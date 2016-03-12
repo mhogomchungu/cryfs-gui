@@ -31,13 +31,13 @@ oneinstance::oneinstance( QObject * parent,const char * socketPath,const char * 
 
 	this->setParent( parent ) ;
 
-	m_serverPath = utility::homePath() + "/.zuluCrypt-socket/" ;
+	m_serverPath = utility::homePath() + "/.cryfs-gui/tmp/" ;
 
 	m_methodName = methodName ;
 
 	QDir d ;
 
-	d.mkdir( m_serverPath ) ;
+	d.mkpath( m_serverPath ) ;
 
 	m_serverPath += socketPath ;
 
