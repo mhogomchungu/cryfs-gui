@@ -57,6 +57,8 @@
 
 #include "plugins.h"
 
+#include "readonlywarning.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -961,4 +963,14 @@ QString utility::mountPathPostFix( const QString& path )
 			return path ;
 		}
 	}
+}
+
+bool utility::setOpenVolumeReadOnly( QWidget * parent,bool checked,const QString& app )
+{
+	return readOnlyWarning::showWarning( parent,checked,app ) ;
+}
+
+bool utility::getOpenVolumeReadOnlyOption( const QString& app )
+{
+	return readOnlyWarning::getOpenVolumeReadOnlyOption( app ) ;
 }

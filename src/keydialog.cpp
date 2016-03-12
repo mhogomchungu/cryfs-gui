@@ -76,7 +76,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 	m_ui->lineEditKey->setFocus() ;
 
-//	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption( "zuluMount-gui" ) ) ;
+	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption( "cryfs-gui" ) ) ;
 
 	m_ui->pbkeyOption->setEnabled( false ) ;
 
@@ -120,21 +120,13 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	} ;
 
 	_add_action( tr( "Set File System Options" ) ) ;
-	_add_action( tr( "Set Volume Offset" ) ) ;
-	_add_action( tr( "Set Volume As VeraCrypt Volume" ) ) ;
-	_add_action( tr( "Set VeraCrypt PIM value" ) ) ;
 
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Key+KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Plugin" ) ) ;
 
-	if( m_encryptedFolder ){
-
-		m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
-	}else{
-		m_ui->cbKeyType->addItem( tr( "TrueCrypt/VeraCrypt Keys" ) ) ;
-	}
+	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
 
 	connect( m_menu_1,SIGNAL( triggered( QAction * ) ),this,SLOT( doAction( QAction * ) ) ) ;
 
@@ -175,7 +167,7 @@ void keyDialog::cbMountReadOnlyStateChanged( int state )
 	Q_UNUSED( state ) ;
 
 	m_ui->checkBoxOpenReadOnly->setEnabled( false ) ;
-//	m_ui->checkBoxOpenReadOnly->setChecked( utility::setOpenVolumeReadOnly( this,state == Qt::Checked,QString( "zuluMount-gui" ) ) ) ;
+	m_ui->checkBoxOpenReadOnly->setChecked( utility::setOpenVolumeReadOnly( this,state == Qt::Checked,QString( "cryfs-gui" ) ) ) ;
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
 	if( m_ui->lineEditKey->text().isEmpty() ){

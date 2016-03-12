@@ -90,6 +90,9 @@ namespace utility
 	bool pathIsReadable( const QString& ) ;
 	bool pathExists( const QString& ) ;
 
+	bool setOpenVolumeReadOnly( QWidget * parent,bool check,const QString& app ) ;
+	bool getOpenVolumeReadOnlyOption( const QString& app ) ;
+
 	QStringList split( const QString&,char = '\n' ) ;
 	void addToFavorite( const QString& dev,const QString& m_point ) ;
 

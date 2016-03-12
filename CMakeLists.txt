@@ -61,6 +61,7 @@ set (UI_FILES 	src/cryfs-gui.ui
 		src/dialogmsg.ui
 		src/plugin.ui
 		src/favorites.ui
+		src/readonlywarning.ui
 )
 
 set(MOC_FILES 	src/cryfs-gui.h
@@ -72,6 +73,7 @@ set(MOC_FILES 	src/cryfs-gui.h
 		src/task.h
 		src/favorites.h
 		src/checkforupdates.h
+		src/readonlywarning.h
  )
 
 set(SRC 	src/main.cpp
@@ -87,6 +89,7 @@ set(SRC 	src/main.cpp
 		src/checkforupdates.cpp
 		src/plugin.cpp
 		src/tablewidget.cpp
+		src/readonlywarning.cpp
 )
 
 if( QT5 )
