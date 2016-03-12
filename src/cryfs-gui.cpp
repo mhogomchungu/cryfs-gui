@@ -120,9 +120,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 	connect( m_ui->pbunlockcryptfs,SIGNAL( clicked() ),
 		 this,SLOT( unlockCryptFs() ) ) ;
 
-	connect( this,SIGNAL( unlistVolume( QString ) ),
-		 this,SLOT( removeVolume( QString ) ) ) ;
-
 	connect( m_ui->pbcreate,SIGNAL( clicked() ),this,SLOT( pbCreate() ) ) ;
 
 	this->setUpShortCuts() ;
@@ -146,12 +143,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 	m_autoMountAction->setCheckable( true ) ;
 	m_autoMountAction->setChecked( m_autoMount ) ;
 
-	//m_autoMountAction->setText( tr( "Automount Volumes" ) ) ;
-
-	//connect( m_autoMountAction,SIGNAL( toggled( bool ) ),this,SLOT( autoMountToggled( bool ) ) ) ;
-
-	//trayMenu->addAction( m_autoMountAction ) ;
-
 	auto autoOpenFolderOnMount = new QAction( this ) ;
 	autoOpenFolderOnMount->setCheckable( true ) ;
 	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
@@ -160,12 +151,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 	connect( autoOpenFolderOnMount,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
 
 	trayMenu->addAction( autoOpenFolderOnMount ) ;
-
-	//auto ac = new QAction( this ) ;
-	//ac->setText( tr( "Unmount All" ) ) ;
-	//connect( ac,SIGNAL( triggered() ),this,SLOT( unMountAll() ) ) ;
-
-	//trayMenu->addAction( ac ) ;
 
 	m_favorite_menu = trayMenu->addMenu( tr( "Favorites" ) ) ;
 
@@ -176,26 +161,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	connect( m_favorite_menu,SIGNAL( aboutToShow() ),
 		 this,SLOT( showFavorites() ) ) ;
-
-	//m_not_hidden_volume_menu = trayMenu->addMenu( tr( "Hide Volume From View" ) ) ;
-
-	//m_not_hidden_volume_menu->setFont( this->font() ) ;
-
-	//connect( m_not_hidden_volume_menu,SIGNAL( triggered( QAction * ) ),
-	//	 this,SLOT( removeVolumeFromVisibleVolumeList( QAction * ) ) ) ;
-
-	//connect( m_not_hidden_volume_menu,SIGNAL( aboutToShow() ),
-	//	 this,SLOT( showVisibleVolumeList() ) ) ;
-
-	//m_hidden_volume_menu = trayMenu->addMenu( tr( "Unhide Volume From View" ) ) ;
-
-	//m_hidden_volume_menu->setFont( this->font() ) ;
-
-	//connect( m_hidden_volume_menu,SIGNAL( triggered( QAction * ) ),
-	//	 this,SLOT( removeVolumeFromHiddenVolumeList( QAction * ) ) ) ;
-
-	//connect( m_hidden_volume_menu,SIGNAL( aboutToShow() ),
-	//	 this,SLOT( showHiddenVolumeList() ) ) ;
 
 	m_languageAction = new QAction( this ) ;
 	m_languageAction->setText( tr( "Select Language" ) ) ;
@@ -229,7 +194,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	if( !dir.exists() ){
 
-		dir.mkdir( dirPath ) ;
+		dir.mkpath( dirPath ) ;
 	}
 
 	this->disableAll() ;
@@ -260,33 +225,7 @@ void cryfsGUI::updateCheck()
 
 void cryfsGUI::autoUpdateCheck()
 {
-	checkForUpdates::instance( this,"cryfsGUI" ) ;
-}
-
-void cryfsGUI::removeVolumeFromHiddenVolumeList( QAction * ac )
-{
-	this->disableAll() ;
-
-	auto e = ac->text() ;
-	e.remove( "&" ) ;
-
-	this->enableAll() ;
-}
-
-void cryfsGUI::showHiddenVolumeList()
-{
-}
-
-void cryfsGUI::showVisibleVolumeList()
-{	
-}
-
-void cryfsGUI::removeVolumeFromVisibleVolumeList( QAction * ac )
-{
-	auto e = ac->text() ;
-	e.remove( "&" ) ;
-
-	this->enableAll() ;
+	checkForUpdates::instance( this,"cryfs-gui" ) ;
 }
 
 QString cryfsGUI::resolveFavoriteMountPoint( const QString& e )
@@ -394,34 +333,6 @@ void cryfsGUI::autoMountVolume( volumeEntryProperties * q )
 	}
 }
 
-void cryfsGUI::volumeRemoved( QString volume )
-{
-	if( !volume.isEmpty() ){
-
-		auto table = m_ui->tableWidget ;
-
-		auto row = tablewidget::columnHasEntry( table,volume ) ;
-
-		if( row != -1 ){
-
-			tablewidget::deleteRowFromTable( table,row ) ;
-
-			this->enableAll() ;
-		}
-	}
-}
-
-void cryfsGUI::removeVolume( QString volume )
-{
-	if( volume.isEmpty() ){
-
-		tablewidget::selectLastRow( m_ui->tableWidget ) ;
-		this->enableAll() ;
-	}else{
-		tablewidget::deleteTableRow( m_ui->tableWidget,volume ) ;
-	}
-}
-
 void cryfsGUI::itemEntered( QTableWidgetItem * item )
 {
 	auto row = item->row() ;
@@ -493,7 +404,7 @@ void cryfsGUI::Show()
 
 	auto volume = utility::cmdArgumentValue( l,"-d" ) ;
 
-	oneinstance::instance( this,"cryfsGUI-gui.socket","startGUI",volume,[ this,volume ]( QObject * instance ){
+	oneinstance::instance( this,"cryfs-gui.socket","startGUI",volume,[ this,volume ]( QObject * instance ){
 
 		connect( instance,SIGNAL( raise() ),this,SLOT( raiseWindow() ) ) ;
 		connect( instance,SIGNAL( raiseWithDevice( QString ) ),this,SLOT( raiseWindow( QString ) ) ) ;
@@ -512,22 +423,6 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 
 	auto mt = m_ui->tableWidget->item( row,1 )->text() ;
 
-	auto _properties_menu = [ & ]( bool addSeparator ){
-
-		auto fs = m_ui->tableWidget->item( row,2 )->text() ;
-
-		if( fs != "encfs" && fs != "cryfs" ){
-
-			connect( m.addAction( tr( "Properties" ) ),SIGNAL( triggered() ),
-				 this,SLOT( volumeProperties() ) ) ;
-
-			if( addSeparator ){
-
-				m.addSeparator() ;
-			}
-		}
-	} ;
-
 	if( mt == "Nil" ){
 
 		connect( m.addAction( tr( "Mount" ) ),SIGNAL( triggered() ),this,SLOT( slotMount() ) ) ;
@@ -543,10 +438,6 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 
 			m.addSeparator() ;
 
-			_properties_menu( true ) ;
-
-			//m_sharedFolderPath = utility::sharedMountPointPath( mt ) ;
-
 			if( m_sharedFolderPath.isEmpty() ){
 
 				connect( m.addAction( tr( "Open Folder" ) ),SIGNAL( triggered() ),
@@ -558,22 +449,14 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 					 this,SLOT( slotOpenSharedFolder() ) ) ;
 			}
 		}else{
-//			m_sharedFolderPath = utility::sharedMountPointPath( mt ) ;
-
 			if( m_sharedFolderPath.isEmpty() ){
 
 				if( utility::pathIsReadable( mt ) ){
 
-					_properties_menu( true ) ;
-
 					connect( m.addAction( tr( "Open Folder" ) ),SIGNAL( triggered() ),
 						 this,SLOT( slotOpenFolder() ) ) ;
-				}else{
-					_properties_menu( false ) ;
 				}
 			}else{
-				_properties_menu( true ) ;
-
 				connect( m.addAction( tr( "Open Shared Folder" ) ),SIGNAL( triggered() ),
 					 this,SLOT( slotOpenSharedFolder() ) ) ;
 			}
@@ -642,10 +525,6 @@ void cryfsGUI::openMountPointPath( QString m )
 	}
 }
 
-void cryfsGUI::volumeProperties()
-{	
-}
-
 void cryfsGUI::setUpShortCuts()
 {
 	auto ac = new QAction( this ) ;
@@ -660,7 +539,7 @@ void cryfsGUI::setUpShortCuts()
 	QList<QKeySequence> z ;
 	z.append( Qt::Key_M ) ;
 	qa->setShortcuts( z ) ;
-	connect( qa,SIGNAL( triggered() ),this,SLOT( pbMount() ) ) ;
+	connect( qa,SIGNAL( triggered() ),this,SLOT( pbCreate() ) ) ;
 	this->addAction( qa ) ;
 
 	qa = new QAction( this ) ;
@@ -731,18 +610,15 @@ void cryfsGUI::mount( const volumeEntryProperties& entry )
 {
 	this->disableAll() ;
 
-	if( entry.encryptedVolume() ){
+	keyDialog::instance( this,m_ui->tableWidget,entry,[ this ](){
 
-		keyDialog::instance( this,m_ui->tableWidget,entry,[ this ](){
+		this->enableAll() ;
 
-			this->enableAll() ;
+	},[ this ]( const QString& e ){
 
-		},[ this ]( const QString& e ){
+		this->openMountPointPath( e ) ;
 
-			this->openMountPointPath( e ) ;
-
-		} ).ShowUI() ;
-	}
+	} ).ShowUI() ;
 }
 
 void cryfsGUI::slotMount()
@@ -771,20 +647,6 @@ void cryfsGUI::showMoungDialog( const QString& volume,const QString& m_point )
 	if( !volume.isEmpty() ){
 
 		this->mount( { volume,m_point,"cryptfs","Nil","Nil","Nil" } ) ;
-	}
-}
-
-void cryfsGUI::pbMount()
-{
-	this->disableAll() ;
-
-	auto path = QFileDialog::getOpenFileName( this,tr( "Select An Image File To Mount" ),utility::homePath() ) ;
-
-	if( path.isEmpty() ){
-
-		this->enableAll() ;
-	}else{
-		this->showMoungDialog( path ) ;
 	}
 }
 
@@ -852,6 +714,7 @@ void cryfsGUI::updateList( const volumeEntryProperties& entry )
 
 			row = tablewidget::addEmptyRow( table ) ;
 		}
+
 		if( entry.isSystem() ){
 
 			tablewidget::updateRowInTable( table,entry.entryList(),row,this->getSystemVolumeFont() ) ;

@@ -46,28 +46,21 @@ public:
 	void Show( void ) ;
 signals:
 	void result( int,QString ) ;
-	void unlistVolume( QString ) ;
 public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
 private slots:
 	void closeApplication( void ) ;
 	void unlockCryptFs( void ) ;
-	void showVisibleVolumeList( void ) ;
-	void showHiddenVolumeList( void ) ;
-	void removeVolumeFromHiddenVolumeList( QAction * ) ;
-	void removeVolumeFromVisibleVolumeList( QAction * ) ;
 	void startGUI( void ) ;
 	void showMoungDialog( const volumeEntryProperties& ) ;
 	void showMoungDialog( const QString&,const QString& = QString() ) ;
 	void autoMountVolume( volumeEntryProperties * ) ;
 	void mount( const volumeEntryProperties& ) ;
 	void defaultButton( void ) ;
-	void volumeProperties( void ) ;
 	void itemClicked( QTableWidgetItem * ) ;
 	void pbUpdate( void ) ;
 	void pbCreate( void ) ;
-	void pbMount( void ) ;
 	void slotMount( void ) ;
 	void unMountAll( void ) ;
 	void pbUmount( void ) ;
@@ -78,8 +71,6 @@ private slots:
 	void slotOpenFolder( void ) ;
 	void slotOpenSharedFolder( void ) ;
 	void itemEntered( QTableWidgetItem * ) ;
-	void volumeRemoved( QString ) ;
-	void removeVolume( QString ) ;
 	void addEntryToTable( bool,const QStringList& ) ;
 	void addEntryToTable( bool,const volumeEntryProperties& ) ;
 	void quitApplication( void ) ;

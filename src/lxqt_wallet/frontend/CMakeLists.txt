@@ -13,6 +13,8 @@ set(LIBRARY_VERSION "2.0.0")
 
 add_definitions(-I${PROJECT_BINARY_DIR}/frontend)
 add_definitions(-I${PROJECT_BINARY_DIR}/backend)
+add_definitions(-I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend)
+add_definitions(-I${PROJECT_BINARY_DIR}/src/lxqt_wallet/backend)
 add_definitions(-I${PROJECT_BINARY_DIR})
 
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
