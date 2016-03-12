@@ -33,6 +33,19 @@ file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
 
+set( PGR_VERSION "1.0.0" )
+
+file( WRITE ${PROJECT_BINARY_DIR}/version.h "
+#ifndef THIS_VERSION
+#define THIS_VERSION \"${PGR_VERSION}\"
+#endif
+\n
+#ifndef CRYFS_GUI_VERSION
+#define CRYFS_GUI_VERSION
+#define VERSION_STRING \"Version  : ${PGR_VERSION}\\nCopyright: 2016 Francis Banyikwa,mhogomchungu@gmail.com\\nLicense  : GPLv2+\"
+#endif
+\n" )
+
 if( REUSEMOUNTPOINT )
 	file( WRITE  ${PROJECT_BINARY_DIR}/reuse_mount_point.h "\n#define REUSE_MOUNT_POINT 1\n" )
 else()

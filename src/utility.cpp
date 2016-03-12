@@ -71,7 +71,7 @@
 #include "dialogmsg.h"
 #include "plugin.h"
 
-#define VERSION_STRING "1.0.0"
+#include "version.h"
 
 static int _help()
 {
@@ -455,7 +455,7 @@ You should have received a copy of the GNU General Public License\n\
 along with this program.  If not, see <http://www.gnu.org/licenses/>." ).arg( VERSION_STRING ) ;
 
 	DialogMsg m( parent ) ;
-	m.ShowUIInfo( QObject::tr( "about zuluCrypt" ),license ) ;
+	m.ShowUIInfo( QObject::tr( "about cryfs-gui" ),license ) ;
 }
 
 static utility::array_t _default_dimensions( const char * defaults )

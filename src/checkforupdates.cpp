@@ -28,7 +28,7 @@
 #include "utility.h"
 #include "dialogmsg.h"
 
-#define THIS_VERSION "1.0.0"
+#include "version.h"
 
 void checkForUpdates::networkReply( QNetworkReply * p )
 {
