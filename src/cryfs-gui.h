@@ -79,6 +79,7 @@ private slots:
 	void removeEntryFromTable( QString ) ;
 	void showFavorites( void ) ;
 	void favoriteClicked( QAction * ) ;
+	void keyManagerClicked( QAction * ) ;
 	void openMountPointPath( QString ) ;
 	void licenseInfo( void ) ;
 	void updateCheck( void ) ;
@@ -97,6 +98,7 @@ private:
 	void startAutoMonitor( void ) ;
 	bool autoMount( void ) ;
 	void updateList( const volumeEntryProperties& ) ;
+	void setupKeyManager( QMenu * ) ;
 
 	Ui::cryfsGUI * m_ui = nullptr ;
 	QString m_folderOpener ;
@@ -110,6 +112,7 @@ private:
 	QMenu * m_favorite_menu = nullptr ;
 	QMenu * m_hidden_volume_menu = nullptr ;
 	QMenu * m_not_hidden_volume_menu = nullptr ;
+	QMenu * m_key_manager_menu ;
 
 	QAction * m_languageAction ;
 

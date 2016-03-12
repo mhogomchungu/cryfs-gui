@@ -53,6 +53,9 @@
 #include "cryfstask.h"
 #include "checkforupdates.h"
 #include "favorites.h"
+#include "walletconfig.h"
+
+#include "lxqt_wallet/frontend/lxqt_wallet.h"
 
 #include <memory>
 
@@ -152,6 +155,8 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	trayMenu->addAction( autoOpenFolderOnMount ) ;
 
+	this->setupKeyManager( trayMenu ) ;
+
 	m_favorite_menu = trayMenu->addMenu( tr( "Favorites" ) ) ;
 
 	m_favorite_menu->setFont( this->font() ) ;
@@ -211,6 +216,43 @@ void cryfsGUI::setUpApp( const QString& volume )
 	}
 
 	this->autoUpdateCheck() ;
+}
+
+void cryfsGUI::setupKeyManager( QMenu * m )
+{
+	m_key_manager_menu = new QMenu( tr( "Key Storage" ) ) ;
+
+	connect( m_key_manager_menu,SIGNAL( triggered( QAction * ) ),
+		 this,SLOT( keyManagerClicked( QAction * ) ) ) ;
+
+	auto i = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::internalBackEnd ) ;
+	auto k = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ;
+	auto g = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ;
+
+	m_key_manager_menu->addAction( tr( "Internal Wallet" ) )->setEnabled( i ) ;
+	m_key_manager_menu->addAction( tr( "KDE Wallet" ) )->setEnabled( k ) ; ;
+	m_key_manager_menu->addAction( tr( "Gnome Wallet" ) )->setEnabled( g ) ; ;
+
+	m->addMenu( m_key_manager_menu ) ;
+}
+
+void cryfsGUI::keyManagerClicked( QAction * ac )
+{
+	auto e = ac->text() ;
+	e.remove( "&" ) ;
+
+	if( e == tr( "Internal Wallet" ) ){
+
+		walletconfig::instance( this ).ShowUI( LxQt::Wallet::internalBackEnd ) ;
+
+	}else if( e == tr( "KDE Wallet" ) ){
+
+		walletconfig::instance( this ).ShowUI( LxQt::Wallet::kwalletBackEnd ) ;
+
+	}else if( e == tr( "Gnome Wallet" ) ){
+
+		walletconfig::instance( this ).ShowUI( LxQt::Wallet::secretServiceBackEnd ) ;
+	}
 }
 
 void cryfsGUI::licenseInfo()

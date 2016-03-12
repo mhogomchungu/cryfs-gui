@@ -53,8 +53,6 @@ else()
 endif()
 
 ADD_SUBDIRECTORY( src/lxqt_wallet )
-add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
-add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/backend )
 
 add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -std=c++11 -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
 
@@ -64,6 +62,8 @@ set (UI_FILES 	src/cryfs-gui.ui
 		src/plugin.ui
 		src/favorites.ui
 		src/readonlywarning.ui
+		src/walletconfig.ui
+		src/walletconfiginput.ui
 )
 
 set(MOC_FILES 	src/cryfs-gui.h
@@ -76,6 +76,8 @@ set(MOC_FILES 	src/cryfs-gui.h
 		src/favorites.h
 		src/checkforupdates.h
 		src/readonlywarning.h
+		src/walletconfig.h
+		src/walletconfiginput.h
  )
 
 set(SRC 	src/main.cpp
@@ -92,6 +94,8 @@ set(SRC 	src/main.cpp
 		src/plugin.cpp
 		src/tablewidget.cpp
 		src/readonlywarning.cpp
+		src/walletconfig.cpp
+		src/walletconfiginput.cpp
 )
 
 if( QT5 )
