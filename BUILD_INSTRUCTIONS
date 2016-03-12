@@ -1,0 +1,74 @@
+
+This tool depends on the following packages installed to build, their precise name may differ in your distro.
+
+3. libqt4-devel
+   libqt4-network
+   libqtcore4
+   libqtgui4
+4. gcc
+5. gcc-c++
+7. cmake
+8.
+9. libgcrypt-devel
+10.libsecret-devel( optional dependency to store keys in gnome's libsecret )
+11.kde-devel( optional dependency to store keys in kde's kwallet )
+12.pkg-config
+
+The precise names of the above packages in debian are:
+
+3. libqt4-dev( optional dependency used when building GUI components )
+   libqt4-network
+   libqtcore4
+   libqtgui4
+4. gcc
+5. g++
+7. cmake
+8.
+9. libgcrypt11-dev
+10.libsecret-1-dev( optional dependency used to store and retrieve volume keys using gnome's libsecret )
+11.not sure of the package name( optional dependency used to store and retrieve volume keys using kde's kwallet )
+12.pkg-config
+
+To build cryfs-gui with default options,run these 5 commands from inside cryfs-gui source folder.
+
+*****************************************************************************************************
+
+mkdir build
+
+cd build
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=false -DNOGNOME=false -DNOKDE=false -DQT5=false -DCMAKE_BUILD_TYPE=RELEASE . ..
+
+make
+
+make install( or sudo make install )
+
+*****************************************************************************************************
+
+The build system now uses GNUInstallDirs (https://cmake.org/cmake/help/v3.5/module/GNUInstallDirs.html), so pretty much all directories can be controlled properly.
+
+meaning of different options:
+
+-DCMAKE_INSTALL_PREFIX=/usr
+This option tells the build process to install project's files in "/usr/".
+
+-DCMAKE_INSTALL_LIBDIR=lib
+This option specifies the base directory where libraries should be installed. Normally, this is automatically detected.
+
+-DCMAKE_BUILD_TYPE=RELEASE
+This option tells the build process to build the project in release mode.This mode is most suitable for non developers.
+
+-DQT5=false
+This option tells the build process to build GUI components using Qt4.Set the option to "true" if you want to build using Qt5.
+
+-DNOGNOME=false
+This option tells the build process to add gnome's libsecret secure storage of passwords.Set this option to "true" if
+you do not want libsecret's support.
+
+-DNOKDE=false
+This option tells the build process to add KDE's secure storage of passwords.Set this option to "true" if you do not
+want KDE wallet support.
+
+Build errors/test fails/feature requests/recommendations can be reported at: https://github.com/mhogomchungu/cryfs-gui/issues
+or using my private email address at: mhogomchungu@gmail.com
+
