@@ -48,8 +48,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <blkid/blkid.h>
-
 #include "task.h"
 #include "lxqt_wallet/frontend/lxqt_wallet.h"
 
@@ -163,26 +161,6 @@ namespace utility
 		{
 			return this->open( filePath.toLatin1().constData(),ro ) ;
 		}
-		bool isFile()
-		{
-			struct stat st ;
-			fstat( m_fd,&st ) ;
-			return S_ISREG( st.st_mode ) != 0 ;
-		}
-		bool isFolder()
-		{
-			struct stat st ;
-			fstat( m_fd,&st ) ;
-			return S_ISDIR( st.st_mode ) != 0 ;
-		}
-		quint64 size()
-		{
-			return static_cast< quint64 >( blkid_get_dev_size( m_fd ) ) ;
-		}
-		void unlink()
-		{
-			m_unlink = true ;
-		}
 		int handle() const
 		{
 			return m_fd ;
@@ -198,15 +176,8 @@ namespace utility
 		~fileHandle()
 		{
 			m_releaseResource( m_fd ) ;
-
-			if( m_unlink ){
-
-				::unlink( m_path.constData() ) ;
-			}
 		}
 	private:
-		bool m_unlink = false ;
-
 		int m_fd = -1 ;
 
 		QByteArray m_path ;

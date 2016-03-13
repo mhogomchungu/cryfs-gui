@@ -913,7 +913,6 @@ QString utility::localizationLanguagePath( const QString& program )
 	return QString( TRANSLATION_PATH ) + program ;
 }
 
-
 QString utility::walletName()
 {
 	return "cryfs-gui" ;
@@ -924,9 +923,30 @@ QString utility::applicationName()
 	return "cryfs-gui" ;
 }
 
+static QString _mountPath = QString() ;
+
 QString utility::mountPath( const QString& path )
 {
-	return utility::homePath() + "/" + path ;
+	if( _mountPath.isEmpty() ){
+
+		QFile f( utility::homePath() + "/.cryfs-gui/mountPrefix" ) ;
+
+		if( f.open( QIODevice::ReadOnly ) ){
+
+			_mountPath = f.readAll() ;
+
+			_mountPath.remove( "\n" ) ;
+
+			if( _mountPath.isEmpty() ){
+
+				_mountPath = utility::homePath() + "/.cryfs-gui.tmp" ;
+			}
+		}else{
+			_mountPath = utility::homePath() + "/.cryfs-gui.tmp" ;
+		}
+	}
+
+	return _mountPath + "/" + path ;
 }
 
 QString utility::mountPathPostFix( const QString& path )

@@ -187,7 +187,7 @@ Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( co
 
 		if( _create_mount_point( cipherFolder ) ){
 
-			auto m_point = utility::homePath() + "/" + utility::mountPathPostFix( plainFoder ) ;
+			auto m_point = utility::mountPath( utility::mountPathPostFix( plainFoder ) ) ;
 
 			if( _create_mount_point( m_point ) ){
 
@@ -198,10 +198,15 @@ Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( co
 				if( e.state == ev::status::success ){
 
 					openFolder( m_point ) ;
+				}else{
+					_delete_mount_point( m_point ) ;
+					_delete_mount_point( cipherFolder ) ;
 				}
 
 				return e ;
 			}else{
+				_delete_mount_point( cipherFolder ) ;
+
 				return { ev::status::failedToCreateMountPoint } ;
 			}
 		}else{
