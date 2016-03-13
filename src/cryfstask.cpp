@@ -35,8 +35,13 @@ static bool _delete_mount_point( const QString& m )
 
 static bool _create_mount_point( const QString& m )
 {
-	QDir e( m ) ;
-	return e.mkpath( m ) ;
+	if( utility::pathExists( m ) ){
+
+		return false ;
+	}else{
+		QDir e( m ) ;
+		return e.mkpath( m ) ;
+	}
 }
 
 Task::future<bool>& cryfsTask::encryptedFolderUnMount( const QString& m )
@@ -79,13 +84,12 @@ static ev _cmd( const QString& e,ev::status status,const QString& arguments,cons
 
 		if( utility::pathExists( exe ) ){
 
+			setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
+			setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+
 			QProcess e ;
 
 			e.start( exe + " " + arguments ) ;
-
-			//qDebug() << exe + " " + arguments ;
-
-			//qDebug() << k ;
 
 			e.waitForStarted() ;
 
@@ -140,9 +144,6 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 
 			return _mount( [ & ](){
 
-				setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-				setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
-
 				const char * opts ;
 
 				if( ro ){
@@ -177,6 +178,38 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 	} ) ;
 }
 
+Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( const QString& cipherFolder,
+									      const QString& plainFoder,
+									      const QString& key,
+									      std::function< void( const QString& )> openFolder )
+{
+	return Task::run< ev >( [ cipherFolder,plainFoder,key,openFolder ]()->ev{
+
+		if( _create_mount_point( cipherFolder ) ){
+
+			auto m_point = utility::homePath() + "/" + utility::mountPathPostFix( plainFoder ) ;
+
+			if( _create_mount_point( m_point ) ){
+
+				auto opts = "%1 %2 -- -o rw -o fsname=cryfs@%3 -o subtype=cryfs" ;
+
+				auto e = _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( cipherFolder,m_point,cipherFolder ),key ) ;
+
+				if( e.state == ev::status::success ){
+
+					openFolder( m_point ) ;
+				}
+
+				return e ;
+			}else{
+				return { ev::status::failedToCreateMountPoint } ;
+			}
+		}else{
+			return { ev::status::failedToCreateMountPoint } ;
+		}
+	} ) ;
+}
+
 Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 {
 	return Task::run< QVector< volumeEntryProperties > >( [](){
@@ -193,7 +226,7 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 
 				auto plainFolder = k.at( s - 2 ) ;
 
-				const auto& cipherFolder  = k.at( 4 ) ;
+				const auto& cipherFolder = k.at( 4 ) ;
 
 				if( plainFolder.startsWith( "encfs@" ) ){
 
@@ -211,18 +244,5 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 		}
 
 		return e ;
-	} ) ;
-}
-
-Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( const QString& p,const QString& m,const QString& k )
-{
-	return Task::run< ev >( [ p,m,k ]()->ev{
-
-		if( _create_mount_point( p ) ){
-
-			return _cmd( "cryfs",ev::status::cryfs,QString( "%1 %2" ).arg( p,m ),k ) ;
-		}else{
-			return { ev::status::failedToCreateMountPoint } ;
-		}
 	} ) ;
 }

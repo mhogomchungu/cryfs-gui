@@ -74,6 +74,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 		m_ui->lineEditFolderPath->setEnabled( false ) ;
 
+		m_ui->lineEditMountPoint->setFocus() ;
+
 		msg = tr( "Creating a new Cryfs Volume" ) ;
 	}else{
 		m_ui->label_3->setVisible( false ) ;
@@ -83,6 +85,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 		m_ui->checkBoxOpenReadOnly->setVisible( true ) ;
 
 		m_ui->pbOpenMountPoint->setVisible( false ) ;
+
+		m_ui->lineEditKey->setFocus() ;
 
 		msg = tr( "Unlocking \"%1\"" ).arg( m_path ) ;
 	}
@@ -99,8 +103,6 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	this->setFixedSize( this->size() ) ;
 	this->setWindowFlags( Qt::Window | Qt::Dialog ) ;
 	this->setFont( parent->font() ) ;
-
-	m_ui->lineEditKey->setFocus() ;
 
 	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption( "cryfs-gui" ) ) ;
 
@@ -154,6 +156,13 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
 
 	connect( m_menu_1,SIGNAL( triggered( QAction * ) ),this,SLOT( doAction( QAction * ) ) ) ;
+
+	if( m_create ){
+
+		m_ui->lineEditMountPoint->setFocus() ;
+	}else{
+		m_ui->lineEditKey->setFocus() ;
+	}
 
 	this->installEventFilter( this ) ;
 }
@@ -245,7 +254,7 @@ void keyDialog::enableAll()
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
-	m_ui->lineEditFolderPath->setEnabled( true ) ;
+	//m_ui->lineEditFolderPath->setEnabled( true ) ;
 	m_ui->label_3->setEnabled( true ) ;
 }
 
@@ -444,11 +453,9 @@ bool keyDialog::completed( cryfsTask::encryptedVolume::status s )
 
 void keyDialog::encryptedFolderCreate()
 {
-	auto path = m_ui->lineEditFolderPath->text() + m_ui->lineEditMountPoint->text() ;
+	auto path = m_ui->lineEditFolderPath->text() ;
 
-	auto m_path = utility::homePath() + "/www" ;
-
-	if( this->completed( cryfsTask::encryptedFolderCreate( path,m_path,m_key ).await().state ) ){
+	if( this->completed( cryfsTask::encryptedFolderCreate( path,path.split( '/' ).last(),m_key,m_success ).await().state ) ){
 
 		this->HideUI() ;
 	}else{

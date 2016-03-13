@@ -41,7 +41,10 @@ namespace cryfsTask
 	Task::future< QVector< volumeEntryProperties > >& updateVolumeList( void ) ;
 	Task::future< bool >& encryptedFolderUnMount( const QString& mountPoint ) ;
 	Task::future< encryptedVolume >& encryptedFolderMount( const QString& volumePath,const QString& mountPoint,const QString& key,bool ro ) ;
-	Task::future< encryptedVolume >& encryptedFolderCreate( const QString& volumePath,const QString& mountPoint,const QString& key ) ;
+	Task::future< encryptedVolume >& encryptedFolderCreate( const QString& volumePath,
+								const QString& mountPoint,
+								const QString& key,
+								std::function< void( const QString& )> openPath ) ;
 }
 
 #endif // ZULUMOUNTTASK_H

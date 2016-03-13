@@ -59,8 +59,6 @@
 
 #include <memory>
 
-static const bool _enableCreate = false ;
-
 cryfsGUI::cryfsGUI( QWidget * parent ) :
 	QWidget( parent ),
 	m_mountInfo( monitor_mountinfo::instance( this,true,[ this ](){ this->quitApplication() ; } ) )
@@ -78,8 +76,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 	m_ui->pbunlockcryptfs->setMinimumHeight( 31 ) ;
 	m_ui->pbmenu->setMinimumHeight( 31 ) ;
 	m_ui->pbupdate->setMinimumHeight( 31 ) ;
-
-	m_ui->pbcreate->setEnabled( _enableCreate ) ;
 
 	auto f = utility::getWindowDimensions( "cryfs" ) ;
 
@@ -842,7 +838,7 @@ void cryfsGUI::enableAll()
 		m_ui->tableWidget->setEnabled( true ) ;
 		m_ui->tableWidget->setFocus() ;
 		m_ui->pbunlockcryptfs->setEnabled( true ) ;
-		m_ui->pbcreate->setEnabled( _enableCreate ) ;
+		m_ui->pbcreate->setEnabled( true ) ;
 	}	
 }
 
