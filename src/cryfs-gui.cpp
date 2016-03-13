@@ -249,20 +249,7 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 
 void cryfsGUI::changeInternalWalletPassWord()
 {
-	m_wallet = LxQt::Wallet::getWalletBackend() ;
-	m_wallet->setInterfaceObject( this ) ;
-	m_wallet->changeWalletPassWord( utility::walletName(),utility::applicationName() ) ;
-}
-
-void cryfsGUI::walletIsOpen( bool e )
-{
-	Q_UNUSED( e ) ;
-}
-
-void cryfsGUI::walletpassWordChanged( bool e )
-{
-	Q_UNUSED( e ) ;
-	m_wallet->deleteLater() ;
+	::changeWalletPassWord::instance() ;
 }
 
 void cryfsGUI::keyManagerClicked( QAction * ac )

@@ -20,6 +20,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QObject>
 #include <QWidget>
 #include <QString>
 #include <QStringList>
@@ -27,6 +28,7 @@
 #include <QVector>
 
 #include "volumeentryproperties.h"
+#include "utility.h"
 
 #include "lxqt_wallet/frontend/lxqt_wallet.h"
 
@@ -34,6 +36,37 @@ class QCloseEvent ;
 class QAction ;
 class QTableWidgetItem ;
 class monitor_mountinfo ;
+
+class changeWalletPassWord : public QWidget
+{
+	Q_OBJECT
+public:
+	static changeWalletPassWord& instance()
+	{
+		return *( new changeWalletPassWord() ) ;
+	}
+	changeWalletPassWord() : m_wallet( LxQt::Wallet::getWalletBackend( LxQt::Wallet::internalBackEnd ) )
+	{
+		m_wallet->setInterfaceObject( this ) ;
+		m_wallet->changeWalletPassWord( utility::walletName(),utility::applicationName() ) ;
+	}
+	~changeWalletPassWord()
+	{
+		m_wallet->deleteLater() ;
+	}
+private slots:
+	void walletpassWordChanged( bool e )
+	{
+		Q_UNUSED( e ) ;
+		this->deleteLater() ;
+	}
+	void walletIsOpen( bool e )
+	{
+		Q_UNUSED( e ) ;
+	}	
+private:
+	LxQt::Wallet::Wallet * m_wallet ;
+};
 
 namespace Ui {
 class cryfsGUI ;
@@ -53,8 +86,6 @@ public slots:
 	void raiseWindow( QString ) ;
 private slots:
 	void aboutToShowMenu( void ) ;
-	void walletpassWordChanged( bool ) ;
-	void walletIsOpen( bool ) ;
 	void changeInternalWalletPassWord( void ) ;
 	void closeApplication( void ) ;
 	void unlockCryptFs( void ) ;
@@ -122,8 +153,6 @@ private:
 	QAction * m_change_password_action = nullptr ;
 
 	QAction * m_languageAction = nullptr ;
-
-	LxQt::Wallet::Wallet * m_wallet = nullptr ;
 
 	bool m_startHidden ;
 	bool m_autoMount ;
