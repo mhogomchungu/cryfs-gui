@@ -49,9 +49,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>120</y>
+     <y>130</y>
      <width>101</width>
-     <height>51</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -91,9 +91,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>10</y>
+     <y>20</y>
      <width>101</width>
-     <height>51</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -110,7 +110,7 @@
    <property name="geometry">
     <rect>
      <x>410</x>
-     <y>20</y>
+     <y>60</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -132,10 +132,10 @@
   <widget class="QCheckBox" name="checkBoxOpenReadOnly">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>110</x>
      <y>50</y>
-     <width>271</width>
-     <height>31</height>
+     <width>301</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -145,9 +145,9 @@
   <widget class="QCheckBox" name="checkBoxShareMountPoint">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>70</y>
-     <width>271</width>
+     <x>490</x>
+     <y>40</y>
+     <width>20</width>
      <height>31</height>
     </rect>
    </property>
@@ -178,23 +178,30 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="veraCryptWarning">
+  <widget class="QLineEdit" name="lineEditFolderPath">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>501</width>
-     <height>181</height>
+     <x>110</x>
+     <y>60</y>
+     <width>301</width>
+     <height>31</height>
     </rect>
    </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>Folder Path</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

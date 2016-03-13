@@ -72,12 +72,12 @@ void cryfsGUI::setUpApp( const QString& volume )
 	m_ui = new Ui::cryfsGUI ;
 	m_ui->setupUi( this ) ;
 
-	m_ui->pbcreate->setEnabled( false ) ;
-
 	m_ui->pbcreate->setMinimumHeight( 31 ) ;
 	m_ui->pbunlockcryptfs->setMinimumHeight( 31 ) ;
 	m_ui->pbmenu->setMinimumHeight( 31 ) ;
 	m_ui->pbupdate->setMinimumHeight( 31 ) ;
+
+	m_ui->pbcreate->setEnabled( false ) ;
 
 	auto f = utility::getWindowDimensions( "cryfs" ) ;
 
@@ -206,7 +206,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	this->startAutoMonitor() ;
 
-	this->updateVolumeList( cryfsGUITask::updateVolumeList().await() ) ;
+	this->updateVolumeList( cryfsTask::updateVolumeList().await() ) ;
 
 	if( volume.isEmpty() ) {
 
@@ -663,6 +663,11 @@ void cryfsGUI::mount( const volumeEntryProperties& entry )
 	} ).ShowUI() ;
 }
 
+void cryfsGUI::pbCreate()
+{
+	this->mount( volumeEntryProperties() ) ;
+}
+
 void cryfsGUI::slotMount()
 {
 	auto table = m_ui->tableWidget ;
@@ -778,7 +783,7 @@ void cryfsGUI::pbUmount()
 
 	auto m = m_ui->tableWidget->item( row,1 )->text() ;
 
-	if( !cryfsGUITask::encryptedFolderUnMount( m ).await() ){
+	if( !cryfsTask::encryptedFolderUnMount( m ).await() ){
 
 		DialogMsg m( this ) ;
 		m.ShowUIOK( tr( "ERROR" ),tr( "Failed to unmount %1 volume" ).arg( type ) ) ;
@@ -796,12 +801,7 @@ void cryfsGUI::pbUpdate()
 
 	tablewidget::clearTable( m_ui->tableWidget ) ;
 
-	this->updateVolumeList( cryfsGUITask::updateVolumeList().await() ) ;
-}
-
-void cryfsGUI::pbCreate()
-{
-
+	this->updateVolumeList( cryfsTask::updateVolumeList().await() ) ;
 }
 
 void cryfsGUI::updateVolumeList( const QVector< volumeEntryProperties >& r )
@@ -828,19 +828,20 @@ void cryfsGUI::disableAll()
 	m_ui->pbupdate->setEnabled( false ) ;
 	m_ui->tableWidget->setEnabled( false ) ;
 	m_ui->pbunlockcryptfs->setEnabled( false ) ;
+	m_ui->pbcreate->setEnabled( false ) ;
 }
 
 void cryfsGUI::enableAll()
 {
-	if( m_removeAllVolumes ){
+	if( !m_removeAllVolumes ){
 
-		return ;
-	}
-	m_ui->pbmenu->setEnabled( true ) ;
-	m_ui->pbupdate->setEnabled( true ) ;
-	m_ui->tableWidget->setEnabled( true ) ;
-	m_ui->tableWidget->setFocus() ;
-	m_ui->pbunlockcryptfs->setEnabled( true ) ;
+		m_ui->pbmenu->setEnabled( true ) ;
+		m_ui->pbupdate->setEnabled( true ) ;
+		m_ui->tableWidget->setEnabled( true ) ;
+		m_ui->tableWidget->setFocus() ;
+		m_ui->pbunlockcryptfs->setEnabled( true ) ;
+		//m_ui->pbcreate->setEnabled( true ) ; ;
+	}	
 }
 
 void cryfsGUI::enableAll_1()

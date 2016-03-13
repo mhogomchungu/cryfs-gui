@@ -28,7 +28,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace cryfsGUITask
+namespace cryfsTask
 {
 	struct encryptedVolume
 	{
@@ -41,6 +41,7 @@ namespace cryfsGUITask
 	Task::future< QVector< volumeEntryProperties > >& updateVolumeList( void ) ;
 	Task::future< bool >& encryptedFolderUnMount( const QString& mountPoint ) ;
 	Task::future< encryptedVolume >& encryptedFolderMount( const QString& volumePath,const QString& mountPoint,const QString& key,bool ro ) ;
+	Task::future< encryptedVolume >& encryptedFolderCreate( const QString& volumePath,const QString& mountPoint,const QString& key ) ;
 }
 
 #endif // ZULUMOUNTTASK_H

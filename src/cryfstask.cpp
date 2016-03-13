@@ -39,7 +39,7 @@ static bool _create_mount_point( const QString& m )
 	return e.mkpath( m ) ;
 }
 
-Task::future<bool>& cryfsGUITask::encryptedFolderUnMount( const QString& m )
+Task::future<bool>& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
@@ -69,51 +69,55 @@ Task::future<bool>& cryfsGUITask::encryptedFolderUnMount( const QString& m )
 	} ) ;
 }
 
-using ev = cryfsGUITask::encryptedVolume ;
+using ev = cryfsTask::encryptedVolume ;
 
-Task::future< ev >& cryfsGUITask::encryptedFolderMount( const QString& p,const QString& m,const QString& k,bool ro )
+static ev _cmd( const QString& e,ev::status status,const QString& arguments,const QString& k )
+{
+	for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/" } ){
+
+		auto exe = it + e ;
+
+		if( utility::pathExists( exe ) ){
+
+			QProcess e ;
+
+			e.start( exe + " " + arguments ) ;
+
+			//qDebug() << exe + " " + arguments ;
+
+			//qDebug() << k ;
+
+			e.waitForStarted() ;
+
+			e.write( k.toLatin1() + '\n' ) ;
+
+			e.closeWriteChannel() ;
+
+			if( e.waitForFinished( 10000 ) ){
+
+				if( e.exitCode() == 0 ){
+
+					return { ev::status::success } ;
+				}else{
+					return { status } ;
+				}
+			}else{
+				return { ev::status::backendFail } ;
+			}
+		}
+	}
+
+	if( status == ev::status::cryfs ){
+
+		return { ev::status::cryfsNotFound } ;
+	}else{
+		return { ev::status::encfsNotFound } ;
+	}
+}
+
+Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QString& m,const QString& k,bool ro )
 {
 	return Task::run< ev >( [ p,m,k,ro ]()->ev{
-
-		auto _cmd = [ & ]( const QString& e,ev::status status,const QString& arguments )->ev{
-
-			for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/" } ){
-
-				auto exe = it + e ;
-
-				if( utility::pathExists( exe ) ){
-
-					QProcess e ;
-
-					e.start( exe + " " + arguments ) ;
-
-					e.waitForStarted() ;
-
-					e.write( k.toLatin1() + '\n' ) ;
-
-					e.closeWriteChannel() ;
-
-					if( e.waitForFinished( 10000 ) ){
-
-						if( e.exitCode() == 0 ){
-
-							return { ev::status::success } ;
-						}else{
-							return { status } ;
-						}
-					}else{
-						return { ev::status::backendFail } ;
-					}
-				}
-			}
-
-			if( status == ev::status::cryfs ){
-
-				return { ev::status::cryfsNotFound } ;
-			}else{
-				return { ev::status::encfsNotFound } ;
-			}
-		} ;
 
 		auto _mount = [ & ]( std::function< ev() > unlocked )->ev{
 
@@ -148,7 +152,7 @@ Task::future< ev >& cryfsGUITask::encryptedFolderMount( const QString& p,const Q
 					opts = "%1 %2 -- -o rw -o fsname=cryfs@%3 -o subtype=cryfs" ;
 				}
 
-				return _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( p,m,p ) ) ;
+				return _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( p,m,p ),k ) ;
 			} ) ;
 		}
 
@@ -165,7 +169,7 @@ Task::future< ev >& cryfsGUITask::encryptedFolderMount( const QString& p,const Q
 					opts = "%1 %2 -S -o rw -o fsname=encfs@%3 -o subtype=encfs" ;
 				}
 
-				return _cmd( "encfs",ev::status::encfs,QString( opts ).arg( p,m,p ) ) ;
+				return _cmd( "encfs",ev::status::encfs,QString( opts ).arg( p,m,p ),k ) ;
 			} ) ;
 		}
 
@@ -173,7 +177,7 @@ Task::future< ev >& cryfsGUITask::encryptedFolderMount( const QString& p,const Q
 	} ) ;
 }
 
-Task::future< QVector<volumeEntryProperties > >& cryfsGUITask::updateVolumeList()
+Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 {
 	return Task::run< QVector< volumeEntryProperties > >( [](){
 
@@ -207,5 +211,18 @@ Task::future< QVector<volumeEntryProperties > >& cryfsGUITask::updateVolumeList(
 		}
 
 		return e ;
+	} ) ;
+}
+
+Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( const QString& p,const QString& m,const QString& k )
+{
+	return Task::run< ev >( [ p,m,k ]()->ev{
+
+		if( _create_mount_point( p ) ){
+
+			return _cmd( "cryfs",ev::status::cryfs,QString( "%1 %2" ).arg( p,m ),k ) ;
+		}else{
+			return { ev::status::failedToCreateMountPoint } ;
+		}
 	} ) ;
 }

@@ -847,6 +847,8 @@ QStringList utility::split( const QString& e,char token )
 
 void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,const QString& c,bool addPlugIns )
 {
+	Q_UNUSED( addPlugIns ) ;
+
 	QStringList l ;
 	QStringList e ;
 
@@ -859,10 +861,6 @@ void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,c
 	if( LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ){
 
 		l.append( c ) ;
-	}
-
-	if( addPlugIns ){
-
 	}
 
 	menu->clear() ;

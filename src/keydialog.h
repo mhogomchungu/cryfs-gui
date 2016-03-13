@@ -34,6 +34,7 @@ class QTableWidget ;
 #include "cryfs-gui.h"
 #include "volumeentryproperties.h"
 #include "utility.h"
+#include "cryfstask.h"
 
 #include <functional>
 #include <memory>
@@ -83,9 +84,10 @@ private slots:
 	void showOffSetWindowOption( void ) ;
 	void showFileSystemOptionWindow( void ) ;
 	void encryptedFolderMount( void ) ;
+	void encryptedFolderCreate( void ) ;
 private :
+	bool completed( cryfsTask::encryptedVolume::status ) ;
 	void keyAndKeyFile( void ) ;
-	void tcryptGui( void ) ;
 	void openVolume( void ) ;
 	void enableAll( void ) ;
 	void disableAll( void ) ;
@@ -102,9 +104,8 @@ private :
 	QMenu * m_menu_1 ;
 	QTableWidget * m_table ;
 	bool m_working ;
-	bool m_encryptedFolder = false ;
-	enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3,tcryptKeys = 4 } ;
-	int m_veraCryptPIMValue = 0 ;
+	bool m_create ;
+	enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } ;
 	std::function< void() > m_cancel ;
 	std::function< void( const QString& ) > m_success ;
 };

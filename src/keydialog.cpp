@@ -31,7 +31,6 @@
 #include "task.h"
 #include "utility.h"
 #include "lxqt_wallet/frontend/lxqt_wallet.h"
-#include "cryfstask.h"
 
 #define KWALLET         "kde wallet"
 #define INTERNAL_WALLET "internal wallet"
@@ -46,19 +45,44 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	QDialog( parent ),m_ui( new Ui::keyDialog ),m_cancel( std::move( p ) ),m_success( std::move( q ) )
 {
 	m_ui->setupUi( this ) ;
-	//m_ui->checkBoxShareMountPoint->setToolTip( utility::shareMountPointToolTip() ) ;
+
+	m_ui->checkBoxShareMountPoint->setVisible( false ) ;
+
 	m_table = table ;
 	m_path = e.volumeName() ;
 	m_working = false ;
-	m_encryptedFolder = e.fileSystem() == "cryptfs" ;
 
 	decltype( tr( "" ) ) msg ;
 
-	if( e.fileSystem() == "crypto_LUKS" ){
+	m_create = e.volumeName().isEmpty() ;
 
-		msg = tr( "Mount A LUKS volume in \"%1\"").arg( m_path ) ;
+	if( m_create ){
+
+		m_ui->pbOpen->setText( tr( "&Create" ) ) ;
+
+		m_ui->label_2->setText( tr( "Folder Name" ) ) ;
+
+		m_ui->label_3->setVisible( true ) ;
+
+		m_ui->checkBoxOpenReadOnly->setVisible( false ) ;
+
+		m_ui->lineEditFolderPath->setVisible( true ) ;
+
+		m_ui->pbOpenMountPoint->setVisible( true ) ;
+
+		m_ui->lineEditFolderPath->setText( utility::homePath() + "/" ) ;
+
+		msg = tr( "Creating a new Cryfs Volume" ) ;
 	}else{
-		msg = tr( "Mount An Encrypted Volume In \"%1\"").arg( m_path ) ;
+		m_ui->label_3->setVisible( false ) ;
+
+		m_ui->lineEditFolderPath->setVisible( false ) ;
+
+		m_ui->checkBoxOpenReadOnly->setVisible( true ) ;
+
+		m_ui->pbOpenMountPoint->setVisible( false ) ;
+
+		msg = tr( "Unlocking \"%1\"" ).arg( m_path ) ;
 	}
 
 	this->setWindowTitle( msg ) ;
@@ -90,8 +114,6 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
 	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),this,SLOT( cbActicated( int ) ) ) ;
 
-	m_ui->pbOpenMountPoint->setVisible( false ) ;
-
 	const auto& m = e.mountPoint() ;
 
 	if( m.isEmpty() || m == "Nil" ){
@@ -116,7 +138,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	auto _add_action = [ & ]( const QString& e ){
 
 		ac = m_menu_1->addAction( e ) ;
-		ac ->setEnabled( !m_encryptedFolder ) ;
+		ac ->setEnabled( false ) ;
 	} ;
 
 	_add_action( tr( "Set File System Options" ) ) ;
@@ -130,18 +152,12 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 	connect( m_menu_1,SIGNAL( triggered( QAction * ) ),this,SLOT( doAction( QAction * ) ) ) ;
 
-	m_ui->veraCryptWarning->setVisible( false ) ;
-
 	this->installEventFilter( this ) ;
 }
 
 bool keyDialog::eventFilter( QObject * watched,QEvent * event )
 {
 	return utility::eventFilter( this,watched,event,[ this ](){ this->pbCancel() ; } ) ;
-}
-
-void keyDialog::tcryptGui()
-{
 }
 
 void keyDialog::pbOptions()
@@ -185,12 +201,16 @@ void keyDialog::cbMountReadOnlyStateChanged( int state )
 void keyDialog::pbMountPointPath()
 {
 	auto msg = tr( "Select A Folder To Create A Mount Point In" ) ;
-	auto Z = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
+	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
-	if( !Z.isEmpty() ){
+	if( !e.isEmpty() ){
 
-		Z = Z + "/" + m_ui->lineEditMountPoint->text().split( "/" ).last() ;
-		m_ui->lineEditMountPoint->setText( Z ) ;
+		if( e.endsWith( "/" ) ){
+
+			m_ui->lineEditFolderPath->setText( e ) ;
+		}else{
+			m_ui->lineEditFolderPath->setText( e + "/" ) ;
+		}
 	}
 }
 
@@ -210,10 +230,9 @@ void keyDialog::enableAll()
 	m_ui->pbkeyOption->setEnabled( true ) ;
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
-	if( !m_encryptedFolder ){
-
-		m_ui->checkBoxShareMountPoint->setEnabled( true ) ;
-	}
+	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
+	m_ui->lineEditFolderPath->setEnabled( true ) ;
+	m_ui->label_3->setEnabled( true ) ;
 }
 
 void keyDialog::disableAll()
@@ -222,6 +241,7 @@ void keyDialog::disableAll()
 	m_ui->pbOptions->setEnabled( false ) ;
 	m_ui->pbkeyOption->setEnabled( false ) ;
 	m_ui->label_2->setEnabled( false ) ;
+	m_ui->label_3->setEnabled( false ) ;
 	m_ui->lineEditMountPoint->setEnabled( false ) ;
 	m_ui->pbOpenMountPoint->setEnabled( false ) ;
 	m_ui->lineEditKey->setEnabled( false ) ;
@@ -230,6 +250,7 @@ void keyDialog::disableAll()
 	m_ui->label->setEnabled( false ) ;
 	m_ui->checkBoxOpenReadOnly->setEnabled( false ) ;
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
+	m_ui->lineEditFolderPath->setEnabled( false ) ;
 }
 
 void keyDialog::KeyFile()
@@ -263,7 +284,7 @@ void keyDialog::pbkeyOption()
 void keyDialog::Plugin()
 {
 	utility::createPlugInMenu( m_menu,tr( INTERNAL_WALLET ),
-				   tr( GNOME_WALLET ),tr( KWALLET ),!m_encryptedFolder ) ;
+				   tr( GNOME_WALLET ),tr( KWALLET ),true ) ;
 
 	m_menu->setFont( this->font() ) ;
 
@@ -353,23 +374,17 @@ void keyDialog::pbOpen()
 	}
 }
 
-void keyDialog::encryptedFolderMount()
+bool keyDialog::completed( cryfsTask::encryptedVolume::status s )
 {
-	auto m = utility::mountPath( m_ui->lineEditMountPoint->text() ) ;
-
-	auto ro = m_ui->checkBoxOpenReadOnly->isChecked() ;
-
 	DialogMsg msg( this ) ;
 
-	switch( cryfsGUITask::encryptedFolderMount( m_path,m,m_key,ro ).await().state ){
+	switch( s ){
 
-	using ev = cryfsGUITask::encryptedVolume ;
+	using ev = cryfsTask::encryptedVolume ;
 
 	case ev::status::success :
 
-		m_success( m ) ;
-
-		return this->HideUI() ;
+		return true ;
 
 	case ev::status::cryfs :
 
@@ -403,49 +418,89 @@ void keyDialog::encryptedFolderMount()
 
 	case ev::status::backendFail :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock the volume.\nBackend not responding" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the task.\nBackend not responding" ) ) ;
 		break;
 	default:
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock the volume.\nNot supported volume encountered" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the task.\nAn unknown error has occured" ) ) ;
 		break;
 	}
 
-	if( m_ui->cbKeyType->currentIndex() == keyDialog::Key ){
+	return false ;
+}
 
-		m_ui->lineEditKey->clear() ;
+void keyDialog::encryptedFolderCreate()
+{
+	auto path = m_ui->lineEditFolderPath->text() + m_ui->lineEditMountPoint->text() ;
+
+	auto m_path = utility::homePath() + "/www" ;
+
+	if( this->completed( cryfsTask::encryptedFolderCreate( path,m_path,m_key ).await().state ) ){
+
+		this->HideUI() ;
+	}else{
+		if( m_ui->cbKeyType->currentIndex() == keyDialog::Key ){
+
+			m_ui->lineEditKey->clear() ;
+		}
+
+		m_ui->lineEditKey->setFocus() ;
+
+		this->enableAll() ;
 	}
+}
 
-	m_ui->lineEditKey->setFocus() ;
+void keyDialog::encryptedFolderMount()
+{
+	auto m = utility::mountPath( m_ui->lineEditMountPoint->text() ) ;
 
-	this->enableAll() ;
+	auto ro = m_ui->checkBoxOpenReadOnly->isChecked() ;
+
+	if( this->completed( cryfsTask::encryptedFolderMount( m_path,m,m_key,ro ).await().state ) ){
+
+		m_success( m ) ;
+
+		this->HideUI() ;
+	}else{
+		if( m_ui->cbKeyType->currentIndex() == keyDialog::Key ){
+
+			m_ui->lineEditKey->clear() ;
+		}
+
+		m_ui->lineEditKey->setFocus() ;
+
+		this->enableAll() ;
+	}
 }
 
 void keyDialog::openVolume()
 {
 	auto keyType = m_ui->cbKeyType->currentIndex() ;
 
-	if( m_encryptedFolder ){
 
-		if( keyType == keyDialog::Key || keyType == keyDialog::keyKeyFile ){
+	if( keyType == keyDialog::Key || keyType == keyDialog::keyKeyFile ){
 
-			m_key = m_ui->lineEditKey->text() ;
+		m_key = m_ui->lineEditKey->text() ;
 
-		}else if( keyType == keyDialog::keyfile ){
+	}else if( keyType == keyDialog::keyfile ){
 
-			QFile f( m_ui->lineEditKey->text() ) ;
+		QFile f( m_ui->lineEditKey->text() ) ;
 
-			f.open( QIODevice::ReadOnly ) ;
+		f.open( QIODevice::ReadOnly ) ;
 
-			m_key = f.readAll() ;
+		m_key = f.readAll() ;
 
-		}else if( keyType == keyDialog::plugin ){
+	}else if( keyType == keyDialog::plugin ){
 
-			/*
-			 * m_key is already set
-			 */
-		}
+		/*
+		 * m_key is already set
+		 */
+	}
 
-		return this->encryptedFolderMount() ;
+	if( m_create ){
+
+		this->encryptedFolderCreate() ;
+	}else{
+		this->encryptedFolderMount() ;
 	}
 }
 
@@ -457,7 +512,6 @@ void keyDialog::cbActicated( int e )
 		case keyDialog::keyfile    : return this->keyFile() ;
 		case keyDialog::keyKeyFile : return this->keyAndKeyFile() ;
 		case keyDialog::plugin     : return this->plugIn() ;
-		case keyDialog::tcryptKeys : return this->tcryptGui() ;
 	}
 }
 
