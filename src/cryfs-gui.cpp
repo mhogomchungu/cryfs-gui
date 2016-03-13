@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  *  Copyright (c) 2012-2015
  *  name : Francis Banyikwa
@@ -54,8 +54,6 @@
 #include "checkforupdates.h"
 #include "favorites.h"
 #include "walletconfig.h"
-
-#include "lxqt_wallet/frontend/lxqt_wallet.h"
 
 #include <memory>
 
@@ -216,6 +214,11 @@ void cryfsGUI::setUpApp( const QString& volume )
 	this->autoUpdateCheck() ;
 }
 
+void cryfsGUI::aboutToShowMenu()
+{
+	m_change_password_action->setEnabled( LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,utility::walletName(),utility::applicationName() ) ) ;
+}
+
 void cryfsGUI::setupKeyManager( QMenu * m )
 {
 	m_key_manager_menu = new QMenu( tr( "Key Storage" ) ) ;
@@ -223,15 +226,43 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 	connect( m_key_manager_menu,SIGNAL( triggered( QAction * ) ),
 		 this,SLOT( keyManagerClicked( QAction * ) ) ) ;
 
+	connect( m_key_manager_menu,SIGNAL( aboutToShow() ),this,SLOT( aboutToShowMenu() ) ) ;
+
 	auto i = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::internalBackEnd ) ;
 	auto k = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ;
 	auto g = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ;
+
+	auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
+
+	m_change_password_action = w->addAction( tr( "Change PassWord" ) ) ;
+
+	connect( m_change_password_action,SIGNAL( triggered() ),this,SLOT( changeInternalWalletPassWord() ) ) ;
+
+	m->addMenu( w ) ;
 
 	m_key_manager_menu->addAction( tr( "Internal Wallet" ) )->setEnabled( i ) ;
 	m_key_manager_menu->addAction( tr( "KDE Wallet" ) )->setEnabled( k ) ; ;
 	m_key_manager_menu->addAction( tr( "Gnome Wallet" ) )->setEnabled( g ) ; ;
 
 	m->addMenu( m_key_manager_menu ) ;
+}
+
+void cryfsGUI::changeInternalWalletPassWord()
+{
+	m_wallet = LxQt::Wallet::getWalletBackend() ;
+	m_wallet->setInterfaceObject( this ) ;
+	m_wallet->changeWalletPassWord( utility::walletName(),utility::applicationName() ) ;
+}
+
+void cryfsGUI::walletIsOpen( bool e )
+{
+	Q_UNUSED( e ) ;
+}
+
+void cryfsGUI::walletpassWordChanged( bool e )
+{
+	Q_UNUSED( e ) ;
+	m_wallet->deleteLater() ;
 }
 
 void cryfsGUI::keyManagerClicked( QAction * ac )
@@ -356,21 +387,6 @@ void cryfsGUI::closeApplication()
 void cryfsGUI::quitApplication()
 {
 	QCoreApplication::quit() ;
-}
-
-void cryfsGUI::autoMountVolume( volumeEntryProperties * q )
-{
-	std::unique_ptr< volumeEntryProperties > r( q ) ;
-
-	if( r && r->entryisValid() ){
-
-		auto& p = *r ;
-
-		if( p.encryptedVolume() ){
-
-			this->addEntryToTable( true,p ) ;
-		}
-	}
 }
 
 void cryfsGUI::itemEntered( QTableWidgetItem * item )

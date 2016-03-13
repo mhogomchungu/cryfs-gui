@@ -28,6 +28,8 @@
 
 #include "volumeentryproperties.h"
 
+#include "lxqt_wallet/frontend/lxqt_wallet.h"
+
 class QCloseEvent ;
 class QAction ;
 class QTableWidgetItem ;
@@ -50,12 +52,15 @@ public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
 private slots:
+	void aboutToShowMenu( void ) ;
+	void walletpassWordChanged( bool ) ;
+	void walletIsOpen( bool ) ;
+	void changeInternalWalletPassWord( void ) ;
 	void closeApplication( void ) ;
 	void unlockCryptFs( void ) ;
 	void startGUI( void ) ;
 	void showMoungDialog( const volumeEntryProperties& ) ;
 	void showMoungDialog( const QString&,const QString& = QString() ) ;
-	void autoMountVolume( volumeEntryProperties * ) ;
 	void mount( const volumeEntryProperties& ) ;
 	void defaultButton( void ) ;
 	void itemClicked( QTableWidgetItem * ) ;
@@ -114,7 +119,11 @@ private:
 	QMenu * m_not_hidden_volume_menu = nullptr ;
 	QMenu * m_key_manager_menu = nullptr ;
 
+	QAction * m_change_password_action = nullptr ;
+
 	QAction * m_languageAction = nullptr ;
+
+	LxQt::Wallet::Wallet * m_wallet = nullptr ;
 
 	bool m_startHidden ;
 	bool m_autoMount ;
