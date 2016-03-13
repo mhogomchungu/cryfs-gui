@@ -41,13 +41,14 @@ class changeWalletPassWord : public QWidget
 {
 	Q_OBJECT
 public:
-	static changeWalletPassWord& instance()
+	static void instance( QWidget * parent )
 	{
-		return *( new changeWalletPassWord() ) ;
+		new changeWalletPassWord( parent ) ;
 	}
-	changeWalletPassWord() : m_wallet( LxQt::Wallet::getWalletBackend( LxQt::Wallet::internalBackEnd ) )
+	changeWalletPassWord( QWidget * parent ) : m_wallet( LxQt::Wallet::getWalletBackend( LxQt::Wallet::internalBackEnd ) )
 	{
 		m_wallet->setInterfaceObject( this ) ;
+		m_wallet->setParent( parent ) ;
 		m_wallet->changeWalletPassWord( utility::walletName(),utility::applicationName() ) ;
 	}
 	~changeWalletPassWord()

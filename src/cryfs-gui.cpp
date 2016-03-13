@@ -249,7 +249,7 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 
 void cryfsGUI::changeInternalWalletPassWord()
 {
-	::changeWalletPassWord::instance() ;
+	::changeWalletPassWord::instance( this ) ;
 }
 
 void cryfsGUI::keyManagerClicked( QAction * ac )
