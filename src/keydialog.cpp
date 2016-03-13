@@ -72,6 +72,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 		m_ui->lineEditFolderPath->setText( utility::homePath() + "/" ) ;
 
+		m_ui->lineEditFolderPath->setEnabled( false ) ;
+
 		msg = tr( "Creating a new Cryfs Volume" ) ;
 	}else{
 		m_ui->label_3->setVisible( false ) ;
@@ -113,6 +115,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 	connect( m_ui->pbOpenMountPoint,SIGNAL( clicked() ),this,SLOT( pbMountPointPath() ) ) ;
 	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
 	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),this,SLOT( cbActicated( int ) ) ) ;
+	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),this,SLOT( textChanged( QString ) ) ) ;
 
 	const auto& m = e.mountPoint() ;
 
@@ -198,6 +201,20 @@ void keyDialog::cbMountReadOnlyStateChanged( int state )
 	}
 }
 
+void keyDialog::textChanged( QString e )
+{
+	auto r =  m_ui->lineEditFolderPath->text() ;
+
+	auto l = r.lastIndexOf( '/' ) ;
+
+	if( l != -1 ){
+
+		r.truncate( l + 1 ) ;
+
+		m_ui->lineEditFolderPath->setText( r + e ) ;
+	}
+}
+
 void keyDialog::pbMountPointPath()
 {
 	auto msg = tr( "Select A Folder To Create A Mount Point In" ) ;
@@ -205,12 +222,9 @@ void keyDialog::pbMountPointPath()
 
 	if( !e.isEmpty() ){
 
-		if( e.endsWith( "/" ) ){
+		e = e + "/" + m_ui->lineEditFolderPath->text().split( '/' ).last() ;
 
-			m_ui->lineEditFolderPath->setText( e ) ;
-		}else{
-			m_ui->lineEditFolderPath->setText( e + "/" ) ;
-		}
+		m_ui->lineEditFolderPath->setText( e ) ;
 	}
 }
 

@@ -72,7 +72,6 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/monitor_mountinfo.h
 		src/dialogmsg.h
 		src/plugin.h
-		src/task.h
 		src/favorites.h
 		src/checkforupdates.h
 		src/readonlywarning.h
