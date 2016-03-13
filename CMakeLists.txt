@@ -1,13 +1,13 @@
-cmake_minimum_required(VERSION 2.6)
-cmake_policy(SET CMP0017 OLD)
-set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON)
+cmake_minimum_required( VERSION 2.6 )
+cmake_policy( SET CMP0017 OLD )
+set_property( GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON )
 
-project(cryfs-gui)
+project( cryfs-gui )
 
 add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
 include_directories( ${PROJECT_BINARY_DIR}/cryfs-gui/ )
 
-INCLUDE(GNUInstallDirs)
+INCLUDE( GNUInstallDirs )
 
 # uninstall target
 configure_file(
@@ -56,7 +56,7 @@ ADD_SUBDIRECTORY( src/lxqt_wallet )
 
 add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -std=c++11 -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
 
-set (UI_FILES 	src/cryfs-gui.ui
+set( UI_FILES 	src/cryfs-gui.ui
 		src/keydialog.ui
 		src/dialogmsg.ui
 		src/plugin.ui
@@ -66,7 +66,7 @@ set (UI_FILES 	src/cryfs-gui.ui
 		src/walletconfiginput.ui
 )
 
-set(MOC_FILES 	src/cryfs-gui.h
+set( MOC_FILES 	src/cryfs-gui.h
 		src/keydialog.h
 		src/oneinstance.h
 		src/monitor_mountinfo.h
@@ -80,7 +80,7 @@ set(MOC_FILES 	src/cryfs-gui.h
 		src/walletconfiginput.h
  )
 
-set(SRC 	src/main.cpp
+set( SRC 	src/main.cpp
 		src/cryfs-gui.cpp
 		src/keydialog.cpp
 		src/cryfstask.cpp
@@ -109,16 +109,16 @@ if( QT5 )
 
 	add_definitions( ${Qt5Widgets_DEFINITIONS} )
 	QT5_WRAP_UI( UI ${UI_FILES} )
-	QT5_WRAP_CPP(MOC ${MOC_FILES} )
+	QT5_WRAP_CPP( MOC ${MOC_FILES} )
 	QT5_ADD_RESOURCES( TRAY_RC_SRCS src/icon.qrc )
 
 	INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-	add_executable( cryfs-gui ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
+	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs-gui ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} lxqtwallet )
 
-	set_target_properties( cryfs-gui PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 else()
 	find_package( Qt4 REQUIRED )
 
@@ -130,21 +130,23 @@ else()
 
 	INCLUDE( ${QT_USE_FILE} )
 	QT4_WRAP_UI( UI ${UI_FILES} )
-	QT4_WRAP_CPP(MOC ${MOC_FILES} )
+	QT4_WRAP_CPP( MOC ${MOC_FILES} )
 	QT4_ADD_RESOURCES( TRAY_RC_SRCS src/icon.qrc )
 
 	INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-	add_executable( cryfs-gui ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
+	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs-gui -lQtCore -lQtGui -lQtNetwork lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork lxqtwallet )
 
-	set_target_properties( cryfs-gui PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 endif()
 
-set_target_properties( cryfs-gui PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIC -pedantic " )
+set_target_properties( cryfs PROPERTIES COMPILE_FLAGS "-Wextra -Wall -s -fPIC -pedantic" )
 
-install( TARGETS cryfs-gui RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
+set_target_properties( cryfs PROPERTIES OUTPUT_NAME cryfs_gui )
+
+install( TARGETS cryfs RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 
 install ( FILES ${PROJECT_BINARY_DIR}/cryfs-gui.desktop
 DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
@@ -163,7 +165,7 @@ file( WRITE ${PROJECT_BINARY_DIR}/cryfs-gui.desktop
 "[Desktop Entry]
 Comment[en_US]=
 Comment=
-Exec=${CMAKE_INSTALL_FULL_BINDIR}/cryfs-gui -d %U
+Exec=${CMAKE_INSTALL_FULL_BINDIR}/cryfs_gui -d %U
 GenericName[en_US]=Encrypted Folder Manager
 GenericName=Encrypted Folder Manager
 Icon=cryfs-gui.png

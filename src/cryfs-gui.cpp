@@ -310,12 +310,12 @@ void cryfsGUI::showFavorites()
 
 void cryfsGUI::setLocalizationLanguage( bool translate )
 {
-	utility::setLocalizationLanguage( translate,this,m_languageAction,"cryfsGUI-gui" ) ;
+	utility::setLocalizationLanguage( translate,this,m_languageAction,"cryfs-gui" ) ;
 }
 
 void cryfsGUI::languageMenu( QAction * ac )
 {
-	utility::languageMenu( this,m_languageAction->menu(),ac,"cryfsGUI-gui" ) ;
+	utility::languageMenu( this,m_languageAction->menu(),ac,"cryfs-gui" ) ;
 }
 
 #define zuluMOUNT_AUTO_OPEN_FOLDER "/.cryfs-gui/cryfs-gui.NoAutoOpenFolder"

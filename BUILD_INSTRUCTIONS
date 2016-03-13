@@ -61,11 +61,11 @@ This option tells the build process to build the project in release mode.This mo
 -DQT5=false
 This option tells the build process to build GUI components using Qt4.Set the option to "true" if you want to build using Qt5.
 
--DNOGNOME=false
+-DNOSECRETSUPPORT=false
 This option tells the build process to add gnome's libsecret secure storage of passwords.Set this option to "true" if
 you do not want libsecret's support.
 
--DNOKDE=false
+-DNOKDESUPPORT=false
 This option tells the build process to add KDE's secure storage of passwords.Set this option to "true" if you do not
 want KDE wallet support.
 

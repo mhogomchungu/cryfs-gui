@@ -56,9 +56,8 @@ std::function< void() > monitor_mountinfo::stop()
 
 void monitor_mountinfo::threadStopped()
 {
-	m_stop() ;
 	m_running = false ;
-	QCoreApplication::exit() ;
+	m_stop() ;
 }
 
 void monitor_mountinfo::failedToStart()
