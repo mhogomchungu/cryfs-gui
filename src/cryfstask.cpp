@@ -97,7 +97,7 @@ static ev _cmd( const QString& e,ev::status status,const QString& arguments,cons
 
 			e.closeWriteChannel() ;
 
-			if( e.waitForFinished( 10000 ) ){
+			if( e.waitForFinished( 20000 ) ){
 
 				if( e.exitCode() == 0 ){
 
