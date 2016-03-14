@@ -243,7 +243,7 @@ void keyDialog::enableAll()
 {
 	m_ui->pbOptions->setEnabled( true ) ;
 	m_ui->label_2->setEnabled( true ) ;
-	m_ui->lineEditMountPoint->setEnabled( true ) ;
+	m_ui->lineEditMountPoint->setEnabled( m_create ) ;
 	m_ui->pbOpenMountPoint->setEnabled( true ) ;
 	m_ui->pbCancel->setEnabled( true ) ;
 	m_ui->pbOpen->setEnabled( true ) ;
@@ -256,7 +256,7 @@ void keyDialog::enableAll()
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
-	//m_ui->lineEditFolderPath->setEnabled( true ) ;
+	m_ui->lineEditFolderPath->setEnabled( false ) ;
 	m_ui->label_3->setEnabled( true ) ;
 }
 
@@ -340,6 +340,16 @@ void keyDialog::closeEvent( QCloseEvent * e )
 
 void keyDialog::pbOpen()
 {
+	if( m_create ){
+
+		if( m_ui->lineEditMountPoint->text().isEmpty() ){
+
+			DialogMsg msg( this ) ;
+
+			return msg.ShowUIOK( tr( "ERROR" ),tr( "Volume Name Field Is Empty" ) ) ;
+		}
+	}
+
 	this->disableAll() ;
 
 	if( m_ui->cbKeyType->currentIndex() == keyDialog::plugin ){
