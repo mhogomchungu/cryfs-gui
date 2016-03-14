@@ -50,7 +50,10 @@ Task::future<bool>& cryfsTask::encryptedFolderUnMount( const QString& m )
 
 		auto _umount = [ & ](){
 
-			if( utility::Task( "fusermount -u \"" + m + "\"",10000 ).success() ){
+			auto mm = m ;
+			mm.replace( "\"","\"\"\"" ) ;
+
+			if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
 
 				return _delete_mount_point( m ) ;
 			}else{
@@ -140,6 +143,12 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 			}
 		} ;
 
+		auto pp = p ;
+		pp.replace( "\"","\"\"\"" ) ;
+
+		auto mm = m ;
+		mm.replace( "\"","\"\"\"" ) ;
+
 		if( utility::pathExists( p + "/cryfs.config" ) ){
 
 			return _mount( [ & ](){
@@ -148,12 +157,12 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 
 				if( ro ){
 
-					opts = "%1 %2 -- -o ro -o fsname=cryfs@%3 -o subtype=cryfs" ;
+					opts = "\"%1\" \"%2\" -- -o ro -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
 				}else{
-					opts = "%1 %2 -- -o rw -o fsname=cryfs@%3 -o subtype=cryfs" ;
+					opts = "\"%1\" \"%2\" -- -o rw -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
 				}
 
-				return _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( p,m,p ),k ) ;
+				return _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( pp,mm,pp ),k ) ;
 			} ) ;
 		}
 
@@ -165,12 +174,12 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 
 				if( ro ){
 
-					opts = "%1 %2 -S -o ro -o fsname=encfs@%3 -o subtype=encfs" ;
+					opts = "\"%1\" \"%2\" -S -o ro -o fsname=encfs@\"%3\" -o subtype=encfs" ;
 				}else{
-					opts = "%1 %2 -S -o rw -o fsname=encfs@%3 -o subtype=encfs" ;
+					opts = "\"%1\" \"%2\" -S -o rw -o fsname=encfs@\"%3\" -o subtype=encfs" ;
 				}
 
-				return _cmd( "encfs",ev::status::encfs,QString( opts ).arg( p,m,p ),k ) ;
+				return _cmd( "encfs",ev::status::encfs,QString( opts ).arg( pp,mm,pp ),k ) ;
 			} ) ;
 		}
 
@@ -191,9 +200,15 @@ Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( co
 
 			if( _create_mount_point( m_point ) ){
 
-				auto opts = "%1 %2 -- -o rw -o fsname=cryfs@%3 -o subtype=cryfs" ;
+				auto m = m_point ;
+				m.replace( "\"","\"\"\"" ) ;
 
-				auto e = _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( cipherFolder,m_point,cipherFolder ),key ) ;
+				auto c = cipherFolder ;
+				c.replace( "\"","\"\"\"" ) ;
+
+				auto opts = "\"%1\" \"%2\" -- -o rw -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
+
+				auto e = _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( c,m,c ),key ) ;
 
 				if( e.state == ev::status::success ){
 
@@ -249,6 +264,22 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 
 		QVector< volumeEntryProperties > e ;
 
+		auto _decode_entry = []( QString path,bool set_offset ){
+
+			path.replace( "\\012","\n" ) ;
+			path.replace( "\\012","\n" ) ;
+			path.replace( "\\040"," " ) ;
+			path.replace( "\\134","\\" ) ;
+			path.replace( "\\011","\\t" ) ;
+
+			if( set_offset ){
+
+				path = path.mid( 6 ) ;
+			}
+
+			return path.toLatin1() ;
+		} ;
+
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
 
 			if( it.contains( " fuse.cryfs " ) || it.contains( " fuse.encfs " ) ){
@@ -263,17 +294,18 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 
 				const auto& fs = k.at( s - 3 ) ;
 
+				#define _entry( x,y ) _decode_entry( x,y ).constData()
 				#define _offset( x,y ) x.toLatin1().constData() + y
 
 				if( cipher_folder.startsWith( "encfs@" ) ){
 
-					e.append( { _offset( cipher_folder,6 ),mount_point,"encfs","Nil","Nil","Nil" } ) ;
+					e.append( { _entry( cipher_folder,true ),_entry( mount_point,false ),"encfs","Nil","Nil","Nil" } ) ;
 
 				}else if( cipher_folder.startsWith( "cryfs@" ) ){
 
-					e.append( { _offset( cipher_folder,6 ),mount_point,"cryfs","Nil","Nil","Nil" } ) ;
+					e.append( { _entry( cipher_folder,true ),_entry( mount_point,false ),"cryfs","Nil","Nil","Nil" } ) ;
 				}else{
-					e.append( { _hash_path( mount_point ),mount_point,_offset( fs,5 ),"Nil","Nil","Nil" } ) ;
+					e.append( { _hash_path( mount_point ),_entry( mount_point,false ),_offset( fs,5 ),"Nil","Nil","Nil" } ) ;
 				}
 			}
 		}
