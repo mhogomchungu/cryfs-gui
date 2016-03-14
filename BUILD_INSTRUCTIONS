@@ -37,7 +37,7 @@ mkdir build
 
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=false -DNOGNOME=false -DNOKDE=false -DQT5=false -DCMAKE_BUILD_TYPE=RELEASE . ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=false -DNOSECRETSUPPORT=false -DNOKDESUPPORT=false -DQT5=false -DCMAKE_BUILD_TYPE=RELEASE . ..
 
 make
 
