@@ -59,7 +59,7 @@
 
 cryfsGUI::cryfsGUI( QWidget * parent ) :
 	QWidget( parent ),
-	m_mountInfo( monitor_mountinfo::instance( this,true,[ this ](){ this->quitApplication() ; } ) )
+	m_mountInfo( monitor_mountinfo::instance( this,true,[](){ QCoreApplication::quit() ; } ) )
 {
 }
 
@@ -369,11 +369,6 @@ void cryfsGUI::startAutoMonitor()
 void cryfsGUI::closeApplication()
 {
 	m_mountInfo.stop()() ;
-}
-
-void cryfsGUI::quitApplication()
-{
-	QCoreApplication::quit() ;
 }
 
 void cryfsGUI::itemEntered( QTableWidgetItem * item )
@@ -764,7 +759,6 @@ void cryfsGUI::pbUmount()
 
 void cryfsGUI::unMountAll()
 {
-
 }
 
 void cryfsGUI::pbUpdate()

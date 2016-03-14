@@ -110,7 +110,6 @@ private slots:
 	void itemEntered( QTableWidgetItem * ) ;
 	void addEntryToTable( bool,const QStringList& ) ;
 	void addEntryToTable( bool,const volumeEntryProperties& ) ;
-	void quitApplication( void ) ;
 	void autoMountToggled( bool ) ;
 	void autoOpenFolderOnMount( bool ) ;
 	void removeEntryFromTable( QString ) ;
