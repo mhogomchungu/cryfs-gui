@@ -5,5 +5,7 @@
 		 <file>cryfs-gui.png</file>
 		 <file>folder.png</file>
 		 <file>file.png</file>
+		 <file>keyfile.png</file>
+		 <file>module.png</file>
 	 </qresource>
  </RCC>
