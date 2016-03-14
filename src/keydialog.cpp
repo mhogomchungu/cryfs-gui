@@ -348,6 +348,13 @@ void keyDialog::pbOpen()
 
 			return msg.ShowUIOK( tr( "ERROR" ),tr( "Volume Name Field Is Empty" ) ) ;
 		}
+
+		if( m_ui->lineEditKey->text().isEmpty() ){
+
+			DialogMsg msg( this ) ;
+
+			return msg.ShowUIOK( tr( "ERROR" ),tr( "Key Field Is Empty" ) ) ;
+		}
 	}
 
 	this->disableAll() ;
