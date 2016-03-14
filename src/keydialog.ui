@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>193</height>
+    <width>561</width>
+    <height>166</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -19,8 +19,8 @@
   <widget class="QPushButton" name="pbOpen">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>160</y>
+     <x>230</x>
+     <y>130</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -35,8 +35,8 @@
   <widget class="QPushButton" name="pbCancel">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>160</y>
+     <x>330</x>
+     <y>130</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -49,8 +49,8 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>130</y>
-     <width>101</width>
+     <y>100</y>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
@@ -67,8 +67,8 @@
   <widget class="QLineEdit" name="lineEditKey">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>130</y>
+     <x>130</x>
+     <y>100</y>
      <width>301</width>
      <height>31</height>
     </rect>
@@ -77,7 +77,7 @@
   <widget class="QPushButton" name="pbkeyOption">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>430</x>
      <y>130</y>
      <width>31</width>
      <height>31</height>
@@ -91,13 +91,13 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>20</y>
-     <width>101</width>
+     <y>10</y>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Mount Name</string>
+    <string>Volume Name</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -109,8 +109,8 @@
   <widget class="QPushButton" name="pbOpenMountPoint">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>60</y>
+     <x>430</x>
+     <y>40</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -122,8 +122,8 @@
   <widget class="QLineEdit" name="lineEditMountPoint">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>20</y>
+     <x>130</x>
+     <y>10</y>
      <width>301</width>
      <height>31</height>
     </rect>
@@ -132,10 +132,10 @@
   <widget class="QCheckBox" name="checkBoxOpenReadOnly">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>50</y>
-     <width>301</width>
-     <height>51</height>
+     <x>130</x>
+     <y>40</y>
+     <width>281</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -158,8 +158,8 @@
   <widget class="QPushButton" name="pbOptions">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>160</y>
+     <x>130</x>
+     <y>130</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -171,8 +171,8 @@
   <widget class="QComboBox" name="cbKeyType">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>100</y>
+     <x>130</x>
+     <y>70</y>
      <width>301</width>
      <height>31</height>
     </rect>
@@ -181,8 +181,8 @@
   <widget class="QLineEdit" name="lineEditFolderPath">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>60</y>
+     <x>130</x>
+     <y>40</y>
      <width>301</width>
      <height>31</height>
     </rect>
@@ -192,13 +192,13 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>60</y>
-     <width>101</width>
+     <y>40</y>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Folder Path</string>
+    <string>Volume Path</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

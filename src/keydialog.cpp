@@ -60,7 +60,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 		m_ui->pbOpen->setText( tr( "&Create" ) ) ;
 
-		m_ui->label_2->setText( tr( "Folder Name" ) ) ;
+		m_ui->label_2->setText( tr( "Volume Name" ) ) ;
 
 		m_ui->label_3->setVisible( true ) ;
 
@@ -78,6 +78,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 		msg = tr( "Creating a new Cryfs Volume" ) ;
 	}else{
+		m_ui->lineEditMountPoint->setEnabled( false ) ;
+
 		m_ui->label_3->setVisible( false ) ;
 
 		m_ui->lineEditFolderPath->setVisible( false ) ;
