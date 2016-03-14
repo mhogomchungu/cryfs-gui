@@ -35,11 +35,11 @@ class monitor_mountinfo : public QThread
 {
 	Q_OBJECT
 public:
-	static monitor_mountinfo& instance( QObject * parent,bool b,std::function< void() > f )
+	static monitor_mountinfo& instance( QObject * parent,bool b,std::function< void() >&& f )
 	{
 		return *( new monitor_mountinfo( parent,b,std::move( f ) ) ) ;
 	}
-	monitor_mountinfo( QObject * parent,bool,std::function< void() > ) ;
+	monitor_mountinfo( QObject * parent,bool,std::function< void() >&& ) ;
 	std::function< void() > stop() ;
 	void announceEvents( bool ) ;
 	~monitor_mountinfo() ;
@@ -56,7 +56,6 @@ private:
 	monitor_mountinfo * m_main ;
 	bool m_running ;
 	std::function< void() > m_stop ;
-	bool m_announceChanges ;
 	bool m_announceEvents ;
 };
 

@@ -98,7 +98,6 @@ void favorites::shortcutPressed()
 
 void favorites::deviceAddress()
 {
-
 }
 
 void favorites::ShowUI()

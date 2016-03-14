@@ -215,6 +215,34 @@ Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( co
 	} ) ;
 }
 
+static QString _hash_path( const QString& e )
+{
+	uint32_t hash = 0 ;
+
+	auto p = e.toLatin1() ;
+
+	auto key = p.constData() ;
+
+	auto l = p.size() ;
+
+	for( decltype( l ) i = 0 ; i < l ; i++ ){
+
+		hash += *( key + i ) ;
+
+		hash += ( hash << 10 ) ;
+
+		hash ^= ( hash >> 6 ) ;
+	}
+
+	hash += ( hash << 3 ) ;
+
+	hash ^= ( hash >> 11 ) ;
+
+	hash += ( hash << 15 ) ;
+
+	return QString::number( hash ) ;
+}
+
 Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 {
 	return Task::run< QVector< volumeEntryProperties > >( [](){
@@ -225,25 +253,27 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 
 			if( it.contains( " fuse.cryfs " ) || it.contains( " fuse.encfs " ) ){
 
-				auto k = utility::split( it,' ' ) ;
+				const auto k = utility::split( it,' ' ) ;
 
-				auto s = k.size() ;
+				const auto s = k.size() ;
 
-				auto plainFolder = k.at( s - 2 ) ;
+				const auto& cipher_folder = k.at( s - 2 ) ;
 
-				const auto& cipherFolder = k.at( 4 ) ;
+				const auto& mount_point = k.at( 4 ) ;
 
-				if( plainFolder.startsWith( "encfs@" ) ){
+				const auto& fs = k.at( s - 3 ) ;
 
-					plainFolder = plainFolder.mid( 6 ) ;
+				#define _offset( x,y ) x.toLatin1().constData() + y
 
-					e.append( { plainFolder,cipherFolder,"encfs","Nil","Nil","Nil" } ) ;
+				if( cipher_folder.startsWith( "encfs@" ) ){
 
-				}else if( plainFolder.startsWith( "cryfs@" ) ){
+					e.append( { _offset( cipher_folder,6 ),mount_point,"encfs","Nil","Nil","Nil" } ) ;
 
-					plainFolder = plainFolder.mid( 6 ) ;
+				}else if( cipher_folder.startsWith( "cryfs@" ) ){
 
-					e.append( { plainFolder,cipherFolder,"cryfs","Nil","Nil","Nil" } ) ;
+					e.append( { _offset( cipher_folder,6 ),mount_point,"cryfs","Nil","Nil","Nil" } ) ;
+				}else{
+					e.append( { _hash_path( mount_point ),mount_point,_offset( fs,5 ),"Nil","Nil","Nil" } ) ;
 				}
 			}
 		}

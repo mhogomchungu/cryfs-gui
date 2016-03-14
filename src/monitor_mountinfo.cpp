@@ -29,8 +29,8 @@
 
 #include <QCoreApplication>
 
-monitor_mountinfo::monitor_mountinfo( QObject * parent,bool e,std::function< void() > f ) :
-	QThread( parent ),m_stop( std::move( f ) ),m_announceChanges( e ),m_announceEvents( true )
+monitor_mountinfo::monitor_mountinfo( QObject * parent,bool e,std::function< void() >&& f ) :
+	QThread( parent ),m_stop( std::move( f ) ),m_announceEvents( e )
 {
 	m_babu = parent ;
 	m_baba = this ;
@@ -89,6 +89,9 @@ void monitor_mountinfo::run()
 
 	while( monitor.gotEvent() ){
 
-		emit gotEvent() ;
+		if( m_announceEvents ){
+
+			emit gotEvent() ;
+		}
 	}
 }

@@ -221,7 +221,7 @@ void cryfsGUI::aboutToShowMenu()
 
 void cryfsGUI::setupKeyManager( QMenu * m )
 {
-	m_key_manager_menu = new QMenu( tr( "Key Storage" ) ) ;
+	m_key_manager_menu = new QMenu( tr( "Key Storage" ),this ) ;
 
 	connect( m_key_manager_menu,SIGNAL( triggered( QAction * ) ),
 		 this,SLOT( keyManagerClicked( QAction * ) ) ) ;
@@ -249,7 +249,7 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 
 void cryfsGUI::changeInternalWalletPassWord()
 {
-	::changeWalletPassWord::instance( this ) ;
+	changeWalletPassWord::instance( this ) ;
 }
 
 void cryfsGUI::keyManagerClicked( QAction * ac )
@@ -378,38 +378,7 @@ void cryfsGUI::quitApplication()
 
 void cryfsGUI::itemEntered( QTableWidgetItem * item )
 {
-	auto row = item->row() ;
-	auto table = item->tableWidget() ;
-	auto m_point = table->item( row,1 )->text() ;
-
-	using string_t = decltype( table->item( row,3 )->text() ) ;
-
-	string_t x = table->item( row,3 )->text() ;
-	string_t z ;
-	string_t y ;
-
-	if( m_point == "/" ){
-		/*
-		 * we dont check if root path is publicly shared because the path it will produce (/run/media/public/)
-		 * will always return true,a solution is to examine /proc/self/mountinfo and thats work for another day
-		 */
-		if( x == "Nil" ){
-			x.clear() ;
-		}
-		z += tr( "LABEL=\"%1\"" ).arg( x ) ;
-
-	}else if( m_point == "Nil" ){
-
-		/*
-		 * volume is not mounted,cant know its LABEL value
-		 */
-
-		x.clear() ;
-
-		z += tr( "LABEL=\"%1\"" ).arg( x ) ;
-	}
-
-	item->setToolTip( z ) ;
+	Q_UNUSED( item ) ;
 }
 
 void cryfsGUI::startGUI()
@@ -788,6 +757,8 @@ void cryfsGUI::pbUmount()
 
 		DialogMsg m( this ) ;
 		m.ShowUIOK( tr( "ERROR" ),tr( "Failed to unmount %1 volume" ).arg( type ) ) ;
+
+		this->enableAll() ;
 	}
 }
 

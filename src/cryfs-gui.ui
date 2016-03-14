@@ -106,13 +106,6 @@
          <enum>QLayout::SetFixedSize</enum>
         </property>
         <item>
-         <widget class="QPushButton" name="pbunlockcryptfs">
-          <property name="text">
-           <string>Mount Encf&amp;s/Cryfs</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="pbcreate">
           <property name="text">
            <string>&amp;Create Cryfs Volume</string>
@@ -122,6 +115,13 @@
           </property>
           <property name="default">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbunlockcryptfs">
+          <property name="text">
+           <string>Mount Encf&amp;s/Cryfs</string>
           </property>
          </widget>
         </item>

@@ -374,7 +374,7 @@ QStringList utility::readFavorites()
 
 		QStringList l ;
 
-		for( const auto& it : QString( f.readAll() ).split( '\n',QString::SkipEmptyParts ) ){
+		for( const auto& it : utility::split( f.readAll() ) ){
 
 			l.append( it ) ;
 		}

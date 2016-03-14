@@ -139,7 +139,7 @@ private:
 	QString m_label ;
 	QString m_volumeSize ;
 	QString m_usedSpacePercentage ;
-	bool    m_isSystem = true ;
+	bool    m_isSystem = false ;
 };
 
 #endif // VOLUMEENTRYPROPERTIES_H
