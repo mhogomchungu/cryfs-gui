@@ -76,7 +76,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 
 		m_ui->lineEditMountPoint->setFocus() ;
 
-		msg = tr( "Creating a new Cryfs Volume" ) ;
+		msg = tr( "Create A New Cryfs Volume" ) ;
 	}else{
 		m_ui->lineEditMountPoint->setEnabled( false ) ;
 
