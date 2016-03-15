@@ -166,6 +166,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryPro
 		m_ui->lineEditKey->setFocus() ;
 	}
 
+	m_ui->pbOptions->setEnabled( false ) ;
+
 	this->installEventFilter( this ) ;
 }
 
@@ -241,7 +243,7 @@ void keyDialog::pbMountPointPath()
 
 void keyDialog::enableAll()
 {
-	m_ui->pbOptions->setEnabled( true ) ;
+	m_ui->pbOptions->setEnabled( false ) ;
 	m_ui->label_2->setEnabled( true ) ;
 	m_ui->lineEditMountPoint->setEnabled( m_create ) ;
 	m_ui->pbOpenMountPoint->setEnabled( true ) ;
