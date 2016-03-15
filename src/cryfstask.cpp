@@ -24,8 +24,6 @@
 #include <QDebug>
 #include <QFile>
 
-#include <stdlib.h>
-
 static bool _delete_mount_point( const QString& m )
 {
 	QDir e;
@@ -126,7 +124,7 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 {
 	return Task::run< ev >( [ p,m,k,ro ]()->ev{
 
-		auto _mount = [ & ]( std::function< ev() > unlocked )->ev{
+		auto _mount = [ & ]( std::function< ev() >&& unlocked )->ev{
 
 			if( _create_mount_point( m ) ){
 
@@ -187,10 +185,11 @@ Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QStr
 	} ) ;
 }
 
-Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( const QString& cipherFolder,
-									      const QString& plainFoder,
-									      const QString& key,
-									      std::function< void( const QString& )> openFolder )
+Task::future< cryfsTask::encryptedVolume >&
+cryfsTask::encryptedFolderCreate( const QString& cipherFolder,
+				  const QString& plainFoder,
+				  const QString& key,
+				  std::function< void( const QString& )> openFolder )
 {
 	return Task::run< ev >( [ cipherFolder,plainFoder,key,openFolder ]()->ev{
 
@@ -230,39 +229,37 @@ Task::future< cryfsTask::encryptedVolume >& cryfsTask::encryptedFolderCreate( co
 	} ) ;
 }
 
-static QString _hash_path( const QString& e )
-{
-	uint32_t hash = 0 ;
-
-	auto p = e.toLatin1() ;
-
-	auto key = p.constData() ;
-
-	auto l = p.size() ;
-
-	for( decltype( l ) i = 0 ; i < l ; i++ ){
-
-		hash += *( key + i ) ;
-
-		hash += ( hash << 10 ) ;
-
-		hash ^= ( hash >> 6 ) ;
-	}
-
-	hash += ( hash << 3 ) ;
-
-	hash ^= ( hash >> 11 ) ;
-
-	hash += ( hash << 15 ) ;
-
-	return QString::number( hash ) ;
-}
-
 Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 {
 	return Task::run< QVector< volumeEntryProperties > >( [](){
 
-		QVector< volumeEntryProperties > e ;
+		auto _hash = []( const QString& e ){
+
+			uint32_t hash = 0 ;
+
+			auto p = e.toLatin1() ;
+
+			auto key = p.constData() ;
+
+			auto l = p.size() ;
+
+			for( decltype( l ) i = 0 ; i < l ; i++ ){
+
+				hash += *( key + i ) ;
+
+				hash += ( hash << 10 ) ;
+
+				hash ^= ( hash >> 6 ) ;
+			}
+
+			hash += ( hash << 3 ) ;
+
+			hash ^= ( hash >> 11 ) ;
+
+			hash += ( hash << 15 ) ;
+
+			return QString::number( hash ) ;
+		} ;
 
 		auto _decode_entry = []( QString path,bool set_offset ){
 
@@ -277,8 +274,10 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 				path = path.mid( 6 ) ;
 			}
 
-			return path.toLatin1() ;
+			return path ;
 		} ;
+
+		QVector< volumeEntryProperties > e ;
 
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
 
@@ -294,18 +293,24 @@ Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
 
 				const auto& fs = k.at( s - 3 ) ;
 
-				#define _entry( x,y ) _decode_entry( x,y ).constData()
-				#define _offset( x,y ) x.toLatin1().constData() + y
-
 				if( cipher_folder.startsWith( "encfs@" ) ){
 
-					e.append( { _entry( cipher_folder,true ),_entry( mount_point,false ),"encfs","Nil","Nil","Nil" } ) ;
+					e.append( { _decode_entry( cipher_folder,true ),
+						    _decode_entry( mount_point,false ),
+						    "encfs",
+						    "Nil","Nil","Nil" } ) ;
 
 				}else if( cipher_folder.startsWith( "cryfs@" ) ){
 
-					e.append( { _entry( cipher_folder,true ),_entry( mount_point,false ),"cryfs","Nil","Nil","Nil" } ) ;
+					e.append( { _decode_entry( cipher_folder,true ),
+						    _decode_entry( mount_point,false ),
+						    "cryfs",
+						    "Nil","Nil","Nil" } ) ;
 				}else{
-					e.append( { _hash_path( mount_point ),_entry( mount_point,false ),_offset( fs,5 ),"Nil","Nil","Nil" } ) ;
+					e.append( { _hash( mount_point ),
+						    _decode_entry( mount_point,false ),
+						    fs.toLatin1().constData() + 5,
+						    "Nil","Nil","Nil" } ) ;
 				}
 			}
 		}

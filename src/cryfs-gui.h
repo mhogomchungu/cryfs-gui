@@ -64,7 +64,7 @@ private slots:
 	void walletIsOpen( bool e )
 	{
 		Q_UNUSED( e ) ;
-	}	
+	}
 private:
 	LxQt::Wallet::Wallet * m_wallet ;
 };
@@ -80,8 +80,6 @@ public:
 	explicit cryfsGUI( QWidget * parent = 0 ) ;
 	~cryfsGUI() ;
 	void Show( void ) ;
-signals:
-	void result( int,QString ) ;
 public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
