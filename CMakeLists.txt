@@ -107,6 +107,7 @@ if( QT5 )
 	include_directories( ${Qt5Network_INCLUDE_DIRS} )
 
 	add_definitions( ${Qt5Widgets_DEFINITIONS} )
+
 	QT5_WRAP_UI( UI ${UI_FILES} )
 	QT5_WRAP_CPP( MOC ${MOC_FILES} )
 	QT5_ADD_RESOURCES( TRAY_RC_SRCS src/icon.qrc )
@@ -128,6 +129,7 @@ else()
 	INCLUDE( ${QT_USE_FILE} )
 
 	INCLUDE( ${QT_USE_FILE} )
+
 	QT4_WRAP_UI( UI ${UI_FILES} )
 	QT4_WRAP_CPP( MOC ${MOC_FILES} )
 	QT4_ADD_RESOURCES( TRAY_RC_SRCS src/icon.qrc )
