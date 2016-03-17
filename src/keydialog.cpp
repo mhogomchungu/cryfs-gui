@@ -442,12 +442,12 @@ bool keyDialog::completed( cryfsTask::encryptedVolume::status s )
 
 	case ev::status::cryfsNotFound :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock a cryfs volume.\ncryfs executable could not be found" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\ncryfs executable could not be found" ) ) ;
 		break;
 
 	case ev::status::encfsNotFound :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock an encfs volume.\nencfs executable could not be found" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\nencfs executable could not be found" ) ) ;
 		break;
 
 	case ev::status::failedToCreateMountPoint :

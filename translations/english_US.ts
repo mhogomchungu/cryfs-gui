@@ -505,16 +505,6 @@ Wrong password entered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to unlock a cryfs volume.
-cryfs executable could not be found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to unlock an encfs volume.
-encfs executable could not be found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Failed to create mount point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -539,6 +529,16 @@ An unknown error has occured</source>
     </message>
     <message>
         <source>Keyfile path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to complete the request.
+cryfs executable could not be found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to complete the request.
+encfs executable could not be found</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
