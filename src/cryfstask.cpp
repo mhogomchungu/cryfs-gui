@@ -229,7 +229,7 @@ cryfsTask::encryptedFolderCreate( const QString& cipherFolder,
 	} ) ;
 }
 
-Task::future< QVector<volumeEntryProperties > >& cryfsTask::updateVolumeList()
+Task::future< QVector< volumeEntryProperties > >& cryfsTask::updateVolumeList()
 {
 	return Task::run< QVector< volumeEntryProperties > >( [](){
 

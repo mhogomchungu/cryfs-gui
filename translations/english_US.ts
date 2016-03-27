@@ -164,6 +164,10 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
         <source>Translation will be done the next time you restart.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Mount All</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>checkForUpdates</name>
@@ -334,6 +338,10 @@ the volume is not supported
     </message>
     <message>
         <source>Failed to unmount %1 volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mount All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
