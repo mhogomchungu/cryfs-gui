@@ -659,8 +659,10 @@ void cryfsGUI::showMoungDialog( const volumeEntryProperties& v )
 	if( v.isEmpty() ){
 
 		DialogMsg msg( this ) ;
+
 		msg.ShowUIOK( tr( "ERROR" ),
-			      tr( "Permission to access the volume was denied\nor\nthe volume is not supported\n(LVM/MDRAID signatures found)" ) ) ;
+			      tr( "Permission to access the volume was denied\nor\nthe volume is not supported" ) ) ;
+
 		this->enableAll() ;
 	}else{
 		this->mount( v ) ;
@@ -784,7 +786,7 @@ void cryfsGUI::pbUpdate()
 }
 
 void cryfsGUI::updateVolumeList( const QVector< volumeEntryProperties >& r )
-{		
+{
 	for( const auto& it : r ){
 
 		if( it.entryisValid() ){
@@ -820,7 +822,7 @@ void cryfsGUI::enableAll()
 		m_ui->tableWidget->setFocus() ;
 		m_ui->pbunlockcryptfs->setEnabled( true ) ;
 		m_ui->pbcreate->setEnabled( true ) ;
-	}	
+	}
 }
 
 void cryfsGUI::enableAll_1()

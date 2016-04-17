@@ -196,8 +196,6 @@ void keyDialog::doAction( QAction * ac )
 
 void keyDialog::cbMountReadOnlyStateChanged( int state )
 {
-	Q_UNUSED( state ) ;
-
 	m_ui->checkBoxOpenReadOnly->setEnabled( false ) ;
 	m_ui->checkBoxOpenReadOnly->setChecked( utility::setOpenVolumeReadOnly( this,state == Qt::Checked,QString( "cryfs-gui" ) ) ) ;
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
@@ -476,7 +474,9 @@ void keyDialog::encryptedFolderCreate()
 {
 	auto path = m_ui->lineEditFolderPath->text() ;
 
-	if( this->completed( cryfsTask::encryptedFolderCreate( path,path.split( '/' ).last(),m_key,m_success ).await().state ) ){
+	auto m = path.split( '/' ).last() ;
+
+	if( this->completed( cryfsTask::encryptedFolderCreate( path,m,m_key,m_success ).await().state ) ){
 
 		this->HideUI() ;
 	}else{
@@ -503,11 +503,9 @@ void keyDialog::encryptedFolderMount()
 
 		this->HideUI() ;
 	}else{
-		if( m_ui->cbKeyType->currentIndex() == keyDialog::Key ){
+		m_ui->cbKeyType->setCurrentIndex( keyDialog::Key ) ;
 
-			m_ui->lineEditKey->clear() ;
-		}
-
+		m_ui->lineEditKey->clear() ;
 		m_ui->lineEditKey->setFocus() ;
 
 		this->enableAll() ;

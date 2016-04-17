@@ -264,7 +264,6 @@ Task::future< QVector< volumeEntryProperties > >& cryfsTask::updateVolumeList()
 		auto _decode_entry = []( QString path,bool set_offset ){
 
 			path.replace( "\\012","\n" ) ;
-			path.replace( "\\012","\n" ) ;
 			path.replace( "\\040"," " ) ;
 			path.replace( "\\134","\\" ) ;
 			path.replace( "\\011","\\t" ) ;
