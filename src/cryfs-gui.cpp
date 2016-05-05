@@ -626,7 +626,7 @@ void cryfsGUI::dropEvent( QDropEvent * e )
 	}
 }
 
-void cryfsGUI::mount( const volumeEntryProperties& entry )
+void cryfsGUI::mount( const volumeInfo& entry )
 {
 	this->disableAll() ;
 
@@ -643,7 +643,7 @@ void cryfsGUI::mount( const volumeEntryProperties& entry )
 
 void cryfsGUI::pbCreate()
 {
-	this->mount( volumeEntryProperties() ) ;
+	this->mount( volumeInfo() ) ;
 }
 
 void cryfsGUI::slotMount()
@@ -654,7 +654,7 @@ void cryfsGUI::slotMount()
 	this->mount( tablewidget::tableRowEntries( table,row ) ) ;
 }
 
-void cryfsGUI::showMoungDialog( const volumeEntryProperties& v )
+void cryfsGUI::showMoungDialog( const volumeInfo& v )
 {
 	if( v.isEmpty() ){
 
@@ -699,19 +699,14 @@ QFont cryfsGUI::getSystemVolumeFont()
 	return f ;
 }
 
-void cryfsGUI::addEntryToTable( bool systemVolume,const QStringList& l )
+void cryfsGUI::addEntryToTable( const QStringList& l )
 {
-	if( systemVolume ){
-
-		tablewidget::addRowToTable( m_ui->tableWidget,l,this->getSystemVolumeFont() ) ;
-	}else{
-		tablewidget::addRowToTable( m_ui->tableWidget,l ) ;
-	}
+	tablewidget::addRowToTable( m_ui->tableWidget,l ) ;
 }
 
-void cryfsGUI::addEntryToTable( bool systemVolume,const volumeEntryProperties& e )
+void cryfsGUI::addEntryToTable( const volumeInfo& e )
 {
-	this->addEntryToTable( systemVolume,e.entryList() ) ;
+	this->addEntryToTable( e.entryList() ) ;
 }
 
 void cryfsGUI::removeEntryFromTable( QString volume )
@@ -729,7 +724,7 @@ void cryfsGUI::removeEntryFromTable( QString volume )
 	}
 }
 
-void cryfsGUI::updateList( const volumeEntryProperties& entry )
+void cryfsGUI::updateList( const volumeInfo& entry )
 {
 	if( entry.isNotEmpty() ){
 
@@ -742,11 +737,14 @@ void cryfsGUI::updateList( const volumeEntryProperties& entry )
 			row = tablewidget::addEmptyRow( table ) ;
 		}
 
-		if( entry.isSystem() ){
+		tablewidget::updateRowInTable( table,entry.entryList(),row,this->font() ) ;
 
-			tablewidget::updateRowInTable( table,entry.entryList(),row,this->getSystemVolumeFont() ) ;
+		if( entry.readOnly() ){
+
+			tablewidget::setRowToolTip( table,row,tr( "Mounted In Read Only Mode" ) ) ;
+
 		}else{
-			tablewidget::updateRowInTable( table,entry.entryList(),row,this->font() ) ;
+			tablewidget::setRowToolTip( table,row,tr( "Mounted In Read/Write Mode" ) ) ;
 		}
 
 		tablewidget::selectRow( table,row ) ;
@@ -785,7 +783,7 @@ void cryfsGUI::pbUpdate()
 	this->updateVolumeList( cryfsTask::updateVolumeList().await() ) ;
 }
 
-void cryfsGUI::updateVolumeList( const QVector< volumeEntryProperties >& r )
+void cryfsGUI::updateVolumeList( const QVector< volumeInfo >& r )
 {
 	for( const auto& it : r ){
 

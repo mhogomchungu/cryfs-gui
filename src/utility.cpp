@@ -203,7 +203,7 @@ utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,c
 		auto walletName = utility::walletName() ;
 		auto appName    = utility::applicationName() ;
 
-		if( LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,walletName,appName ) ){
+		if( LxQt::Wallet::walletExists( storage,walletName,appName ) ){
 
 			storage_t e( _getBackEnd( storage ) ) ;
 

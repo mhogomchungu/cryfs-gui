@@ -32,7 +32,7 @@ class QTableWidgetItem ;
 class QTableWidget ;
 
 #include "cryfs-gui.h"
-#include "volumeentryproperties.h"
+#include "volumeinfo.h"
 #include "utility.h"
 #include "cryfstask.h"
 
@@ -49,7 +49,7 @@ class keyDialog : public QDialog
 public:
 	static keyDialog& instance( QWidget * parent,
 				     QTableWidget * table,
-				     const volumeEntryProperties& v,
+				     const volumeInfo& v,
 				     std::function< void() > cancel,
 				     std::function< void( const QString& ) > success )
 	{
@@ -57,7 +57,7 @@ public:
 	}
 	keyDialog( QWidget * parent,
 		   QTableWidget *,
-		   const volumeEntryProperties&,
+		   const volumeInfo&,
 		   std::function< void() >,
 		   std::function< void( const QString& ) > ) ;
 	~keyDialog() ;
@@ -87,7 +87,7 @@ private slots:
 	void encryptedFolderMount( void ) ;
 	void encryptedFolderCreate( void ) ;
 private :
-	bool completed( cryfsTask::encryptedVolume::status ) ;
+	bool completed( cryfsTask::status ) ;
 	void keyAndKeyFile( void ) ;
 	void openVolume( void ) ;
 	void enableAll( void ) ;

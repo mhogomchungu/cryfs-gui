@@ -20,7 +20,7 @@
 #ifndef ZULUMOUNTTASK_H
 #define ZULUMOUNTTASK_H
 
-#include "volumeentryproperties.h"
+#include "volumeinfo.h"
 #include "task.h"
 #include "utility.h"
 
@@ -30,21 +30,24 @@
 
 namespace cryfsTask
 {
-	struct encryptedVolume
+	struct options
 	{
-		enum class status
-		{
-			success,cryfs,cryfsNotFound,encfs,encfsNotFound,unknown,failedToCreateMountPoint,backendFail
-		}state;
+		QString cipherFolder ;
+		QString plainFolder ;
+		QString key ;
+		std::function< void( const QString& )> openFolder ;
+		bool ro ;
 	};
 
-	Task::future< QVector< volumeEntryProperties > >& updateVolumeList( void ) ;
+	enum class status
+	{
+		success,cryfs,cryfsNotFound,encfs,encfsNotFound,unknown,failedToCreateMountPoint,backendFail
+	};
+
+	Task::future< QVector< volumeInfo > >& updateVolumeList( void ) ;
 	Task::future< bool >& encryptedFolderUnMount( const QString& mountPoint ) ;
-	Task::future< encryptedVolume >& encryptedFolderMount( const QString& volumePath,const QString& mountPoint,const QString& key,bool ro ) ;
-	Task::future< encryptedVolume >& encryptedFolderCreate( const QString& volumePath,
-								const QString& mountPoint,
-								const QString& key,
-								std::function< void( const QString& )> openPath ) ;
+	Task::future< cryfsTask::status >& encryptedFolderMount( const options& ) ;
+	Task::future< cryfsTask::status >& encryptedFolderCreate( const options& ) ;
 }
 
 #endif // ZULUMOUNTTASK_H

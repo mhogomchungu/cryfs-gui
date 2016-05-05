@@ -74,30 +74,6 @@
           <set>AlignCenter</set>
          </property>
         </column>
-        <column>
-         <property name="text">
-          <string>Label</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Size</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>%Used</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
        </widget>
       </item>
       <item>

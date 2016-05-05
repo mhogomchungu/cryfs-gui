@@ -86,7 +86,6 @@ namespace utility
 	QString mountPathPostFix( const QString& path ) ;
 
 	bool pathIsReadable( const QString& ) ;
-	bool pathExists( const QString& ) ;
 
 	bool setOpenVolumeReadOnly( QWidget * parent,bool check,const QString& app ) ;
 	bool getOpenVolumeReadOnlyOption( const QString& app ) ;
@@ -127,6 +126,44 @@ namespace utility
 	::Task::future< bool >& openPath( const QString& path,const QString& opener,const QString& env = QString() ) ;
 
 	void openPath( const QString& path,const QString& opener,const QString& env,QWidget *,const QString&,const QString& ) ;
+}
+
+namespace utility{
+
+	bool pathExists( const QString& ) ;
+
+	static inline bool pathExists()
+	{
+		return false ;
+	}
+
+	template< typename First,typename ... Args >
+	bool atLeastOnePathExists( First f,Args ... args )
+	{
+		if( utility::pathExists( f ) ){
+
+			return true ;
+		}else{
+			return utility::pathExists( args ... ) ;
+		}
+	}
+
+	static inline bool containsAtleastOne( const QString& e )
+	{
+		Q_UNUSED( e ) ;
+		return false ;
+	}
+
+	template< typename First,typename ... Args >
+	bool containsAtleastOne( const QString& e,First f,Args ... args )
+	{
+		if( e.contains( f ) ){
+
+			return true ;
+		}else{
+			return containsAtleastOne( e,args ... ) ;
+		}
+	}
 }
 
 namespace utility

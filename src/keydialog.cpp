@@ -41,7 +41,7 @@
  */
 static QString _internalPassWord ;
 
-keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeEntryProperties& e,std::function< void() > p,std::function< void( const QString& ) > q ) :
+keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,std::function< void() > p,std::function< void( const QString& ) > q ) :
 	QDialog( parent ),m_ui( new Ui::keyDialog ),m_cancel( std::move( p ) ),m_success( std::move( q ) )
 {
 	m_ui->setupUi( this ) ;
@@ -416,49 +416,47 @@ void keyDialog::pbOpen()
 	}
 }
 
-bool keyDialog::completed( cryfsTask::encryptedVolume::status s )
+bool keyDialog::completed( cryfsTask::status s )
 {
 	DialogMsg msg( this ) ;
 
 	switch( s ){
 
-	using ev = cryfsTask::encryptedVolume ;
-
-	case ev::status::success :
+	case cryfsTask::status::success :
 
 		return true ;
 
-	case ev::status::cryfs :
+	case cryfsTask::status::cryfs :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock a cryfs volume.\nWrong password entered" ) ) ;
 		break;
 
-	case ev::status::encfs :
+	case cryfsTask::status::encfs :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock an encfs volume.\nWrong password entered" ) ) ;
 		break;
 
-	case ev::status::cryfsNotFound :
+	case cryfsTask::status::cryfsNotFound :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\ncryfs executable could not be found" ) ) ;
 		break;
 
-	case ev::status::encfsNotFound :
+	case cryfsTask::status::encfsNotFound :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\nencfs executable could not be found" ) ) ;
 		break;
 
-	case ev::status::failedToCreateMountPoint :
+	case cryfsTask::status::failedToCreateMountPoint :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to create mount point" ) ) ;
 		break;
 
-	case ev::status::unknown :
+	case cryfsTask::status::unknown :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock the volume.\nNot supported volume encountered" ) ) ;
 		break;
 
-	case ev::status::backendFail :
+	case cryfsTask::status::backendFail :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the task.\nBackend not responding" ) ) ;
 		break;
@@ -476,7 +474,9 @@ void keyDialog::encryptedFolderCreate()
 
 	auto m = path.split( '/' ).last() ;
 
-	if( this->completed( cryfsTask::encryptedFolderCreate( path,m,m_key,m_success ).await().state ) ){
+	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_success,false } ) ;
+
+	if( this->completed( e.await() ) ){
 
 		this->HideUI() ;
 	}else{
@@ -497,7 +497,9 @@ void keyDialog::encryptedFolderMount()
 
 	auto ro = m_ui->checkBoxOpenReadOnly->isChecked() ;
 
-	if( this->completed( cryfsTask::encryptedFolderMount( m_path,m,m_key,ro ).await().state ) ){
+	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_success,ro } ) ;
+
+	if( this->completed( e.await() ) ){
 
 		m_success( m ) ;
 

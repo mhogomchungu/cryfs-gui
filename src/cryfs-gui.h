@@ -27,7 +27,7 @@
 #include <QSystemTrayIcon>
 #include <QVector>
 
-#include "volumeentryproperties.h"
+#include "volumeinfo.h"
 #include "utility.h"
 
 #include "lxqt_wallet/frontend/lxqt_wallet.h"
@@ -89,9 +89,9 @@ private slots:
 	void closeApplication( void ) ;
 	void unlockCryptFs( void ) ;
 	void startGUI( void ) ;
-	void showMoungDialog( const volumeEntryProperties& ) ;
+	void showMoungDialog( const volumeInfo& ) ;
 	void showMoungDialog( const QString&,const QString& = QString() ) ;
-	void mount( const volumeEntryProperties& ) ;
+	void mount( const volumeInfo& ) ;
 	void defaultButton( void ) ;
 	void itemClicked( QTableWidgetItem * ) ;
 	void pbUpdate( void ) ;
@@ -106,8 +106,8 @@ private slots:
 	void slotOpenFolder( void ) ;
 	void slotOpenSharedFolder( void ) ;
 	void itemEntered( QTableWidgetItem * ) ;
-	void addEntryToTable( bool,const QStringList& ) ;
-	void addEntryToTable( bool,const volumeEntryProperties& ) ;
+	void addEntryToTable( const QStringList& ) ;
+	void addEntryToTable( const volumeInfo& ) ;
 	void autoMountToggled( bool ) ;
 	void autoOpenFolderOnMount( bool ) ;
 	void removeEntryFromTable( QString ) ;
@@ -121,7 +121,7 @@ private slots:
 private:
 	QString resolveFavoriteMountPoint( const QString& ) ;
 	void autoUpdateCheck( void ) ;
-	void updateVolumeList( const QVector< volumeEntryProperties >& ) ;
+	void updateVolumeList( const QVector< volumeInfo >& ) ;
 	void openMountPoint( const QString& ) ;
 	QFont getSystemVolumeFont( void ) ;
 	void setLocalizationLanguage( bool ) ;
@@ -131,7 +131,7 @@ private:
 	void showContextMenu( QTableWidgetItem *,bool ) ;
 	void startAutoMonitor( void ) ;
 	bool autoMount( void ) ;
-	void updateList( const volumeEntryProperties& ) ;
+	void updateList( const volumeInfo& ) ;
 	void setupKeyManager( QMenu * ) ;
 
 	Ui::cryfsGUI * m_ui = nullptr ;

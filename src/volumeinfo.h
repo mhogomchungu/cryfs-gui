@@ -24,16 +24,16 @@
 
 #include <initializer_list>
 
-class volumeEntryProperties
+class volumeInfo
 {
 public:
-	volumeEntryProperties( const QStringList& l = QStringList(),bool isSystem = false )
+	volumeInfo( const QStringList& l = QStringList() )
 	{
-		this->setValues( l,isSystem ) ;
+		this->setValues( l ) ;
 	}
-	volumeEntryProperties( const std::initializer_list<QString>& l,bool isSystem = false )
+	volumeInfo( const std::initializer_list<QString>& l )
 	{
-		this->setValues( l,isSystem ) ;
+		this->setValues( l ) ;
 	}
 	const QString& volumeName() const
 	{
@@ -46,22 +46,6 @@ public:
 	const QString& fileSystem() const
 	{
 		return m_fileSystem ;
-	}
-	const QString& label() const
-	{
-		return m_label ;
-	}
-	const QString& volumeSize() const
-	{
-		return m_volumeSize ;
-	}
-	const QString& spaceUsedPercentage() const
-	{
-		return m_usedSpacePercentage ;
-	}
-	bool isSystem() const
-	{
-		return m_isSystem ;
 	}
 	bool isEmpty() const
 	{
@@ -78,9 +62,6 @@ public:
 		}
 		if( m_fileSystem == "encfs" || m_fileSystem == "cryfs" ){
 			return true ;
-		}
-		if( m_volumeSize == "1.0 KB" || m_volumeSize == "1,0 KB" || m_volumeSize == "Nil" ){
-			return false ;
 		}
 		if( m_mountPoint == "/run/media/public/" ){
 			return false ;
@@ -99,47 +80,30 @@ public:
 	{
 		return m_mountPoint != "Nil" ;
 	}
+	bool readOnly() const
+	{
+	    return m_readOnly == "ro" ;
+	}
 	QStringList entryList() const
 	{
-		return { m_volume,m_mountPoint,m_fileSystem,m_label,m_volumeSize,m_usedSpacePercentage } ;
-	}
-	volumeEntryProperties& setMountPoint( const QString& m )
-	{
-		m_mountPoint = m ;
-		return *this ;
+		return { m_volume,m_mountPoint,m_fileSystem } ;
 	}
 private:
-	void setValues( const QStringList& l,bool isSystem )
+	void setValues( const QStringList& l )
 	{
-		m_isSystem = isSystem ;
-
-		if( l.size() >= 6 ){
+		if( l.size() >= 4 ){
 			
 			m_volume      = l.at( 0 ) ;
 			m_mountPoint  = l.at( 1 ) ;
 			m_fileSystem  = l.at( 2 ) ;
-			m_label       = l.at( 3 ) ;
-			m_volumeSize  = l.at( 4 ) ;
-			m_usedSpacePercentage = l.at( 5 ) ;
-
-			int index = m_fileSystem.indexOf( "/" ) ;
-
-			if( index != -1 ){
-
-				m_fileSystem = m_fileSystem.replace( "/","\n(" ) + ")" ;
-			}
-
-			m_usedSpacePercentage.remove( QChar( '\n' ) ) ;
+			m_readOnly    = l.at( 3 ) ;
 		}
 	}
 
 	QString m_volume ;
 	QString m_mountPoint ;
 	QString m_fileSystem ;
-	QString m_label ;
-	QString m_volumeSize ;
-	QString m_usedSpacePercentage ;
-	bool    m_isSystem = false ;
+	QString m_readOnly ;
 };
 
 #endif // VOLUMEENTRYPROPERTIES_H

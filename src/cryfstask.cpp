@@ -24,6 +24,8 @@
 #include <QDebug>
 #include <QFile>
 
+using cs = cryfsTask::status ;
+
 static bool _delete_mount_point( const QString& m )
 {
 	QDir e;
@@ -42,7 +44,7 @@ static bool _create_mount_point( const QString& m )
 	}
 }
 
-Task::future<bool>& cryfsTask::encryptedFolderUnMount( const QString& m )
+Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
@@ -75,9 +77,7 @@ Task::future<bool>& cryfsTask::encryptedFolderUnMount( const QString& m )
 	} ) ;
 }
 
-using ev = cryfsTask::encryptedVolume ;
-
-static ev _cmd( const QString& e,ev::status status,const QString& arguments,const QString& k )
+static cs _cmd( const QString& e,cs status,const QString& arguments,const QString& k )
 {
 	for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/" } ){
 
@@ -102,136 +102,139 @@ static ev _cmd( const QString& e,ev::status status,const QString& arguments,cons
 
 				if( e.exitCode() == 0 ){
 
-					return { ev::status::success } ;
+					return cs::success ;
 				}else{
-					return { status } ;
+					return status ;
 				}
 			}else{
-				return { ev::status::backendFail } ;
+				return cs::backendFail ;
 			}
 		}
 	}
 
-	if( status == ev::status::cryfs ){
+	if( status == cs::cryfs ){
 
-		return { ev::status::cryfsNotFound } ;
+		return cs::cryfsNotFound ;
 	}else{
-		return { ev::status::encfsNotFound } ;
+		return cs::encfsNotFound ;
 	}
 }
 
-Task::future< ev >& cryfsTask::encryptedFolderMount( const QString& p,const QString& m,const QString& k,bool ro )
+struct arguments
 {
-	return Task::run< ev >( [ p,m,k,ro ]()->ev{
+	const cryfsTask::options& opt ;
+	const QString& type ;
+	const QString& arguments ;
+	const QString& m_point ;
+};
 
-		auto _mount = [ & ]( std::function< ev() >&& unlocked )->ev{
+static QString _args( const arguments& args )
+{
+	auto c = args.opt.cipherFolder ;
+	c.replace( "\"","\"\"\"" ) ;
 
-			if( _create_mount_point( m ) ){
+	QString m ;
 
-				auto e = unlocked() ;
+	if( args.m_point.isEmpty() ){
 
-				if( e.state != ev::status::success ) {
+		m = args.opt.plainFolder ;
+	}else{
+		m = args.m_point ;
+	}
 
-					_delete_mount_point( m ) ;
+	m.replace( "\"","\"\"\"" ) ;
+
+	const char * opts ;
+
+	if( args.opt.ro ){
+
+		opts = "\"%1\" \"%2\" %3 -o ro -o fsname=%4@\"%5\" -o subtype=%6" ;
+	}else{
+		opts = "\"%1\" \"%2\" %3 -o rw -o fsname=%4@\"%5\" -o subtype=%6" ;
+	}
+
+	return QString( opts ).arg( c,m,args.arguments,args.type,c,args.type ) ;
+}
+
+Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
+{
+	return Task::run< cs >( [ opt ](){
+
+		auto _mount = [ & ]( std::function< cs() >&& unlock ){
+
+			if( _create_mount_point( opt.plainFolder ) ){
+
+				auto e = unlock() ;
+
+				if( e != cs::success ) {
+
+					_delete_mount_point( opt.plainFolder ) ;
 				}
 
 				return e ;
 			}else{
-				return { ev::status::failedToCreateMountPoint } ;
+				return cs::failedToCreateMountPoint ;
 			}
 		} ;
 
-		auto pp = p ;
-		pp.replace( "\"","\"\"\"" ) ;
-
-		auto mm = m ;
-		mm.replace( "\"","\"\"\"" ) ;
-
-		if( utility::pathExists( p + "/cryfs.config" ) ){
+		if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
 
 			return _mount( [ & ](){
 
-				const char * opts ;
-
-				if( ro ){
-
-					opts = "\"%1\" \"%2\" -- -o ro -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
-				}else{
-					opts = "\"%1\" \"%2\" -- -o rw -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
-				}
-
-				return _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( pp,mm,pp ),k ) ;
+				return _cmd( "cryfs",cs::cryfs,_args( { opt,"cryfs","--","" } ),opt.key ) ;
 			} ) ;
 		}
 
-		if( utility::pathExists( p + "/.encfs6.xml" ) ){
+		auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
+		auto encfs5 = opt.cipherFolder + "/.encfs5.xml" ;
+
+		if( utility::atLeastOnePathExists( encfs6,encfs5 ) ){
 
 			return _mount( [ & ](){
 
-				const char * opts ;
-
-				if( ro ){
-
-					opts = "\"%1\" \"%2\" -S -o ro -o fsname=encfs@\"%3\" -o subtype=encfs" ;
-				}else{
-					opts = "\"%1\" \"%2\" -S -o rw -o fsname=encfs@\"%3\" -o subtype=encfs" ;
-				}
-
-				return _cmd( "encfs",ev::status::encfs,QString( opts ).arg( pp,mm,pp ),k ) ;
+				return _cmd( "encfs",cs::encfs,_args( { opt,"encfs","-S","" } ),opt.key ) ;
 			} ) ;
 		}
 
-		return { ev::status::unknown } ;
+		return cs::unknown ;
 	} ) ;
 }
 
-Task::future< cryfsTask::encryptedVolume >&
-cryfsTask::encryptedFolderCreate( const QString& cipherFolder,
-				  const QString& plainFoder,
-				  const QString& key,
-				  std::function< void( const QString& )> openFolder )
+Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 {
-	return Task::run< ev >( [ cipherFolder,plainFoder,key,openFolder ]()->ev{
+	return Task::run< cryfsTask::status >( [ opt ](){
 
-		if( _create_mount_point( cipherFolder ) ){
+		if( _create_mount_point( opt.cipherFolder ) ){
 
-			auto m_point = utility::mountPath( utility::mountPathPostFix( plainFoder ) ) ;
+			auto m = utility::mountPath( utility::mountPathPostFix( opt.plainFolder ) ) ;
 
-			if( _create_mount_point( m_point ) ){
+			if( _create_mount_point( m ) ){
 
-				auto m = m_point ;
-				m.replace( "\"","\"\"\"" ) ;
+				auto e = _cmd( "cryfs",cs::cryfs,_args( { opt,"cryfs","--",m } ),opt.key ) ;
 
-				auto c = cipherFolder ;
-				c.replace( "\"","\"\"\"" ) ;
+				if( e == cs::success ){
 
-				auto opts = "\"%1\" \"%2\" -- -o rw -o fsname=cryfs@\"%3\" -o subtype=cryfs" ;
-
-				auto e = _cmd( "cryfs",ev::status::cryfs,QString( opts ).arg( c,m,c ),key ) ;
-
-				if( e.state == ev::status::success ){
-
-					openFolder( m_point ) ;
+					opt.openFolder( m ) ;
 				}else{
-					_delete_mount_point( m_point ) ;
-					_delete_mount_point( cipherFolder ) ;
+					_delete_mount_point( m ) ;
+					_delete_mount_point( opt.cipherFolder ) ;
 				}
 
 				return e ;
 			}else{
-				_delete_mount_point( cipherFolder ) ;
+				_delete_mount_point( opt.cipherFolder ) ;
 
-				return { ev::status::failedToCreateMountPoint } ;
+				return cs::failedToCreateMountPoint ;
 			}
 		}else{
-			return { ev::status::failedToCreateMountPoint } ;
+			return cs::failedToCreateMountPoint ;
 		}
 	} ) ;
 }
 
-Task::future< QVector< volumeEntryProperties > >& cryfsTask::updateVolumeList()
+Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 {
-	return Task::run< QVector< volumeEntryProperties > >( [](){
+	return Task::run< QVector< volumeInfo > >( [](){
 
 		auto _hash = []( const QString& e ){
 
@@ -261,7 +264,7 @@ Task::future< QVector< volumeEntryProperties > >& cryfsTask::updateVolumeList()
 			return QString::number( hash ) ;
 		} ;
 
-		auto _decode_entry = []( QString path,bool set_offset ){
+		auto _decode = []( QString path,bool set_offset ){
 
 			path.replace( "\\012","\n" ) ;
 			path.replace( "\\040"," " ) ;
@@ -276,40 +279,44 @@ Task::future< QVector< volumeEntryProperties > >& cryfsTask::updateVolumeList()
 			return path ;
 		} ;
 
-		QVector< volumeEntryProperties > e ;
+		QVector< volumeInfo > e ;
 
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
 
+			auto _fs = []( const QString& e ){
+
+				return QString( e.toLatin1().constData() + 5 ) ;
+			} ;
+
+			auto _ro = []( const QStringList& l ){
+
+				const auto& e = l.at( 5 ) ;
+
+				if( utility::containsAtleastOne( e,"ro,",",ro",",ro," ) ){
+
+					return "ro" ;
+				}else{
+					return "rw" ;
+				}
+			} ;
+
 			if( it.contains( " fuse.cryfs " ) || it.contains( " fuse.encfs " ) ){
 
-				const auto k = utility::split( it,' ' ) ;
+				const auto& k = utility::split( it,' ' ) ;
 
 				const auto s = k.size() ;
 
-				const auto& cipher_folder = k.at( s - 2 ) ;
+				const auto& cf = k.at( s - 2 ) ;
 
-				const auto& mount_point = k.at( 4 ) ;
+				const auto& m = k.at( 4 ) ;
 
 				const auto& fs = k.at( s - 3 ) ;
 
-				if( cipher_folder.startsWith( "encfs@" ) ){
+				if( cf.startsWith( "encfs@" ) || cf.startsWith( "cryfs@" ) ){
 
-					e.append( { _decode_entry( cipher_folder,true ),
-						    _decode_entry( mount_point,false ),
-						    "encfs",
-						    "Nil","Nil","Nil" } ) ;
-
-				}else if( cipher_folder.startsWith( "cryfs@" ) ){
-
-					e.append( { _decode_entry( cipher_folder,true ),
-						    _decode_entry( mount_point,false ),
-						    "cryfs",
-						    "Nil","Nil","Nil" } ) ;
+					e.append( { _decode( cf,true ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}else{
-					e.append( { _hash( mount_point ),
-						    _decode_entry( mount_point,false ),
-						    fs.toLatin1().constData() + 5,
-						    "Nil","Nil","Nil" } ) ;
+					e.append( { _hash( m ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}
 			}
 		}

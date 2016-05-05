@@ -29,7 +29,7 @@
 #include <memory>
 
 class QObject ;
-class volumeEntryProperties ;
+class volumeInfo ;
 
 class monitor_mountinfo : public QThread
 {

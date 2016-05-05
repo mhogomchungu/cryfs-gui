@@ -44,6 +44,7 @@ namespace tablewidget
 	QStringList tableColumnEntries( QTableWidget * table,int = 0 ) ;
 	QStringList tableRowEntries( QTableWidget * table,int = 0 ) ;
 	void clearTable( QTableWidget * ) ;
+	void setRowToolTip( QTableWidget *,int row,const QString& ) ;
 }
 
 #endif // TABLEWIDGET_H

@@ -254,3 +254,11 @@ void tablewidget::clearTable( QTableWidget * table )
 		table->removeRow( 0 ) ;
 	}
 }
+
+void tablewidget::setRowToolTip( QTableWidget * table,int row,const QString& tooltip )
+{
+	_for_each_column( table,row,[ & ]( count_t row,count_t col ){
+
+		table->item( row,col )->setToolTip( tooltip ) ;
+	} ) ;
+}

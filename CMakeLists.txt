@@ -86,7 +86,6 @@ set( SRC 	src/main.cpp
 		src/oneinstance.cpp
 		src/monitor_mountinfo.cpp
 		src/utility.cpp
-		src/volumeentryproperties.cpp
 		src/dialogmsg.cpp
 		src/favorites.cpp
 		src/checkforupdates.cpp
