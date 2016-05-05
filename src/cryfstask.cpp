@@ -300,7 +300,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 				}
 			} ;
 
-			if( it.contains( " fuse.cryfs " ) || it.contains( " fuse.encfs " ) ){
+			if( utility::containsAtleastOne( it," fuse.cryfs "," fuse.encfs " ) ){
 
 				const auto& k = utility::split( it,' ' ) ;
 
@@ -312,7 +312,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 				const auto& fs = k.at( s - 3 ) ;
 
-				if( cf.startsWith( "encfs@" ) || cf.startsWith( "cryfs@" ) ){
+				if( utility::startsWithAtLeastOne( cf,"encfs@","cryfs@" ) ){
 
 					e.append( { _decode( cf,true ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}else{

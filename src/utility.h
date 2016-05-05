@@ -164,6 +164,23 @@ namespace utility{
 			return containsAtleastOne( e,args ... ) ;
 		}
 	}
+
+	static inline bool startsWithAtLeastOne( const QString& e )
+	{
+		Q_UNUSED( e ) ;
+		return false ;
+	}
+
+	template< typename First,typename ... Args >
+	bool startsWithAtLeastOne( const QString& e,First f,Args ... args )
+	{
+		if( e.startsWith( f ) ){
+
+			return true ;
+		}else{
+			return startsWithAtLeastOne( e,args ... ) ;
+		}
+	}
 }
 
 namespace utility
