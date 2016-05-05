@@ -79,9 +79,11 @@ Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 
 static cs _cmd( const QString& e,cs status,const QString& arguments,const QString& k )
 {
+	QString exe ;
+
 	for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/" } ){
 
-		auto exe = it + e ;
+		exe = it + e ;
 
 		if( utility::pathExists( exe ) ){
 
@@ -279,26 +281,26 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 			return path ;
 		} ;
 
+		auto _fs = []( const QString& e ){
+
+			return QString( e.toLatin1().constData() + 5 ) ;
+		} ;
+
+		auto _ro = []( const QStringList& l ){
+
+			const auto& e = l.at( 5 ) ;
+
+			if( utility::containsAtleastOne( e,"ro,",",ro",",ro," ) ){
+
+				return "ro" ;
+			}else{
+				return "rw" ;
+			}
+		} ;
+
 		QVector< volumeInfo > e ;
 
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
-
-			auto _fs = []( const QString& e ){
-
-				return QString( e.toLatin1().constData() + 5 ) ;
-			} ;
-
-			auto _ro = []( const QStringList& l ){
-
-				const auto& e = l.at( 5 ) ;
-
-				if( utility::containsAtleastOne( e,"ro,",",ro",",ro," ) ){
-
-					return "ro" ;
-				}else{
-					return "rw" ;
-				}
-			} ;
 
 			if( utility::containsAtleastOne( it," fuse.cryfs "," fuse.encfs " ) ){
 
