@@ -132,7 +132,7 @@ namespace utility{
 
 	bool pathExists( const QString& ) ;
 
-	static inline bool pathExists()
+	static inline bool atLeastOnePathExists()
 	{
 		return false ;
 	}
@@ -144,7 +144,7 @@ namespace utility{
 
 			return true ;
 		}else{
-			return utility::pathExists( args ... ) ;
+			return utility::atLeastOnePathExists( args ... ) ;
 		}
 	}
 

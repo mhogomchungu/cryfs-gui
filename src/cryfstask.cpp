@@ -188,9 +188,10 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 		}
 
 		auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
-		auto encfs5 = opt.cipherFolder + "/.encfs5.xml" ;
+		auto encfs5 = opt.cipherFolder + "/.encfs5" ;
+		auto encfs4 = opt.cipherFolder + "/.encfs4" ;
 
-		if( utility::atLeastOnePathExists( encfs6,encfs5 ) ){
+		if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
 
 			return _mount( [ & ](){
 
@@ -204,7 +205,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
 Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 {
-	return Task::run< cryfsTask::status >( [ opt ](){
+	return Task::run< cs >( [ opt ](){
 
 		if( _create_mount_point( opt.cipherFolder ) ){
 
