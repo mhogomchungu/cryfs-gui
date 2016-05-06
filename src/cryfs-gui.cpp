@@ -86,12 +86,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 	table->setColumnWidth( 0,*( e + 4 ) ) ;
 	table->setColumnWidth( 1,*( e + 5 ) ) ;
 	table->setColumnWidth( 2,*( e + 6 ) ) ;
-	table->setColumnWidth( 4,*( e + 7 ) ) ;
-	table->setColumnWidth( 5,*( e + 8 ) ) ;
-
-	m_ui->tableWidget->hideColumn( 3 ) ;
-	m_ui->tableWidget->hideColumn( 4 ) ;
-	m_ui->tableWidget->hideColumn( 5 ) ;
+	table->setColumnWidth( 3,*( e + 7 ) ) ;
 
 #if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
 	m_ui->tableWidget->verticalHeader()->setResizeMode( QHeaderView::ResizeToContents ) ;
@@ -739,14 +734,6 @@ void cryfsGUI::updateList( const volumeInfo& entry )
 
 		tablewidget::updateRowInTable( table,entry.entryList(),row,this->font() ) ;
 
-		if( entry.readOnly() ){
-
-			tablewidget::setRowToolTip( table,row,tr( "Mounted In Read Only Mode" ) ) ;
-
-		}else{
-			tablewidget::setRowToolTip( table,row,tr( "Mounted In Read/Write Mode" ) ) ;
-		}
-
 		tablewidget::selectRow( table,row ) ;
 	}
 }
@@ -865,8 +852,7 @@ cryfsGUI::~cryfsGUI()
 						q->columnWidth( 0 ),
 						q->columnWidth( 1 ),
 						q->columnWidth( 2 ),
-						q->columnWidth( 4 ),
-						q->columnWidth( 5 ) } ) ;
+						q->columnWidth( 3 ) } ) ;
 
 	delete m_ui ;
 }

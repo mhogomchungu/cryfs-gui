@@ -110,7 +110,7 @@ namespace utility
 	void setLocalizationLanguage( bool translate,QWidget * obj,QAction * ac,const char * ) ;
 	void languageMenu( QWidget *,QMenu *,QAction *,const char * ) ;
 
-	using array_t = std::array< int,10 > ;
+	using array_t = std::array< int,8 > ;
 
 	utility::array_t getWindowDimensions( const QString& application ) ;
 	void setWindowDimensions( const QString& application,const std::initializer_list<int>& ) ;

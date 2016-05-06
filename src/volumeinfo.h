@@ -82,11 +82,11 @@ public:
 	}
 	bool readOnly() const
 	{
-	    return m_readOnly == "ro" ;
+	    return m_mode == "ro" ;
 	}
 	QStringList entryList() const
 	{
-		return { m_volume,m_mountPoint,m_fileSystem } ;
+		return { m_volume,m_mountPoint,m_fileSystem,m_mode } ;
 	}
 private:
 	void setValues( const QStringList& l )
@@ -96,14 +96,14 @@ private:
 			m_volume      = l.at( 0 ) ;
 			m_mountPoint  = l.at( 1 ) ;
 			m_fileSystem  = l.at( 2 ) ;
-			m_readOnly    = l.at( 3 ) ;
+			m_mode        = l.at( 3 ) ;
 		}
 	}
 
 	QString m_volume ;
 	QString m_mountPoint ;
 	QString m_fileSystem ;
-	QString m_readOnly ;
+	QString m_mode ;
 };
 
 #endif // VOLUMEENTRYPROPERTIES_H

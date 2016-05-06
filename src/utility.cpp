@@ -534,18 +534,21 @@ static utility::array_t _dimensions( const QString& path,const char * defaults,i
 	}
 }
 
+static QString _windowDimensionsConfigPath( const QString& application )
+{
+	return utility::homePath() + "/.cryfs-gui/" + application + "-gui.dimensions" ;
+}
+
 utility::array_t utility::getWindowDimensions( const QString& application )
 {
-	auto path = utility::homePath() + "/.cryfs-gui/" + application + "-gui-ui-options" ;
+	auto path = _windowDimensionsConfigPath( application ) ;
 
-	return _dimensions( path,"205 149 861 466 384 320 121 0 0",9 ) ;
+	return _dimensions( path,"205 149 861 466 326 320 101 76",8 ) ;
 }
 
 void utility::setWindowDimensions( const QString& application,const std::initializer_list<int>& e )
 {
-	auto path = utility::homePath() + "/.cryfs-gui/" + application + "-gui-ui-options" ;
-
-	QFile f( path ) ;
+	QFile f( _windowDimensionsConfigPath( application ) ) ;
 
 	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
 
