@@ -1,0 +1,16 @@
+
+version 1.0.0
+-- Initial release.
+-- Can create Cryfs Volumes.
+-- Can unlock Encfs Volumes.
+-- Can unlock Cryfs Volumes.
+-- Can save and retrieve volumes keys from KDE wallet,GNOME's libsecret and an internal
+   secured storage system backed by libgcrypt.
+-- Can save favorite volumes for easier access to frequently used volumes.
+-- Can use keys derived from passphrases,keyfiles and a combination of a passphrase and a keyfile.
+-- Can be build with Qt4(default) or with Qt5.
+
+version 1.1.0
+
+-- Add ability to unmount all volumes at the same time(Menu->UnmountAll)
+-- Add ability to generate mounting dialog with a single action(Menu->Favorites->Mount All)

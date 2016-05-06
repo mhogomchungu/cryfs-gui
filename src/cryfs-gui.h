@@ -142,12 +142,12 @@ private:
 	void setUpShortCuts( void ) ;
 	void setUpApp( const QString& ) ;
 
-	QAction * m_autoMountAction = nullptr ;
 	QMenu * m_favorite_menu = nullptr ;
 	QMenu * m_hidden_volume_menu = nullptr ;
 	QMenu * m_not_hidden_volume_menu = nullptr ;
 	QMenu * m_key_manager_menu = nullptr ;
 
+	QAction * m_unMountAll = nullptr ;
 	QAction * m_change_password_action = nullptr ;
 
 	QAction * m_languageAction = nullptr ;

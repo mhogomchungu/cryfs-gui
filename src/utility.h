@@ -87,6 +87,7 @@ namespace utility
 
 	bool pathIsReadable( const QString& ) ;
 
+	void suspend( int ) ;
 	bool setOpenVolumeReadOnly( QWidget * parent,bool check,const QString& app ) ;
 	bool getOpenVolumeReadOnlyOption( const QString& app ) ;
 

@@ -48,6 +48,8 @@
 #include <QProcessEnvironment>
 #include <unistd.h>
 #include <pwd.h>
+#include <QTimer>
+#include <QEventLoop>
 
 #include <QEvent>
 #include <QKeyEvent>
@@ -113,7 +115,7 @@ int utility::startApplication( const char * appName,std::function<int()> start )
 	}
 }
 
-static bool _execute_process( const QString& m,const QString& exe,const QString& env,int uid )
+static bool _execute_process( const QString& m,const QString& exe,const QString& env )
 {
 	if( exe.startsWith( "/" ) && utility::pathExists( exe ) ){
 
@@ -121,26 +123,7 @@ static bool _execute_process( const QString& m,const QString& exe,const QString&
 
 		e.replace( "\"","\"\"\"" ) ;
 
-		return utility::Task( exe + " \"" + e + "\"",-1,env.split( "\n" ),[ uid ](){
-
-			if( uid != -1 ){
-
-				Q_UNUSED( setgid( uid ) ) ;
-				Q_UNUSED( setgroups( 1,reinterpret_cast< const gid_t * >( &uid ) ) ) ;
-				Q_UNUSED( setegid( uid ) ) ;
-				Q_UNUSED( setuid( uid ) ) ;
-
-				auto id = getpwuid( uid ) ;
-
-				if( id ){
-
-					setenv( "LOGNAME",id->pw_name,1 ) ;
-					setenv( "HOME",id->pw_dir,1 ) ;
-					setenv( "USER",id->pw_name,1 ) ;
-				}
-			}
-
-		} ).success() ;
+		return utility::Task( exe + " \"" + e + "\"",-1,env.split( "\n" ) ).success() ;
 	}else{
 		return false ;
 	}
@@ -150,7 +133,7 @@ static bool _execute_process( const QString& m,const QString& exe,const QString&
 {
 	return ::Task::run<bool>( [ env,path,opener ](){
 
-		return _execute_process( path,opener,env,-1 ) == false ;
+		return _execute_process( path,opener,env ) == false ;
 	} ) ;
 }
 
@@ -172,6 +155,19 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 
 		return wallet->readValue( volumeID ) ;
 	} ) ;
+}
+
+void utility::suspend( int s )
+{
+	QTimer t ;
+
+	QEventLoop l ;
+
+	QObject::connect( &t,SIGNAL( timeout() ),&l,SLOT( quit() ) ) ;
+
+	t.start( 1000 * s ) ;
+
+	l.exec() ;
 }
 
 utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,const QString& keyID,const QString& pwd )
@@ -424,8 +420,6 @@ void utility::readFavorites( QMenu * m,bool truncate )
 		}else{
 			ac->setText( e ) ;
 		}
-
-		ac->setEnabled( !e.startsWith( "/dev/disk/by-id" ) ) ;
 
 		return ac ;
 	} ;

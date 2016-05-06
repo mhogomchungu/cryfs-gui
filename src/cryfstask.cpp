@@ -44,36 +44,41 @@ static bool _create_mount_point( const QString& m )
 	}
 }
 
+bool cryfsTask::UnmountEncryptedFolder( const QString& m )
+{
+	auto _umount = [ & ](){
+
+		auto mm = m ;
+		mm.replace( "\"","\"\"\"" ) ;
+
+		if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
+
+			return _delete_mount_point( m ) ;
+		}else{
+			return false ;
+		}
+	} ;
+
+	utility::Task::waitForOneSecond() ;
+
+	for( int i = 0 ; i < 5 ; i++ ){
+
+		if( _umount() ){
+
+			return true ;
+		}else{
+			utility::Task::waitForOneSecond() ;
+		}
+	}
+
+	return false ;
+}
+
 Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
-		auto _umount = [ & ](){
-
-			auto mm = m ;
-			mm.replace( "\"","\"\"\"" ) ;
-
-			if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
-
-				return _delete_mount_point( m ) ;
-			}else{
-				return false ;
-			}
-		} ;
-
-		utility::Task::waitForOneSecond() ;
-
-		for( int i = 0 ; i < 5 ; i++ ){
-
-			if( _umount() ){
-
-				return true ;
-			}else{
-				utility::Task::waitForOneSecond() ;
-			}
-		}
-
-		return false ;
+		return cryfsTask::UnmountEncryptedFolder( m ) ;
 	} ) ;
 }
 

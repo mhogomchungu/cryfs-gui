@@ -132,19 +132,29 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	trayMenu->setFont( this->font() ) ;
 
-	m_autoMountAction = new QAction( this ) ;
-	m_autoMount = this->autoMount() ;
-	m_autoMountAction->setCheckable( true ) ;
-	m_autoMountAction->setChecked( m_autoMount ) ;
-
-	auto autoOpenFolderOnMount = new QAction( this ) ;
-	autoOpenFolderOnMount->setCheckable( true ) ;
 	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
-	autoOpenFolderOnMount->setChecked( m_autoOpenFolderOnMount ) ;
-	autoOpenFolderOnMount->setText( tr( "Auto Open Mount Point" ) ) ;
-	connect( autoOpenFolderOnMount,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
+	m_autoMount = this->autoMount() ;
 
-	trayMenu->addAction( autoOpenFolderOnMount ) ;
+	trayMenu->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "Auto Open Mount Point" ),this ) ;
+
+		ac->setCheckable( true ) ;
+		ac->setChecked( m_autoOpenFolderOnMount ) ;
+
+		connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	trayMenu->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "Unmount All" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( unMountAll() ) ) ;
+
+		return ac ;
+	}() ) ;
 
 	this->setupKeyManager( trayMenu ) ;
 
@@ -158,22 +168,30 @@ void cryfsGUI::setUpApp( const QString& volume )
 	connect( m_favorite_menu,SIGNAL( aboutToShow() ),
 		 this,SLOT( showFavorites() ) ) ;
 
-	m_languageAction = new QAction( this ) ;
-	m_languageAction->setText( tr( "Select Language" ) ) ;
+	m_languageAction = new QAction( tr( "Select Language" ),this ) ;
 
 	trayMenu->addAction( m_languageAction ) ;
 
-	auto ac = new QAction( this ) ;
-	ac->setText( tr( "Check For Update" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( updateCheck() ) ) ;
-	trayMenu->addAction( ac ) ;
+	trayMenu->addAction( [ this ](){
 
-	ac = new QAction( this ) ;
-	ac->setText( tr( "About" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( licenseInfo() ) ) ;
-	trayMenu->addAction( ac ) ;
+		auto ac = new QAction( tr( "Check For Update" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( updateCheck() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	trayMenu->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "About" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( licenseInfo() ) ) ;
+
+		return ac ;
+	}() ) ;
 
 	trayMenu->addAction( tr( "Quit" ),this,SLOT( closeApplication() ) ) ;
+
 	m_trayIcon.setContextMenu( trayMenu ) ;
 
 	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
@@ -223,10 +241,6 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 
 	connect( m_key_manager_menu,SIGNAL( aboutToShow() ),this,SLOT( aboutToShowMenu() ) ) ;
 
-	auto i = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::internalBackEnd ) ;
-	auto k = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ;
-	auto g = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ;
-
 	auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
 
 	m_change_password_action = w->addAction( tr( "Change PassWord" ) ) ;
@@ -234,6 +248,10 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 	connect( m_change_password_action,SIGNAL( triggered() ),this,SLOT( changeInternalWalletPassWord() ) ) ;
 
 	m->addMenu( w ) ;
+
+	auto i = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::internalBackEnd ) ;
+	auto k = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ;
+	auto g = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ;
 
 	m_key_manager_menu->addAction( tr( "Internal Wallet" ) )->setEnabled( i ) ;
 	m_key_manager_menu->addAction( tr( "KDE Wallet" ) )->setEnabled( k ) ; ;
@@ -542,41 +560,79 @@ void cryfsGUI::openMountPointPath( QString m )
 
 void cryfsGUI::setUpShortCuts()
 {
-	auto ac = new QAction( this ) ;
-	QList<QKeySequence> keys ;
-	keys.append( Qt::Key_Enter ) ;
-	keys.append( Qt::Key_Return ) ;
-	ac->setShortcuts( keys ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( defaultButton() ) ) ;
-	this->addAction( ac ) ;
+	this->addAction( [ this ](){
 
-	auto qa = new QAction( this ) ;
-	QList<QKeySequence> z ;
-	z.append( Qt::Key_M ) ;
-	qa->setShortcuts( z ) ;
-	connect( qa,SIGNAL( triggered() ),this,SLOT( pbCreate() ) ) ;
-	this->addAction( qa ) ;
+		auto ac = new QAction( this ) ;
 
-	qa = new QAction( this ) ;
-	QList<QKeySequence> p ;
-	p.append( Qt::Key_U ) ;
-	qa->setShortcuts( p ) ;
-	connect( qa,SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
-	this->addAction( qa ) ;
+		QList<QKeySequence> keys ;
 
-	qa = new QAction( this ) ;
-	QList<QKeySequence> q ;
-	q.append( Qt::Key_R ) ;
-	qa->setShortcuts( q ) ;
-	connect( qa,SIGNAL( triggered() ),this,SLOT( pbUpdate() ) ) ;
-	this->addAction( qa ) ;
+		keys.append( Qt::Key_Enter ) ;
+		keys.append( Qt::Key_Return ) ;
 
-	qa = new QAction( this ) ;
-	QList<QKeySequence> e ;
-	e.append( Qt::Key_C ) ;
-	qa->setShortcuts( e ) ;
-	connect( qa,SIGNAL( triggered() ),this,SLOT( closeApplication() ) ) ;
-	this->addAction( qa ) ;
+		ac->setShortcuts( keys ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( defaultButton() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	this->addAction( [ this ](){
+
+		auto ac = new QAction( this ) ;
+
+		QList<QKeySequence> z ;
+
+		z.append( Qt::Key_M ) ;
+
+		ac->setShortcuts( z ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( pbCreate() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	this->addAction( [ this ](){
+
+		auto ac = new QAction( this ) ;
+
+		QList<QKeySequence> p ;
+
+		p.append( Qt::Key_U ) ;
+
+		ac->setShortcuts( p ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	this->addAction( [ this ](){
+
+		auto ac = new QAction( this ) ;
+
+		QList<QKeySequence> q ;
+
+		q.append( Qt::Key_R ) ;
+		ac->setShortcuts( q ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUpdate() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	this->addAction( [ this ](){
+
+		auto ac = new QAction( this ) ;
+
+		QList<QKeySequence> e ;
+
+		e.append( Qt::Key_C ) ;
+		ac->setShortcuts( e ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( closeApplication() ) ) ;
+
+		return ac ;
+	}() ) ;
 }
 
 void cryfsGUI::setUpFont()
@@ -676,7 +732,8 @@ void cryfsGUI::unlockCryptFs()
 {
 	this->disableAll() ;
 
-	auto path = QFileDialog::getExistingDirectory( this,tr( "Select An Encfs/Cryfs Volume Directory" ),utility::homePath(),QFileDialog::ShowDirsOnly ) ;
+	auto e = tr( "Select An Encfs/Cryfs Volume Directory" ) ;
+	auto path = QFileDialog::getExistingDirectory( this,e,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
 	if( path.isEmpty() ){
 
@@ -759,6 +816,36 @@ void cryfsGUI::pbUmount()
 
 void cryfsGUI::unMountAll()
 {
+	m_mountInfo.announceEvents( false ) ;
+
+	this->disableAll() ;
+
+	auto table = m_ui->tableWidget ;
+
+	auto l = tablewidget::tableColumnEntries( table,1 ) ;
+
+	auto r = l.size() - 1 ;
+
+	if( r < 0 ){
+
+		utility::suspend( 1 ) ;
+	}else{
+		for( int i = r ; i >= 0 ; i-- ){
+
+			const auto& e = l.at( i ) ;
+
+			if( cryfsTask::encryptedFolderUnMount( e ).await() ){
+
+				tablewidget::deleteTableRow( table,e,1 ) ;
+
+				utility::suspend( 1 ) ;
+			}
+		}
+	}
+
+	this->enableAll() ;
+
+	m_mountInfo.announceEvents( true ) ;
 }
 
 void cryfsGUI::pbUpdate()
@@ -827,19 +914,6 @@ bool cryfsGUI::autoMount()
 cryfsGUI::~cryfsGUI()
 {
 	QFile f( utility::homePath() + zuluMOUNT_AUTOPATH ) ;
-
-	if( m_autoMountAction ){
-
-		if( m_autoMountAction->isChecked() ){
-
-			if( !f.exists() ){
-
-				f.open( QIODevice::WriteOnly ) ;
-			}
-		}else{
-			f.remove() ;
-		}
-	}
 
 	auto q = m_ui->tableWidget ;
 

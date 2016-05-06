@@ -132,23 +132,15 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	m_ui->lineEditMountPoint->setText( m_point ) ;
 
-	auto ac = new QAction( this ) ;
-	QKeySequence s( Qt::CTRL + Qt::Key_F ) ;
-	ac->setShortcut( s ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( showOffSetWindowOption() ) ) ;
-	this->addAction( ac ) ;
+	m_menu_1 = [ this ](){
 
-	m_menu_1 = new QMenu( this ) ;
+		auto m = new QMenu( this ) ;
 
-	m_menu_1->setFont( this->font() ) ;
+		m->setFont( this->font() ) ;
+		m->addAction( tr( "Set File System Options" ) )->setEnabled( false ) ;
 
-	auto _add_action = [ & ]( const QString& e ){
-
-		ac = m_menu_1->addAction( e ) ;
-		ac ->setEnabled( false ) ;
-	} ;
-
-	_add_action( tr( "Set File System Options" ) ) ;
+		return m ;
+	}() ;
 
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
@@ -179,14 +171,6 @@ bool keyDialog::eventFilter( QObject * watched,QEvent * event )
 void keyDialog::pbOptions()
 {
 	m_menu_1->exec( QCursor::pos() ) ;
-}
-
-void keyDialog::showOffSetWindowOption()
-{
-}
-
-void keyDialog::showFileSystemOptionWindow()
-{
 }
 
 void keyDialog::doAction( QAction * ac )

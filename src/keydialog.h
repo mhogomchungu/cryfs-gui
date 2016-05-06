@@ -82,8 +82,6 @@ private slots:
 	void KeyFile( void ) ;
 	void cbMountReadOnlyStateChanged( int ) ;
 	void doAction( QAction * ) ;
-	void showOffSetWindowOption( void ) ;
-	void showFileSystemOptionWindow( void ) ;
 	void encryptedFolderMount( void ) ;
 	void encryptedFolderCreate( void ) ;
 private :
