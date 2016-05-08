@@ -452,54 +452,14 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 
 	m.setFont( this->font() ) ;
 
-	auto row = item->row() ;
-
-	auto mt = m_ui->tableWidget->item( row,1 )->text() ;
-
-	if( mt == "Nil" ){
-
-		connect( m.addAction( tr( "Mount" ) ),SIGNAL( triggered() ),this,SLOT( slotMount() ) ) ;
-	}else{
-		auto home = utility::homePath().split( '/').last() ;
-
-		auto mp   = QString( "/run/media/private/%1/" ).arg( home ) ;
-		auto mp_1 = QString( "/home/%1/" ).arg( home ) ;
-
-		if( mt.startsWith( mp ) || mt.startsWith( mp_1 ) ){
-
-			connect( m.addAction( tr( "Unmount" ) ),SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
-
-			m.addSeparator() ;
-
-			if( m_sharedFolderPath.isEmpty() ){
-
-				connect( m.addAction( tr( "Open Folder" ) ),SIGNAL( triggered() ),
-					 this,SLOT( slotOpenFolder() ) ) ;
-			}else{
-				connect( m.addAction( tr( "Open Private Folder" ) ),SIGNAL( triggered() ),
-					 this,SLOT( slotOpenFolder() ) ) ;
-				connect( m.addAction( tr( "Open Shared Folder" ) ),SIGNAL( triggered() ),
-					 this,SLOT( slotOpenSharedFolder() ) ) ;
-			}
-		}else{
-			if( m_sharedFolderPath.isEmpty() ){
-
-				if( utility::pathIsReadable( mt ) ){
-
-					connect( m.addAction( tr( "Open Folder" ) ),SIGNAL( triggered() ),
-						 this,SLOT( slotOpenFolder() ) ) ;
-				}
-			}else{
-				connect( m.addAction( tr( "Open Shared Folder" ) ),SIGNAL( triggered() ),
-					 this,SLOT( slotOpenSharedFolder() ) ) ;
-			}
-		}
-	}
+	connect( m.addAction( tr( "Unmount" ) ),SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
 
 	m.addSeparator() ;
+
 	m.addAction( tr( "Close Menu" ) ) ;
 
 	if( itemClicked ){
+
 		m.exec( QCursor::pos() ) ;
 	}else{
 		auto p = this->pos() ;
@@ -518,14 +478,11 @@ void cryfsGUI::itemClicked( QTableWidgetItem * item )
 
 void cryfsGUI::defaultButton()
 {
-	auto row = m_ui->tableWidget->currentRow() ;
-	auto mt = m_ui->tableWidget->item( row,1 )->text() ;
+	auto table = m_ui->tableWidget ;
 
-	if( mt == "Nil" ){
+	if( table->rowCount() > 0 ){
 
-		this->slotMount() ;
-	}else{
-		this->showContextMenu( m_ui->tableWidget->currentItem(),false ) ;
+		this->showContextMenu( table->currentItem(),false ) ;
 	}
 }
 
@@ -580,11 +537,7 @@ void cryfsGUI::setUpShortCuts()
 
 		auto ac = new QAction( this ) ;
 
-		QList<QKeySequence> z ;
-
-		z.append( Qt::Key_M ) ;
-
-		ac->setShortcuts( z ) ;
+		ac->setShortcut( QKeySequence( Qt::Key_M ) ) ;
 
 		connect( ac,SIGNAL( triggered() ),this,SLOT( pbCreate() ) ) ;
 
@@ -595,11 +548,7 @@ void cryfsGUI::setUpShortCuts()
 
 		auto ac = new QAction( this ) ;
 
-		QList<QKeySequence> p ;
-
-		p.append( Qt::Key_U ) ;
-
-		ac->setShortcuts( p ) ;
+		ac->setShortcut( QKeySequence( Qt::Key_U ) ) ;
 
 		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
 
@@ -610,10 +559,7 @@ void cryfsGUI::setUpShortCuts()
 
 		auto ac = new QAction( this ) ;
 
-		QList<QKeySequence> q ;
-
-		q.append( Qt::Key_R ) ;
-		ac->setShortcuts( q ) ;
+		ac->setShortcut( QKeySequence( Qt::Key_R ) ) ;
 
 		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUpdate() ) ) ;
 
@@ -624,10 +570,7 @@ void cryfsGUI::setUpShortCuts()
 
 		auto ac = new QAction( this ) ;
 
-		QList<QKeySequence> e ;
-
-		e.append( Qt::Key_C ) ;
-		ac->setShortcuts( e ) ;
+		ac->setShortcut( QKeySequence( Qt::Key_C ) ) ;
 
 		connect( ac,SIGNAL( triggered() ),this,SLOT( closeApplication() ) ) ;
 
