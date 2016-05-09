@@ -63,9 +63,6 @@ public:
 		if( m_fileSystem == "encfs" || m_fileSystem == "cryfs" ){
 			return true ;
 		}
-		if( m_mountPoint == "/run/media/public/" ){
-			return false ;
-		}
 		return true ;
 	}
 	bool encryptedVolume() const
@@ -91,12 +88,29 @@ public:
 private:
 	void setValues( const QStringList& l )
 	{
-		if( l.size() >= 4 ){
-			
-			m_volume      = l.at( 0 ) ;
-			m_mountPoint  = l.at( 1 ) ;
-			m_fileSystem  = l.at( 2 ) ;
-			m_mode        = l.at( 3 ) ;
+		auto s = l.size() ;
+
+		if( s == 1 ){
+
+			m_volume = l.at( 0 ) ;
+
+		}else if( s == 2 ){
+
+			m_volume     = l.at( 0 ) ;
+			m_mountPoint = l.at( 1 ) ;
+
+		}else if( s == 3 ){
+
+			m_volume     = l.at( 0 ) ;
+			m_mountPoint = l.at( 1 ) ;
+			m_fileSystem = l.at( 2 ) ;
+
+		}else if( s >= 4 ){
+
+			m_volume     = l.at( 0 ) ;
+			m_mountPoint = l.at( 1 ) ;
+			m_fileSystem = l.at( 2 ) ;
+			m_mode       = l.at( 3 ) ;
 		}
 	}
 

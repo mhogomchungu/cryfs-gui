@@ -660,7 +660,7 @@ void cryfsGUI::showMoungDialog( const QString& volume,const QString& m_point )
 {
 	if( !volume.isEmpty() ){
 
-		this->mount( { volume,m_point,"cryptfs","Nil","Nil","Nil" } ) ;
+		this->mount( { volume,m_point } ) ;
 	}
 }
 
