@@ -229,35 +229,52 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 void cryfsGUI::aboutToShowMenu()
 {
-	m_change_password_action->setEnabled( LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,utility::walletName(),utility::applicationName() ) ) ;
+	auto a = utility::walletName() ;
+	auto b = utility::applicationName() ;
+	auto c = LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,a,b ) ;
+	m_change_password_action->setEnabled( c ) ;
 }
 
 void cryfsGUI::setupKeyManager( QMenu * m )
-{
-	m_key_manager_menu = new QMenu( tr( "Key Storage" ),this ) ;
+{	
+	m->addMenu( [ this ](){
 
-	connect( m_key_manager_menu,SIGNAL( triggered( QAction * ) ),
-		 this,SLOT( keyManagerClicked( QAction * ) ) ) ;
+		auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
 
-	connect( m_key_manager_menu,SIGNAL( aboutToShow() ),this,SLOT( aboutToShowMenu() ) ) ;
+		m_change_password_action = w->addAction( tr( "Change PassWord" ) ) ;
 
-	auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
+		connect( m_change_password_action,SIGNAL( triggered() ),
+			 this,SLOT( changeInternalWalletPassWord() ) ) ;
 
-	m_change_password_action = w->addAction( tr( "Change PassWord" ) ) ;
+		return w ;
+	}() ) ;
 
-	connect( m_change_password_action,SIGNAL( triggered() ),this,SLOT( changeInternalWalletPassWord() ) ) ;
+	m->addMenu( [ this ](){
 
-	m->addMenu( w ) ;
+		m_key_manager_menu = [ this ](){
 
-	auto i = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::internalBackEnd ) ;
-	auto k = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ;
-	auto g = LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ;
+			auto m = new QMenu( tr( "Key Storage" ),this ) ;
 
-	m_key_manager_menu->addAction( tr( "Internal Wallet" ) )->setEnabled( i ) ;
-	m_key_manager_menu->addAction( tr( "KDE Wallet" ) )->setEnabled( k ) ; ;
-	m_key_manager_menu->addAction( tr( "Gnome Wallet" ) )->setEnabled( g ) ; ;
+			connect( m,SIGNAL( triggered( QAction * ) ),this,SLOT( keyManagerClicked( QAction * ) ) ) ;
 
-	m->addMenu( m_key_manager_menu ) ;
+			connect( m,SIGNAL( aboutToShow() ),this,SLOT( aboutToShowMenu() ) ) ;
+
+			return m ;
+		}() ;
+
+		auto _addOption = [ & ]( const QString& e,LxQt::Wallet::walletBackEnd s ){
+
+			auto i = LxQt::Wallet::backEndIsSupported( s ) ;
+
+			m_key_manager_menu->addAction( e )->setEnabled( i ) ;
+		} ;
+
+		_addOption( tr( "Internal Wallet" ),LxQt::Wallet::internalBackEnd ) ;
+		_addOption( tr( "KDE Wallet" ),LxQt::Wallet::kwalletBackEnd ) ;
+		_addOption( tr( "Gnome Wallet" ),LxQt::Wallet::secretServiceBackEnd ) ;
+
+		return m_key_manager_menu ;
+	}() ) ;
 }
 
 void cryfsGUI::changeInternalWalletPassWord()
@@ -452,7 +469,13 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 
 	m.setFont( this->font() ) ;
 
-	connect( m.addAction( tr( "Unmount" ) ),SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
+	auto _addAction = [ & ]( const QString& txt,const char * slot ){
+
+		connect( m.addAction( txt ),SIGNAL( triggered() ),this,slot ) ;
+	} ;
+
+	_addAction( tr( "Unmount" ),SLOT( pbUmount() ) ) ;
+	_addAction( tr( "Open Folder" ),SLOT( slotOpenFolder() ) ) ;
 
 	m.addSeparator() ;
 
@@ -493,10 +516,15 @@ void cryfsGUI::slotOpenSharedFolder()
 
 void cryfsGUI::slotOpenFolder()
 {
-	auto item = m_ui->tableWidget->currentItem() ;
-	auto path = m_ui->tableWidget->item( item->row(),1 )->text() ;
+	auto table = m_ui->tableWidget ;
 
-	this->openMountPoint( path ) ;
+	if( table->rowCount() > 0 ){
+
+		auto item = table->currentItem() ;
+		auto path = table->item( item->row(),1 )->text() ;
+
+		this->openMountPoint( path ) ;
+	}
 }
 
 void cryfsGUI::openMountPoint( const QString& m_point )
@@ -517,65 +545,26 @@ void cryfsGUI::openMountPointPath( QString m )
 
 void cryfsGUI::setUpShortCuts()
 {
-	this->addAction( [ this ](){
+	auto _addAction = [ this ]( std::initializer_list<QKeySequence> s,const char * slot ){
 
 		auto ac = new QAction( this ) ;
 
-		QList<QKeySequence> keys ;
+		ac->setShortcuts( s ) ;
 
-		keys.append( Qt::Key_Enter ) ;
-		keys.append( Qt::Key_Return ) ;
-
-		ac->setShortcuts( keys ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( defaultButton() ) ) ;
+		connect( ac,SIGNAL( triggered() ),this,slot ) ;
 
 		return ac ;
-	}() ) ;
+	} ;
 
-	this->addAction( [ this ](){
+	this->addAction( _addAction( { Qt::Key_Enter,Qt::Key_Return },SLOT( defaultButton() ) ) ) ;
 
-		auto ac = new QAction( this ) ;
+	this->addAction( _addAction( { Qt::Key_M },SLOT( pbCreate() ) ) ) ;
 
-		ac->setShortcut( QKeySequence( Qt::Key_M ) ) ;
+	this->addAction( _addAction( { Qt::Key_U },SLOT( pbUmount() ) ) ) ;
 
-		connect( ac,SIGNAL( triggered() ),this,SLOT( pbCreate() ) ) ;
+	this->addAction( _addAction( { Qt::Key_R },SLOT( pbUpdate() ) ) ) ;
 
-		return ac ;
-	}() ) ;
-
-	this->addAction( [ this ](){
-
-		auto ac = new QAction( this ) ;
-
-		ac->setShortcut( QKeySequence( Qt::Key_U ) ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUmount() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	this->addAction( [ this ](){
-
-		auto ac = new QAction( this ) ;
-
-		ac->setShortcut( QKeySequence( Qt::Key_R ) ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( pbUpdate() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	this->addAction( [ this ](){
-
-		auto ac = new QAction( this ) ;
-
-		ac->setShortcut( QKeySequence( Qt::Key_C ) ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( closeApplication() ) ) ;
-
-		return ac ;
-	}() ) ;
+	this->addAction( _addAction( { Qt::Key_C },SLOT( closeApplication() ) ) ) ;
 }
 
 void cryfsGUI::setUpFont()
@@ -643,9 +632,13 @@ void cryfsGUI::pbCreate()
 void cryfsGUI::slotMount()
 {
 	auto table = m_ui->tableWidget ;
-	auto row = table->currentRow() ;
 
-	this->mount( tablewidget::tableRowEntries( table,row ) ) ;
+	if( table->rowCount() > 0 ){
+
+		auto row = table->currentRow() ;
+
+		this->mount( tablewidget::tableRowEntries( table,row ) ) ;
+	}
 }
 
 void cryfsGUI::showMoungDialog( const volumeInfo& v )
@@ -740,20 +733,25 @@ void cryfsGUI::updateList( const volumeInfo& entry )
 
 void cryfsGUI::pbUmount()
 {
-	this->disableAll() ;
+	auto table = m_ui->tableWidget ;
 
-	auto row = m_ui->tableWidget->currentRow() ;
+	if( table->rowCount() > 0 ){
 
-	auto type = m_ui->tableWidget->item( row,2 )->text() ;
+		this->disableAll() ;
 
-	auto m = m_ui->tableWidget->item( row,1 )->text() ;
+		auto row = table->currentRow() ;
 
-	if( !cryfsTask::encryptedFolderUnMount( m ).await() ){
+		auto type = table->item( row,2 )->text() ;
 
-		DialogMsg m( this ) ;
-		m.ShowUIOK( tr( "ERROR" ),tr( "Failed to unmount %1 volume" ).arg( type ) ) ;
+		auto m = table->item( row,1 )->text() ;
 
-		this->enableAll() ;
+		if( !cryfsTask::encryptedFolderUnMount( m ).await() ){
+
+			DialogMsg m( this ) ;
+			m.ShowUIOK( tr( "ERROR" ),tr( "Failed to unmount %1 volume" ).arg( type ) ) ;
+
+			this->enableAll() ;
+		}
 	}
 }
 
