@@ -35,7 +35,7 @@ namespace cryfsTask
 		QString cipherFolder ;
 		QString plainFolder ;
 		QString key ;
-		std::function< void( const QString& )> openFolder ;
+		std::function< void( const QString& ) > openFolder ;
 		bool ro ;
 	};
 

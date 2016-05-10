@@ -196,7 +196,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 		auto encfs5 = opt.cipherFolder + "/.encfs5" ;
 		auto encfs4 = opt.cipherFolder + "/.encfs4" ;
 
-		if( utility::atLeastOnePathExists( { encfs6,encfs5,encfs4 } ) ){
+		if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
 
 			return _mount( [ & ](){
 
@@ -296,7 +296,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 			const auto& e = l.at( 5 ) ;
 
-			if( utility::containsAtleastOne( e,{ "ro,",",ro",",ro," } ) ){
+			if( utility::containsAtleastOne( e,"ro,",",ro",",ro," ) ){
 
 				return "ro" ;
 			}else{
@@ -308,7 +308,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
 
-			if( utility::containsAtleastOne( it,{ " fuse.cryfs "," fuse.encfs " } ) ){
+			if( utility::containsAtleastOne( it," fuse.cryfs "," fuse.encfs " ) ){
 
 				const auto& k = utility::split( it,' ' ) ;
 
@@ -320,7 +320,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 				const auto& fs = k.at( s - 3 ) ;
 
-				if( utility::startsWithAtLeastOne( cf,{ "encfs@","cryfs@" } ) ){
+				if( utility::startsWithAtLeastOne( cf,"encfs@","cryfs@" ) ){
 
 					e.append( { _decode( cf,true ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}else{

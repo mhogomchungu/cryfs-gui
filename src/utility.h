@@ -133,10 +133,10 @@ namespace utility
 {
 	bool pathExists( const QString& ) ;
 
-	template< typename F >
-	bool atLeastOnePathExists( const std::initializer_list< F >& f ){
+	template< typename ... F >
+	bool atLeastOnePathExists( const F& ... f ){
 
-		for( const auto& it : f ){
+		for( const auto& it : { f ... } ){
 
 			if( utility::pathExists( it ) ){
 
@@ -147,10 +147,10 @@ namespace utility
 		return false ;
 	}
 
-	template< typename E,typename F >
-	bool containsAtleastOne( const E& e,const std::initializer_list< F >& f )
+	template< typename E,typename ... F >
+	bool containsAtleastOne( const E& e,const F& ... f )
 	{
-		for( const auto& it : f ){
+		for( const auto& it : { f ... } ){
 
 			if( e.contains( it ) ){
 
@@ -161,10 +161,10 @@ namespace utility
 		return false ;
 	}
 
-	template< typename E,typename F >
-	bool startsWithAtLeastOne( const E& e,const std::initializer_list< F >& f )
+	template< typename E,typename ... F >
+	bool startsWithAtLeastOne( const E& e,const F& ... f )
 	{
-		for( const auto& it : f ){
+		for( const auto& it : { f ... } ){
 
 			if( e.startsWith( it ) ){
 
