@@ -129,58 +129,50 @@ namespace utility
 	void openPath( const QString& path,const QString& opener,const QString& env,QWidget *,const QString&,const QString& ) ;
 }
 
-namespace utility{
-
+namespace utility
+{
 	bool pathExists( const QString& ) ;
 
-	static inline bool atLeastOnePathExists()
-	{
+	template< typename F >
+	bool atLeastOnePathExists( const std::initializer_list< F >& f ){
+
+		for( const auto& it : f ){
+
+			if( utility::pathExists( it ) ){
+
+				return true ;
+			}
+		}
+
 		return false ;
 	}
 
-	template< typename First,typename ... Args >
-	bool atLeastOnePathExists( First f,Args ... args )
+	template< typename E,typename F >
+	bool containsAtleastOne( const E& e,const std::initializer_list< F >& f )
 	{
-		if( utility::pathExists( f ) ){
+		for( const auto& it : f ){
 
-			return true ;
-		}else{
-			return utility::atLeastOnePathExists( args ... ) ;
+			if( e.contains( it ) ){
+
+				return true ;
+			}
 		}
-	}
 
-	static inline bool containsAtleastOne( const QString& e )
-	{
-		Q_UNUSED( e ) ;
 		return false ;
 	}
 
-	template< typename First,typename ... Args >
-	bool containsAtleastOne( const QString& e,First f,Args ... args )
+	template< typename E,typename F >
+	bool startsWithAtLeastOne( const E& e,const std::initializer_list< F >& f )
 	{
-		if( e.contains( f ) ){
+		for( const auto& it : f ){
 
-			return true ;
-		}else{
-			return containsAtleastOne( e,args ... ) ;
+			if( e.startsWith( it ) ){
+
+				return true ;
+			}
 		}
-	}
 
-	static inline bool startsWithAtLeastOne( const QString& e )
-	{
-		Q_UNUSED( e ) ;
 		return false ;
-	}
-
-	template< typename First,typename ... Args >
-	bool startsWithAtLeastOne( const QString& e,First f,Args ... args )
-	{
-		if( e.startsWith( f ) ){
-
-			return true ;
-		}else{
-			return startsWithAtLeastOne( e,args ... ) ;
-		}
 	}
 }
 

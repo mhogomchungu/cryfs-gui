@@ -132,8 +132,8 @@ private:
 	void startAutoMonitor( void ) ;
 	bool autoMount( void ) ;
 	void updateList( const volumeInfo& ) ;
-	void setupKeyManager( QMenu * ) ;
 
+	void setUpAppMenu( void ) ;
 	Ui::cryfsGUI * m_ui = nullptr ;
 	QString m_folderOpener ;
 	void disableAll( void ) ;

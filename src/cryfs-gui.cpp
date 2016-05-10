@@ -116,6 +116,10 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	connect( m_ui->pbcreate,SIGNAL( clicked() ),this,SLOT( pbCreate() ) ) ;
 
+	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
+
+	m_autoMount = this->autoMount() ;
+
 	this->setUpShortCuts() ;
 
 	this->setUpFont() ;
@@ -125,81 +129,12 @@ void cryfsGUI::setUpApp( const QString& volume )
 	this->setAcceptDrops( true ) ;
 	this->setWindowIcon( icon ) ;
 
-	m_trayIcon.setParent( this ) ;
-	m_trayIcon.setIcon( icon ) ;
-
-	auto trayMenu = new QMenu( this ) ;
-
-	trayMenu->setFont( this->font() ) ;
-
-	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
-	m_autoMount = this->autoMount() ;
-
-	trayMenu->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "Auto Open Mount Point" ),this ) ;
-
-		ac->setCheckable( true ) ;
-		ac->setChecked( m_autoOpenFolderOnMount ) ;
-
-		connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	trayMenu->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "Unmount All" ),this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( unMountAll() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	this->setupKeyManager( trayMenu ) ;
-
-	m_favorite_menu = trayMenu->addMenu( tr( "Favorites" ) ) ;
-
-	m_favorite_menu->setFont( this->font() ) ;
-
-	connect( m_favorite_menu,SIGNAL( triggered( QAction * ) ),
-		 this,SLOT( favoriteClicked( QAction * ) ) ) ;
-
-	connect( m_favorite_menu,SIGNAL( aboutToShow() ),
-		 this,SLOT( showFavorites() ) ) ;
-
-	m_languageAction = new QAction( tr( "Select Language" ),this ) ;
-
-	trayMenu->addAction( m_languageAction ) ;
-
-	trayMenu->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "Check For Update" ),this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( updateCheck() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	trayMenu->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "About" ),this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( licenseInfo() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	trayMenu->addAction( tr( "Quit" ),this,SLOT( closeApplication() ) ) ;
-
-	m_trayIcon.setContextMenu( trayMenu ) ;
-
-	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
-		 this,SLOT( slotTrayClicked( QSystemTrayIcon::ActivationReason ) ) ) ;
-
-	m_ui->pbmenu->setMenu( m_trayIcon.contextMenu() ) ;
+	this->setUpAppMenu() ;
 
 	this->setLocalizationLanguage( false ) ;
+
+	m_trayIcon.setParent( this ) ;
+	m_trayIcon.setIcon( icon ) ;
 
 	m_trayIcon.show() ;
 
@@ -227,16 +162,33 @@ void cryfsGUI::setUpApp( const QString& volume )
 	this->autoUpdateCheck() ;
 }
 
-void cryfsGUI::aboutToShowMenu()
+void cryfsGUI::setUpAppMenu()
 {
-	auto a = utility::walletName() ;
-	auto b = utility::applicationName() ;
-	auto c = LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,a,b ) ;
-	m_change_password_action->setEnabled( c ) ;
-}
+	auto m = new QMenu( this ) ;
 
-void cryfsGUI::setupKeyManager( QMenu * m )
-{	
+	m->setFont( this->font() ) ;
+
+	m->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "Auto Open Mount Point" ),this ) ;
+
+		ac->setCheckable( true ) ;
+		ac->setChecked( m_autoOpenFolderOnMount ) ;
+
+		connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	m->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "Unmount All" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( unMountAll() ) ) ;
+
+		return ac ;
+	}() ) ;
+
 	m->addMenu( [ this ](){
 
 		auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
@@ -275,6 +227,74 @@ void cryfsGUI::setupKeyManager( QMenu * m )
 
 		return m_key_manager_menu ;
 	}() ) ;
+
+	m_favorite_menu = [ this,m ](){
+
+		auto e = m->addMenu( tr( "Favorites" ) ) ;
+
+		e->setFont( this->font() ) ;
+
+		connect( e,SIGNAL( triggered( QAction * ) ),this,SLOT( favoriteClicked( QAction * ) ) ) ;
+
+		connect( e,SIGNAL( aboutToShow() ),this,SLOT( showFavorites() ) ) ;
+
+		return e ;
+	}() ;
+
+	m->addAction( [ this ](){
+
+		m_languageAction = new QAction( tr( "Select Language" ),this ) ;
+
+		return m_languageAction ;
+	}() ) ;
+
+	m->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "Check For Update" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( updateCheck() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	m->addAction( [ this ](){
+
+		auto ac = new QAction( tr( "About" ),this ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( licenseInfo() ) ) ;
+
+		return ac ;
+	}() ) ;
+
+	m->addAction( tr( "Quit" ),this,SLOT( closeApplication() ) ) ;
+
+	m_trayIcon.setContextMenu( m ) ;
+
+	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
+		 this,SLOT( slotTrayClicked( QSystemTrayIcon::ActivationReason ) ) ) ;
+
+	m_ui->pbmenu->setMenu( m ) ;
+}
+
+void cryfsGUI::startAutoMonitor()
+{
+	m_mountInfo.start() ;
+}
+
+/*
+ * This should be the only function that closes the application
+ */
+void cryfsGUI::closeApplication()
+{
+	m_mountInfo.stop()() ;
+}
+
+void cryfsGUI::aboutToShowMenu()
+{
+	auto a = utility::walletName() ;
+	auto b = utility::applicationName() ;
+	auto c = LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,a,b ) ;
+	m_change_password_action->setEnabled( c ) ;
 }
 
 void cryfsGUI::changeInternalWalletPassWord()
@@ -377,19 +397,20 @@ void cryfsGUI::languageMenu( QAction * ac )
 	utility::languageMenu( this,m_languageAction->menu(),ac,"cryfs-gui" ) ;
 }
 
-#define zuluMOUNT_AUTO_OPEN_FOLDER "/.cryfs-gui/cryfs-gui.NoAutoOpenFolder"
-
-void cryfsGUI::autoOpenFolderOnMount( bool b )
+static QString _autoOpenFolderConfigPath()
 {
-	auto x = utility::homePath() + zuluMOUNT_AUTO_OPEN_FOLDER ;
+	return utility::homePath() + "/.cryfs-gui/cryfs-gui.NoAutoOpenFolder" ;
+}
 
-	m_autoOpenFolderOnMount = b ;
+void cryfsGUI::autoOpenFolderOnMount( bool e )
+{
+	m_autoOpenFolderOnMount = e ;
 
 	if( m_autoOpenFolderOnMount ){
 
-		QFile::remove( x ) ;
+		QFile::remove( _autoOpenFolderConfigPath() ) ;
 	}else{
-		QFile f( x ) ;
+		QFile f( _autoOpenFolderConfigPath() ) ;
 		f.open( QIODevice::WriteOnly ) ;
 		f.close() ;
 	}
@@ -397,21 +418,7 @@ void cryfsGUI::autoOpenFolderOnMount( bool b )
 
 bool cryfsGUI::autoOpenFolderOnMount( void )
 {
-	auto x = utility::homePath() + zuluMOUNT_AUTO_OPEN_FOLDER ;
-	return !QFile::exists( x ) ;
-}
-
-void cryfsGUI::startAutoMonitor()
-{
-	m_mountInfo.start() ;
-}
-
-/*
- * This should be the only function that closes the application
- */
-void cryfsGUI::closeApplication()
-{
-	m_mountInfo.stop()() ;
+	return !QFile::exists( _autoOpenFolderConfigPath() ) ;
 }
 
 void cryfsGUI::itemEntered( QTableWidgetItem * item )
@@ -486,8 +493,10 @@ void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 		m.exec( QCursor::pos() ) ;
 	}else{
 		auto p = this->pos() ;
+
 		auto x = p.x() + 100 + m_ui->tableWidget->columnWidth( 0 ) ;
 		auto y = p.y() + 50 + m_ui->tableWidget->rowHeight( 0 ) * item->row() ;
+
 		p.setX( x ) ;
 		p.setY( y ) ;
 		m.exec( p ) ;
