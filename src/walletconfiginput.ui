@@ -39,7 +39,7 @@
     <string>&amp;Cancel</string>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -47,9 +47,6 @@
      <width>581</width>
      <height>151</height>
     </rect>
-   </property>
-   <property name="title">
-    <string/>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -92,9 +89,9 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>70</y>
-      <width>101</width>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
@@ -111,9 +108,9 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>100</y>
-      <width>101</width>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
