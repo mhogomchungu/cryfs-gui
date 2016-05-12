@@ -21,7 +21,7 @@ COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
 INCLUDE(CMakeDependentOption)
 INCLUDE(FindPkgConfig)
 
-add_definitions( -D_DEFAULT_SOURCE -fstack-protector-all -D_FORTIFY_SOURCE=2 --param ssp-buffer-size=4 )
+add_definitions( -D_DEFAULT_SOURCE -fstack-protector-all --param ssp-buffer-size=4 )
 include_directories( ${PROJECT_BINARY_DIR} )
 
 if( LIB_SUFFIX )

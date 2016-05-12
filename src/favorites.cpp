@@ -54,14 +54,17 @@ favorites::favorites( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::favor
 	m_ui->pbFileAddress->setIcon( QIcon( ":/file.png" ) ) ;
 	m_ui->pbDeviceAddress->setIcon( QIcon( ":/partition.png" ) ) ;
 
-	m_ac = new QAction( this ) ;
-	QList<QKeySequence> keys ;
-	keys.append( Qt::Key_Enter ) ;
-	keys.append( Qt::Key_Return ) ;
-	keys.append( Qt::Key_Menu ) ;
-	m_ac->setShortcuts( keys ) ;
-	connect( m_ac,SIGNAL( triggered() ),this,SLOT( shortcutPressed() ) ) ;
-	this->addAction( m_ac ) ;
+
+	this->addAction( [ this ](){
+
+		auto ac = new QAction( this ) ;
+
+		ac->setShortcuts( { Qt::Key_Enter,Qt::Key_Return,Qt::Key_Menu } ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,SLOT( shortcutPressed() ) ) ;
+
+		return ac ;
+	}() ) ;
 
 	this->installEventFilter( this ) ;
 
