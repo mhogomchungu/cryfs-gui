@@ -83,9 +83,12 @@ static int _help()
 
 	QString helpMsg = QObject::tr( "\n\
 options:\n\
-	-d   path to where a volume to be auto unlocked/mounted is located\n\
-	-m   tool to use to open a default file manager(default tool is xdg-open)\n\
-	-e   start the application without showing the GUI\n" ) ;
+	-d   path to where a volume to be auto unlocked/mounted is located.\n\
+	-m   tool to use to open a default file manager(default tool is xdg-open).\n\
+	-e   start the application without showing the GUI.\n\
+	-b   a name of a backend to retrieve a password from when a volume is open from CLI.\n\
+	-k   when opening a volume from CLI,a value of \"rw\" will open the volume in read\\write\n\
+	     mode and a value of \"ro\" will open the volume in read only mode.\n" ) ;
 
 	std::cout << helpMsg.toLatin1().constData() << std::endl ;
 
@@ -203,7 +206,7 @@ utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,c
 
 			storage_t e( _getBackEnd( storage ) ) ;
 
-			e->setImage( ":/zuluCrypt.png" ) ;
+			e->setImage( ":/cryfs-gui" ) ;
 
 			w.opened = e->await_open( walletName,appName,pwd ) ;
 

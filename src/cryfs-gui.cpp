@@ -461,13 +461,86 @@ void cryfsGUI::Show()
 
 	auto volume = utility::cmdArgumentValue( l,"-d" ) ;
 
-	oneinstance::instance( this,"cryfs-gui.socket","startGUI",volume,[ this,volume ]( QObject * instance ){
+	auto s = utility::cmdArgumentValue( l,"-b","" ) ;
+	auto e = utility::cmdArgumentValue( l,"-k","rw" ) ;
 
-		connect( instance,SIGNAL( raise() ),this,SLOT( raiseWindow() ) ) ;
-		connect( instance,SIGNAL( raiseWithDevice( QString ) ),this,SLOT( raiseWindow( QString ) ) ) ;
+	if( s.isEmpty() ){
 
-		this->setUpApp( volume ) ;
-	} ) ;
+		oneinstance::instance( this,"cryfs-gui.socket","startGUI",
+				       volume,[ this,volume ]( QObject * instance ){
+
+			connect( instance,SIGNAL( raise() ),this,
+				 SLOT( raiseWindow() ) ) ;
+			connect( instance,SIGNAL( raiseWithDevice( QString ) ),
+				 this,SLOT( raiseWindow( QString ) ) ) ;
+
+			this->setUpApp( volume ) ;
+		} ) ;
+	}else{
+		QMetaObject::invokeMethod( this,"unlockVolume",Qt::QueuedConnection,
+					   Q_ARG( QString,volume ),Q_ARG( QString,s ),
+					   Q_ARG( bool,e == "rw" ) ) ;
+	}
+}
+
+void cryfsGUI::unlockVolume( const QString& volume,const QString& backEnd,bool mode )
+{
+	if( volume.isEmpty() ){
+
+		qDebug() << tr( "ERROR: Volume path not given." ) ;
+		QCoreApplication::exit( 1 ) ;
+	}else{
+		auto w = [ & ](){
+
+			namespace wxt = LxQt::Wallet ;
+
+			auto _supported = [ & ]( wxt::walletBackEnd e,const char * s ){
+
+				return backEnd == s && wxt::backEndIsSupported( e ) ;
+			} ;
+
+			if( _supported( wxt::internalBackEnd,"internal" ) ){
+
+				return utility::getKeyFromWallet( wxt::internalBackEnd,volume ) ;
+
+			}else if( _supported( wxt::secretServiceBackEnd,"gnomewallet" ) ){
+
+				return utility::getKeyFromWallet( wxt::secretServiceBackEnd,volume ) ;
+
+			}else if( _supported( wxt::kwalletBackEnd,"kwallet" ) ){
+
+				return utility::getKeyFromWallet( wxt::kwalletBackEnd,volume ) ;
+			}
+
+			return utility::wallet{ false,true,"","" } ;
+		}() ;
+
+		if( w.opened ){
+
+			if( w.key.isEmpty() ){
+
+				qDebug() << tr( "ERROR: Key not found in the backend." ) ;
+				QCoreApplication::exit( 1 ) ;
+			}else{
+				auto m = utility::mountPath( volume.split( "/" ).last() ) ;
+
+				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
+
+				auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,o,mode } ).await() ;
+
+				if( e == cryfsTask::status::success ){
+
+					QCoreApplication::exit( 0 ) ;
+				}else{
+					qDebug() << tr( "ERROR: Failed to unlock requested volume" ) ;
+					QCoreApplication::exit( 1 ) ;
+				}
+			}
+		}else{
+			qDebug() << tr( "ERROR: Failed to unlock requested backend" ) ;
+			QCoreApplication::exit( 1 ) ;
+		}
+	}
 }
 
 void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
@@ -863,20 +936,21 @@ bool cryfsGUI::autoMount()
 
 cryfsGUI::~cryfsGUI()
 {
-	QFile f( utility::homePath() + zuluMOUNT_AUTOPATH ) ;
+	if( m_ui ){
 
-	auto q = m_ui->tableWidget ;
+		auto q = m_ui->tableWidget ;
 
-	const auto& r = this->window()->geometry() ;
+		const auto& r = this->window()->geometry() ;
 
-	utility::setWindowDimensions( "cryfs",{ r.x(),
-						r.y(),
-						r.width(),
-						r.height(),
-						q->columnWidth( 0 ),
-						q->columnWidth( 1 ),
-						q->columnWidth( 2 ),
-						q->columnWidth( 3 ) } ) ;
+		utility::setWindowDimensions( "cryfs",{ r.x(),
+							r.y(),
+							r.width(),
+							r.height(),
+							q->columnWidth( 0 ),
+							q->columnWidth( 1 ),
+							q->columnWidth( 2 ),
+							q->columnWidth( 3 ) } ) ;
 
-	delete m_ui ;
+		delete m_ui ;
+	}
 }

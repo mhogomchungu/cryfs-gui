@@ -84,6 +84,7 @@ public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
 private slots:
+	void unlockVolume( const QString&,const QString&,bool ) ;
 	void aboutToShowMenu( void ) ;
 	void changeInternalWalletPassWord( void ) ;
 	void closeApplication( void ) ;
