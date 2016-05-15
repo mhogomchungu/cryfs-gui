@@ -522,7 +522,9 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& backEnd,bool m
 				qDebug() << tr( "ERROR: Key not found in the backend." ) ;
 				QCoreApplication::exit( 1 ) ;
 			}else{
-				auto m = utility::mountPath( volume.split( "/" ).last() ) ;
+				auto m = utility::mountPathPostFix( volume.split( "/" ).last() ) ;
+
+				m = utility::mountPath( m ) ;
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
