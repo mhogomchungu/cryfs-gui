@@ -36,7 +36,6 @@
 #include <QEventLoop>
 #include <QDebug>
 #include <QCoreApplication>
-#include <blkid/blkid.h>
 #include <QByteArray>
 #include <QProcess>
 #include <QFile>

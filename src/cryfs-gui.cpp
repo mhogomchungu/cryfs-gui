@@ -412,7 +412,6 @@ void cryfsGUI::autoOpenFolderOnMount( bool e )
 	}else{
 		QFile f( _autoOpenFolderConfigPath() ) ;
 		f.open( QIODevice::WriteOnly ) ;
-		f.close() ;
 	}
 }
 
