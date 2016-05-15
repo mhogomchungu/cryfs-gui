@@ -241,12 +241,7 @@ void cryfsGUI::setUpAppMenu()
 		return e ;
 	}() ;
 
-	m->addAction( [ this ](){
-
-		m_languageAction = new QAction( tr( "Select Language" ),this ) ;
-
-		return m_languageAction ;
-	}() ) ;
+	m_languageAction = m->addAction( tr( "Select Language" ) ) ;
 
 	m->addAction( [ this ](){
 
