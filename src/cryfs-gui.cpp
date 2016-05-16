@@ -436,6 +436,7 @@ void cryfsGUI::Show()
 
 	auto s = utility::cmdArgumentValue( l,"-b","" ) ;
 	auto e = utility::cmdArgumentValue( l,"-k","rw" ) ;
+	auto z = utility::cmdArgumentValue( l,"-z","" ) ;
 
 	if( s.isEmpty() ){
 
@@ -451,12 +452,12 @@ void cryfsGUI::Show()
 		} ) ;
 	}else{
 		QMetaObject::invokeMethod( this,"unlockVolume",Qt::QueuedConnection,
-					   Q_ARG( QString,volume ),Q_ARG( QString,s ),
-					   Q_ARG( bool,e == "rw" ) ) ;
+					   Q_ARG( QString,volume ),Q_ARG( QString,z ),
+					   Q_ARG( QString,s ), Q_ARG( bool,e == "ro" ) ) ;
 	}
 }
 
-void cryfsGUI::unlockVolume( const QString& volume,const QString& backEnd,bool mode )
+void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,const QString& backEnd,bool mode )
 {
 	if( volume.isEmpty() ){
 
@@ -495,9 +496,14 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& backEnd,bool m
 				qDebug() << tr( "ERROR: Key not found in the backend." ) ;
 				QCoreApplication::exit( 1 ) ;
 			}else{
-				auto m = utility::mountPathPostFix( volume.split( "/" ).last() ) ;
+				QString m ;
 
-				m = utility::mountPath( m ) ;
+				if( mountPath.isEmpty() ){
+
+					m = utility::mountPath( utility::mountPathPostFix( volume.split( "/" ).last() ) ) ;
+				}else{
+					m = mountPath ;
+				}
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
