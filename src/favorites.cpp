@@ -41,9 +41,8 @@ favorites::favorites( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::favor
 
 	this->setFixedSize( this->size() ) ;
 
-	connect( m_ui->pbDeviceAddress,SIGNAL( clicked() ),this,SLOT( deviceAddress() ) ) ;
 	connect( m_ui->pbAdd,SIGNAL( clicked() ),this,SLOT( add() ) ) ;
-	connect( m_ui->pbFileAddress,SIGNAL( clicked() ),this,SLOT( fileAddress() ) ) ;
+	connect( m_ui->pbFolderPath,SIGNAL( clicked() ),this,SLOT( folderPath() ) ) ;
 	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( cancel() ) ) ;
 	connect( m_ui->tableWidget,SIGNAL( currentItemChanged( QTableWidgetItem *,QTableWidgetItem * ) ),this,
 		SLOT( currentItemChanged( QTableWidgetItem *,QTableWidgetItem * ) ) ) ;
@@ -51,9 +50,7 @@ favorites::favorites( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::favor
 		SLOT( itemClicked( QTableWidgetItem * ) ) ) ;
 	connect( m_ui->lineEditDeviceAddress,SIGNAL( textChanged( QString ) ),this,SLOT( devicePathTextChange( QString ) ) ) ;
 
-	m_ui->pbFileAddress->setIcon( QIcon( ":/file.png" ) ) ;
-	m_ui->pbDeviceAddress->setIcon( QIcon( ":/partition.png" ) ) ;
-
+	m_ui->pbFolderPath->setIcon( QIcon( ":/file.png" ) ) ;
 
 	this->addAction( [ this ](){
 
@@ -68,7 +65,6 @@ favorites::favorites( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::favor
 
 	this->installEventFilter( this ) ;
 
-	m_ui->pbDeviceAddress->setVisible( false ) ;
 	this->ShowUI() ;
 }
 
@@ -81,7 +77,7 @@ void favorites::devicePathTextChange( QString txt )
 {
 	if( txt.isEmpty() ){
 
-		m_ui->lineEditMountPath->clear() ; ;
+		m_ui->lineEditMountPath->clear() ;
 	}else{
 		auto s = txt.split( "/" ).last() ;
 
@@ -89,18 +85,20 @@ void favorites::devicePathTextChange( QString txt )
 
 			m_ui->lineEditMountPath->setText( txt ) ;
 		}else{
-			m_ui->lineEditMountPath->setText( s ) ;
+			auto m = utility::mountPath( s ) ;
+			m_ui->lineEditMountPath->setText( m ) ;
 		}
 	}
 }
 
 void favorites::shortcutPressed()
 {
-	this->itemClicked( m_ui->tableWidget->currentItem(),false ) ;
-}
+	auto table = m_ui->tableWidget ;
 
-void favorites::deviceAddress()
-{
+	if( table->rowCount() > 0 ){
+
+		this->itemClicked( m_ui->tableWidget->currentItem(),false ) ;
+	}
 }
 
 void favorites::ShowUI()
@@ -169,21 +167,24 @@ void favorites::removeEntryFromFavoriteList()
 {
 	auto table = m_ui->tableWidget ;
 
-	table->setEnabled( false ) ;
+	if( table->rowCount() > 0 ){
 
-	auto row = table->currentRow() ;
+		table->setEnabled( false ) ;
 
-	auto p = table->item( row,0 )->text() ;
-	auto q = table->item( row,1 )->text() ;
+		auto row = table->currentRow() ;
 
-	if( !p.isEmpty() && !q.isEmpty() ){
+		auto p = table->item( row,0 )->text() ;
+		auto q = table->item( row,1 )->text() ;
 
-		utility::removeFavoriteEntry( QString( "%1\t%2" ).arg( p,q ) ) ;
+		if( !p.isEmpty() && !q.isEmpty() ){
 
-		tablewidget::deleteRowFromTable( table,row ) ;
+			utility::removeFavoriteEntry( QString( "%1\t%2" ).arg( p,q ) ) ;
+
+			tablewidget::deleteRowFromTable( table,row ) ;
+		}
+
+		table->setEnabled( true ) ;
 	}
-
-	table->setEnabled( true ) ;
 }
 
 void favorites::cancel()
@@ -196,22 +197,22 @@ void favorites::add()
 	DialogMsg msg( this ) ;
 
 	auto dev = m_ui->lineEditDeviceAddress->text() ;
-	auto m_path = m_ui->lineEditMountPath->text() ;
+	auto path = m_ui->lineEditMountPath->text() ;
 
 	if( dev.isEmpty() ){
 
 		return msg.ShowUIOK( tr( "ERROR!" ),tr( "Encrypted folder address field is empty" ) ) ;
 	}
-	if( m_path.isEmpty() ){
+	if( path.isEmpty() ){
 
 		return msg.ShowUIOK( tr( "ERROR!" ),tr( "Mount point path field is empty" ) ) ;
 	}
 
 	m_ui->tableWidget->setEnabled( false ) ;
 
-	this->addEntries( { dev,m_path } ) ;
+	this->addEntries( { dev,path } ) ;
 
-	utility::addToFavorite( dev,m_path ) ;
+	utility::addToFavorite( dev,path ) ;
 
 	m_ui->lineEditDeviceAddress->clear() ; ;
 	m_ui->lineEditMountPath->clear() ;
@@ -219,7 +220,7 @@ void favorites::add()
 	m_ui->tableWidget->setEnabled( true ) ;
 }
 
-void favorites::fileAddress()
+void favorites::folderPath()
 {
 	auto e = QFileDialog::getExistingDirectory( this,tr( "Path To An Encrypted Folder" ),QDir::homePath(),0 ) ;
 

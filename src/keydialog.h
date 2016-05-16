@@ -71,6 +71,7 @@ private slots:
 	void cbActicated( int ) ;
 	void pbkeyOption( void ) ;
 	void pbMountPointPath( void ) ;
+	void pbFolderPath( void ) ;
 	void pbPluginEntryClicked( QAction * ) ;
 	void plugIn( void ) ;
 	void key( void ) ;
@@ -94,7 +95,6 @@ private :
 	bool eventFilter( QObject * watched,QEvent * event ) ;
 	Ui::keyDialog * m_ui ;
 	QString m_path ;
-	QString m_point ;
 	QString m_key ;
 	QStringList m_keyFiles ;
 	QString m_deviceOffSet ;

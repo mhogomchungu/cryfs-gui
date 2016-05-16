@@ -64,7 +64,7 @@
      <string>Volume ID</string>
     </property>
     <property name="textAlignment">
-     <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+     <set>AlignCenter</set>
     </property>
    </column>
    <column>
@@ -72,7 +72,7 @@
      <string>Mount Point</string>
     </property>
     <property name="textAlignment">
-     <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+     <set>AlignCenter</set>
     </property>
    </column>
   </widget>
@@ -134,23 +134,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pbDeviceAddress">
-   <property name="geometry">
-    <rect>
-     <x>500</x>
-     <y>230</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>open partition dialog</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbFileAddress">
+  <widget class="QPushButton" name="pbFolderPath">
    <property name="geometry">
     <rect>
      <x>470</x>
@@ -183,8 +167,7 @@
  <tabstops>
   <tabstop>tableWidget</tabstop>
   <tabstop>lineEditDeviceAddress</tabstop>
-  <tabstop>pbDeviceAddress</tabstop>
-  <tabstop>pbFileAddress</tabstop>
+  <tabstop>pbFolderPath</tabstop>
   <tabstop>lineEditMountPath</tabstop>
   <tabstop>pbAdd</tabstop>
   <tabstop>pbCancel</tabstop>

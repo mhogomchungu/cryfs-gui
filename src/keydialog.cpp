@@ -68,17 +68,24 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 		m_ui->lineEditFolderPath->setVisible( true ) ;
 
-		m_ui->pbOpenMountPoint->setVisible( true ) ;
+		m_ui->pbOpenFolderPath->setVisible( true ) ;
 
+		m_ui->pbMountPoint->setVisible( false ) ;
 		m_ui->lineEditFolderPath->setText( utility::homePath() + "/" ) ;
 
 		m_ui->lineEditFolderPath->setEnabled( false ) ;
 
 		m_ui->lineEditMountPoint->setFocus() ;
 
+		m_ui->lineEditMountPoint->setText( m_path ) ;
+
 		msg = tr( "Create A New Cryfs Volume" ) ;
 	}else{
-		m_ui->lineEditMountPoint->setEnabled( false ) ;
+		msg = tr( "Unlocking \"%1\"" ).arg( m_path ) ;
+
+		m_ui->lineEditMountPoint->setEnabled( true ) ;
+
+		m_ui->label_2->setText( tr( "Mount Path" ) ) ;
 
 		m_ui->label_3->setVisible( false ) ;
 
@@ -86,17 +93,33 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 		m_ui->checkBoxOpenReadOnly->setVisible( true ) ;
 
-		m_ui->pbOpenMountPoint->setVisible( false ) ;
+		m_ui->pbOpenFolderPath->setVisible( false ) ;
+
+		m_ui->pbMountPoint->setIcon( QIcon( ":/folder.png" ) ) ;
 
 		m_ui->lineEditKey->setFocus() ;
 
-		msg = tr( "Unlocking \"%1\"" ).arg( m_path ) ;
+		const auto& m = e.mountPoint() ;
+
+		if( m.startsWith( "/" ) ){
+
+			m_ui->lineEditMountPoint->setText( m ) ;
+		}else{
+			m_ui->lineEditMountPoint->setText( utility::mountPath( [ &m,this ](){
+
+				if( m.isEmpty() ){
+
+					return utility::mountPathPostFix( m_path.split( "/" ).last() ) ;
+				}else{
+					return utility::mountPathPostFix( m ) ;
+				}
+			}() ) ) ;
+		}
 	}
 
 	this->setWindowTitle( msg ) ;
 
-	m_ui->lineEditMountPoint->setText( m_path ) ;
-	m_ui->pbOpenMountPoint->setIcon( QIcon( ":/folder.png" ) ) ;
+	m_ui->pbOpenFolderPath->setIcon( QIcon( ":/folder.png" ) ) ;
 
 	m_menu = new QMenu( this ) ;
 
@@ -116,21 +139,11 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( pbCancel() ) ) ;
 	connect( m_ui->pbOpen,SIGNAL( clicked() ),this,SLOT( pbOpen() ) ) ;
 	connect( m_ui->pbkeyOption,SIGNAL( clicked() ),this,SLOT( pbkeyOption() ) ) ;
-	connect( m_ui->pbOpenMountPoint,SIGNAL( clicked() ),this,SLOT( pbMountPointPath() ) ) ;
+	connect( m_ui->pbOpenFolderPath,SIGNAL( clicked() ),this,SLOT( pbFolderPath() ) ) ;
+	connect( m_ui->pbMountPoint,SIGNAL( clicked() ),this,SLOT( pbMountPointPath() ) ) ;
 	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
 	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),this,SLOT( cbActicated( int ) ) ) ;
 	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),this,SLOT( textChanged( QString ) ) ) ;
-
-	const auto& m = e.mountPoint() ;
-
-	if( m.isEmpty() || m == "Nil" ){
-
-		m_point = utility::mountPathPostFix( m_path.split( "/" ).last() ) ;
-	}else{
-		m_point = utility::mountPathPostFix( m ) ;
-	}
-
-	m_ui->lineEditMountPoint->setText( m_point ) ;
 
 	m_menu_1 = [ this ](){
 
@@ -217,6 +230,19 @@ void keyDialog::pbMountPointPath()
 
 	if( !e.isEmpty() ){
 
+		e = e + "/" + m_ui->lineEditMountPoint->text().split( '/' ).last() ;
+
+		m_ui->lineEditMountPoint->setText( e ) ;
+	}
+}
+
+void keyDialog::pbFolderPath()
+{
+	auto msg = tr( "Select A Folder To Create A Mount Point In" ) ;
+	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
+
+	if( !e.isEmpty() ){
+
 		e = e + "/" + m_ui->lineEditFolderPath->text().split( '/' ).last() ;
 
 		m_ui->lineEditFolderPath->setText( e ) ;
@@ -228,7 +254,7 @@ void keyDialog::enableAll()
 	m_ui->pbOptions->setEnabled( false ) ;
 	m_ui->label_2->setEnabled( true ) ;
 	m_ui->lineEditMountPoint->setEnabled( m_create ) ;
-	m_ui->pbOpenMountPoint->setEnabled( true ) ;
+	m_ui->pbOpenFolderPath->setEnabled( true ) ;
 	m_ui->pbCancel->setEnabled( true ) ;
 	m_ui->pbOpen->setEnabled( true ) ;
 	m_ui->label->setEnabled( true ) ;
@@ -252,7 +278,7 @@ void keyDialog::disableAll()
 	m_ui->label_2->setEnabled( false ) ;
 	m_ui->label_3->setEnabled( false ) ;
 	m_ui->lineEditMountPoint->setEnabled( false ) ;
-	m_ui->pbOpenMountPoint->setEnabled( false ) ;
+	m_ui->pbOpenFolderPath->setEnabled( false ) ;
 	m_ui->lineEditKey->setEnabled( false ) ;
 	m_ui->pbCancel->setEnabled( false ) ;
 	m_ui->pbOpen->setEnabled( false ) ;
@@ -267,11 +293,11 @@ void keyDialog::KeyFile()
 	if( m_ui->cbKeyType->currentIndex() == keyDialog::keyfile ){
 
 		auto msg = tr( "Select A File To Be Used As A Keyfile" ) ;
-		auto Z = QFileDialog::getOpenFileName( this,msg,utility::homePath() ) ;
+		auto e = QFileDialog::getOpenFileName( this,msg,utility::homePath() ) ;
 
-		if( !Z.isEmpty() ){
+		if( !e.isEmpty() ){
 
-			m_ui->lineEditKey->setText( Z ) ;
+			m_ui->lineEditKey->setText( e ) ;
 		}
 	}
 }
@@ -304,15 +330,15 @@ void keyDialog::Plugin()
 	m_menu->exec( QCursor::pos() ) ;
 }
 
-void keyDialog::pbPluginEntryClicked( QAction * e )
+void keyDialog::pbPluginEntryClicked( QAction * ac )
 {
-	auto r = e->text() ;
+	auto e = ac->text() ;
 
-	r.remove( "&" ) ;
+	e.remove( "&" ) ;
 
-	if( r != tr( "Cancel" ) ){
+	if( e != tr( "Cancel" ) ){
 
-		m_ui->lineEditKey->setText( r ) ;
+		m_ui->lineEditKey->setText( e ) ;
 	}
 }
 
@@ -477,9 +503,9 @@ void keyDialog::encryptedFolderCreate()
 
 void keyDialog::encryptedFolderMount()
 {
-	auto m = utility::mountPath( m_ui->lineEditMountPoint->text() ) ;
-
 	auto ro = m_ui->checkBoxOpenReadOnly->isChecked() ;
+
+	auto m = m_ui->lineEditMountPoint->text() ;
 
 	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_success,ro } ) ;
 
@@ -501,7 +527,6 @@ void keyDialog::encryptedFolderMount()
 void keyDialog::openVolume()
 {
 	auto keyType = m_ui->cbKeyType->currentIndex() ;
-
 
 	if( keyType == keyDialog::Key || keyType == keyDialog::keyKeyFile ){
 

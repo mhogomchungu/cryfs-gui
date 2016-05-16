@@ -52,8 +52,7 @@ private slots:
 	void removeEntryFromFavoriteList( void ) ;
 	void add( void ) ;
 	void cancel( void ) ;
-	void deviceAddress( void ) ;
-	void fileAddress( void ) ;
+	void folderPath( void ) ;
 	void currentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous ) ;
 	void itemClicked( QTableWidgetItem * current,bool ) ;
 	void itemClicked( QTableWidgetItem * current ) ;
