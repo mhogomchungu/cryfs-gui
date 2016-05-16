@@ -225,7 +225,7 @@ void keyDialog::textChanged( QString e )
 
 void keyDialog::pbMountPointPath()
 {
-	auto msg = tr( "Select A Folder To Create A Mount Point In" ) ;
+	auto msg = tr( "Select A Folder To Create A Mount Point In." ) ;
 	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
 	if( !e.isEmpty() ){
@@ -238,7 +238,7 @@ void keyDialog::pbMountPointPath()
 
 void keyDialog::pbFolderPath()
 {
-	auto msg = tr( "Select A Folder To Create A Mount Point In" ) ;
+	auto msg = tr( "Select A Folder To Create A Mount Point In." ) ;
 	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
 	if( !e.isEmpty() ){
@@ -292,7 +292,7 @@ void keyDialog::KeyFile()
 {
 	if( m_ui->cbKeyType->currentIndex() == keyDialog::keyfile ){
 
-		auto msg = tr( "Select A File To Be Used As A Keyfile" ) ;
+		auto msg = tr( "Select A File To Be Used As A Keyfile." ) ;
 		auto e = QFileDialog::getOpenFileName( this,msg,utility::homePath() ) ;
 
 		if( !e.isEmpty() ){
@@ -356,14 +356,14 @@ void keyDialog::pbOpen()
 
 			DialogMsg msg( this ) ;
 
-			return msg.ShowUIOK( tr( "ERROR" ),tr( "Volume Name Field Is Empty" ) ) ;
+			return msg.ShowUIOK( tr( "ERROR" ),tr( "Volume Name Field Is Empty." ) ) ;
 		}
 
 		if( m_ui->lineEditKey->text().isEmpty() ){
 
 			DialogMsg msg( this ) ;
 
-			return msg.ShowUIOK( tr( "ERROR" ),tr( "Key Field Is Empty" ) ) ;
+			return msg.ShowUIOK( tr( "ERROR" ),tr( "Key Field Is Empty." ) ) ;
 		}
 	}
 
@@ -386,7 +386,7 @@ void keyDialog::pbOpen()
 			if( w.notConfigured ){
 
 				DialogMsg msg( this ) ;
-				msg.ShowUIOK( tr( "ERROR!" ),tr( "Internal wallet is not configured" ) ) ;
+				msg.ShowUIOK( tr( "ERROR!" ),tr( "Internal Wallet Is Not Configured." ) ) ;
 				return this->enableAll() ;
 			}else{
 				_internalPassWord = w.password ;
@@ -405,7 +405,7 @@ void keyDialog::pbOpen()
 
 				DialogMsg msg( this ) ;
 
-				msg.ShowUIOK( tr( "ERROR" ),tr( "The volume does not appear to have an entry in the wallet" ) ) ;
+				msg.ShowUIOK( tr( "ERROR" ),tr( "The Volume Does Not Appear To Have An Entry In The Wallet." ) ) ;
 
 				this->enableAll() ;
 
@@ -438,40 +438,40 @@ bool keyDialog::completed( cryfsTask::status s )
 
 	case cryfsTask::status::cryfs :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock a cryfs volume.\nWrong password entered" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unlock A Cryfs Volume.\nWrong Password Entered." ) ) ;
 		break;
 
 	case cryfsTask::status::encfs :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock an encfs volume.\nWrong password entered" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unlock An Encfs Volume.\nWrong Password Entered." ) ) ;
 		break;
 
 	case cryfsTask::status::cryfsNotFound :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\ncryfs executable could not be found" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Request.\nCryfs Executable Could Not Be Found." ) ) ;
 		break;
 
 	case cryfsTask::status::encfsNotFound :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the request.\nencfs executable could not be found" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Request.\nEncfs Executable Could Not Be Found." ) ) ;
 		break;
 
 	case cryfsTask::status::failedToCreateMountPoint :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to create mount point" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Create Mount Point." ) ) ;
 		break;
 
 	case cryfsTask::status::unknown :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to unlock the volume.\nNot supported volume encountered" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unlock The Volume.\nNot Supported Volume Encountered." ) ) ;
 		break;
 
 	case cryfsTask::status::backendFail :
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the task.\nBackend not responding" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Task.\nBackend Not Responding." ) ) ;
 		break;
 	default:
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed to complete the task.\nAn unknown error has occured" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Task.\nAn Unknown Error Has Occured." ) ) ;
 		break;
 	}
 
@@ -483,6 +483,24 @@ void keyDialog::encryptedFolderCreate()
 	auto path = m_ui->lineEditFolderPath->text() ;
 
 	auto m = path.split( '/' ).last() ;
+
+	if( utility::pathExists( path ) ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Encrypted Folder Path Appear Already Taken." ) ) ;
+
+		return this->enableAll() ;
+	}
+
+	if( utility::pathExists( utility::mountPath( utility::mountPathPostFix( m ) ) ) ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Mount Point Path Already Taken." ) ) ;
+
+		return this->enableAll() ;
+	}
 
 	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_success,false } ) ;
 
@@ -506,6 +524,24 @@ void keyDialog::encryptedFolderMount()
 	auto ro = m_ui->checkBoxOpenReadOnly->isChecked() ;
 
 	auto m = m_ui->lineEditMountPoint->text() ;
+
+	if( utility::pathExists( m ) ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Mount Point Path Already Taken." ) ) ;
+
+		return this->enableAll() ;
+	}
+
+	if( !utility::pathExists( m_path ) ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Encrypted Folder Appear To Not Be Present." ) ) ;
+
+		return this->enableAll() ;
+	}
 
 	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_success,ro } ) ;
 

@@ -461,7 +461,7 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,cons
 {
 	if( volume.isEmpty() ){
 
-		qDebug() << tr( "ERROR: Volume path not given." ) ;
+		qDebug() << tr( "ERROR: Volume Path Not Given." ) ;
 		QCoreApplication::exit( 1 ) ;
 	}else{
 		auto w = [ & ](){
@@ -493,7 +493,7 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,cons
 
 			if( w.key.isEmpty() ){
 
-				qDebug() << tr( "ERROR: Key not found in the backend." ) ;
+				qDebug() << tr( "ERROR: Key Not Found In The Backend." ) ;
 				QCoreApplication::exit( 1 ) ;
 			}else{
 				QString m ;
@@ -513,12 +513,12 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,cons
 
 					QCoreApplication::exit( 0 ) ;
 				}else{
-					qDebug() << tr( "ERROR: Failed to unlock requested volume" ) ;
+					qDebug() << tr( "ERROR: Failed To Unlock Requested Volume." ) ;
 					QCoreApplication::exit( 1 ) ;
 				}
 			}
 		}else{
-			qDebug() << tr( "ERROR: Failed to unlock requested backend" ) ;
+			qDebug() << tr( "ERROR: Failed To Unlock Requested Backend." ) ;
 			QCoreApplication::exit( 1 ) ;
 		}
 	}
@@ -592,8 +592,8 @@ void cryfsGUI::slotOpenFolder()
 
 void cryfsGUI::openMountPoint( const QString& m_point )
 {
-	auto x = tr( "Warning" ) ;
-	auto y = tr( "Could not open mount point because \"%1\" tool does not appear to be working correctly").arg( m_folderOpener ) ;
+	auto x = tr( "WARNING" ) ;
+	auto y = tr( "Could Not Open Mount Point Because \"%1\" Tool Does Not Appear To Be Working Correctly." ).arg( m_folderOpener ) ;
 
 	utility::openPath( m_point,m_folderOpener,m_env,this,x,y ) ;
 }
@@ -711,7 +711,7 @@ void cryfsGUI::showMoungDialog( const volumeInfo& v )
 		DialogMsg msg( this ) ;
 
 		msg.ShowUIOK( tr( "ERROR" ),
-			      tr( "Permission to access the volume was denied\nor\nthe volume is not supported" ) ) ;
+			      tr( "Permission To Access The Volume Was Denied\nOr\nThe Volume Is Not Supported" ) ) ;
 
 		this->enableAll() ;
 	}else{
@@ -811,7 +811,7 @@ void cryfsGUI::pbUmount()
 		if( !cryfsTask::encryptedFolderUnMount( m ).await() ){
 
 			DialogMsg m( this ) ;
-			m.ShowUIOK( tr( "ERROR" ),tr( "Failed to unmount %1 volume" ).arg( type ) ) ;
+			m.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unmount %1 Volume" ).arg( type ) ) ;
 
 			this->enableAll() ;
 		}
