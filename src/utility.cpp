@@ -767,7 +767,18 @@ void utility::setLocalizationLanguage( bool translate,QWidget * w,QAction * ac,c
 
 		QDir d( e ) ;
 
-		m->addAction( "en_US" )->setCheckable( true ) ;
+		auto q = m->addAction( "en_US" ) ;
+
+		q->setCheckable( true ) ;
+		q->setChecked( true ) ;
+		q->setEnabled( false ) ;
+
+		if( ac ){
+
+			ac->setMenu( m ) ;
+		}
+
+		return ;
 
 		auto t = d.entryList() ;
 
@@ -780,11 +791,6 @@ void utility::setLocalizationLanguage( bool translate,QWidget * w,QAction * ac,c
 
 				m->addAction( it.remove( ".qm" ) )->setCheckable( true ) ;
 			}
-		}
-
-		if( ac ){
-
-			ac->setMenu( m ) ;
 		}
 
 		_set_checked( m,r ) ;

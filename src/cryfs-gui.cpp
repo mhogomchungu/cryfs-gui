@@ -168,100 +168,79 @@ void cryfsGUI::setUpAppMenu()
 
 	m->setFont( this->font() ) ;
 
-	m->addAction( [ this ](){
+	auto _addAction = [ this ]( bool p,bool q,const QString& e,const char * s ){
 
-		auto ac = new QAction( tr( "Auto Open Mount Point" ),this ) ;
+		auto ac = new QAction( e,this ) ;
 
-		ac->setCheckable( true ) ;
-		ac->setChecked( m_autoOpenFolderOnMount ) ;
+		if( p ){
 
-		connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( autoOpenFolderOnMount( bool ) ) ) ;
+			ac->setCheckable( p ) ;
+			ac->setChecked( q ) ;
 
-		return ac ;
-	}() ) ;
-
-	m->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "Unmount All" ),this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( unMountAll() ) ) ;
+			connect( ac,SIGNAL( toggled( bool ) ),this,s ) ;
+		}else{
+			connect( ac,SIGNAL( triggered() ),this,s ) ;
+		}
 
 		return ac ;
-	}() ) ;
+	} ;
 
-	m->addMenu( [ this ](){
+	auto _addMenu = [ m,this ]( const QString& r,const char * t,const char * s ){
 
-		auto w = new QMenu( tr( "Internal Wallet" ),this ) ;
+		auto e = m->addMenu( r ) ;
 
-		m_change_password_action = w->addAction( tr( "Change PassWord" ) ) ;
+		e->setFont( this->font() ) ;
 
-		connect( m_change_password_action,SIGNAL( triggered() ),
-			 this,SLOT( changeInternalWalletPassWord() ) ) ;
+		connect( e,SIGNAL( triggered( QAction * ) ),this,t ) ;
 
-		return w ;
-	}() ) ;
+		connect( e,SIGNAL( aboutToShow() ),this,s ) ;
 
-	m->addMenu( [ this ](){
+		return e ;
+	} ;
 
-		m_key_manager_menu = [ this ](){
+	m->addAction( _addAction( true,m_autoOpenFolderOnMount,tr( "Auto Open Mount Point" ),
+				  SLOT( autoOpenFolderOnMount( bool ) ) ) ) ;
 
-			auto m = new QMenu( tr( "Key Storage" ),this ) ;
+	m->addAction( _addAction( false,false,tr( "Unmount All" ),SLOT( unMountAll() ) ) ) ;
 
-			connect( m,SIGNAL( triggered( QAction * ) ),this,SLOT( keyManagerClicked( QAction * ) ) ) ;
+	m_change_password_action = [ m,this ](){
 
-			connect( m,SIGNAL( aboutToShow() ),this,SLOT( aboutToShowMenu() ) ) ;
+		auto e = m->addMenu( tr( "Internal Wallet" ) )->addAction( tr( "Change PassWord" ) ) ;
 
-			return m ;
-		}() ;
+		connect( e,SIGNAL( triggered() ),this,SLOT( changeInternalWalletPassWord() ) ) ;
+
+		return e ;
+	}() ;
+
+	m_key_manager_menu = [ &_addMenu ](){
+
+		auto m = _addMenu( tr( "Key Storage" ),
+				   SLOT( keyManagerClicked( QAction * ) ),
+				   SLOT( aboutToShowMenu() ) ) ;
 
 		auto _addOption = [ & ]( const QString& e,LxQt::Wallet::walletBackEnd s ){
 
-			auto i = LxQt::Wallet::backEndIsSupported( s ) ;
-
-			m_key_manager_menu->addAction( e )->setEnabled( i ) ;
+			m->addAction( e )->setEnabled( LxQt::Wallet::backEndIsSupported( s ) ) ;
 		} ;
 
 		_addOption( tr( "Internal Wallet" ),LxQt::Wallet::internalBackEnd ) ;
 		_addOption( tr( "KDE Wallet" ),LxQt::Wallet::kwalletBackEnd ) ;
 		_addOption( tr( "Gnome Wallet" ),LxQt::Wallet::secretServiceBackEnd ) ;
 
-		return m_key_manager_menu ;
-	}() ) ;
-
-	m_favorite_menu = [ this,m ](){
-
-		auto e = m->addMenu( tr( "Favorites" ) ) ;
-
-		e->setFont( this->font() ) ;
-
-		connect( e,SIGNAL( triggered( QAction * ) ),this,SLOT( favoriteClicked( QAction * ) ) ) ;
-
-		connect( e,SIGNAL( aboutToShow() ),this,SLOT( showFavorites() ) ) ;
-
-		return e ;
+		return m ;
 	}() ;
+
+	m_favorite_menu = _addMenu( tr( "Favorites" ),
+				    SLOT( favoriteClicked( QAction * ) ),
+				    SLOT( showFavorites() ) ) ;
 
 	m_languageAction = m->addAction( tr( "Select Language" ) ) ;
 
-	m->addAction( [ this ](){
+	m->addAction( _addAction( false,false,tr( "Check For Update" ),SLOT( updateCheck() ) ) ) ;
 
-		auto ac = new QAction( tr( "Check For Update" ),this ) ;
+	m->addAction( _addAction( false,false,tr( "About" ),SLOT( licenseInfo() ) ) ) ;
 
-		connect( ac,SIGNAL( triggered() ),this,SLOT( updateCheck() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	m->addAction( [ this ](){
-
-		auto ac = new QAction( tr( "About" ),this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( licenseInfo() ) ) ;
-
-		return ac ;
-	}() ) ;
-
-	m->addAction( tr( "Quit" ),this,SLOT( closeApplication() ) ) ;
+	m->addAction( _addAction( false,false,tr( "Quit" ),SLOT( closeApplication() ) ) ) ;
 
 	m_trayIcon.setContextMenu( m ) ;
 
@@ -504,9 +483,9 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& backEnd,bool m
 			}else if( _supported( wxt::kwalletBackEnd,"kwallet" ) ){
 
 				return utility::getKeyFromWallet( wxt::kwalletBackEnd,volume ) ;
+			}else{
+				return utility::wallet{ false,true,"","" } ;
 			}
-
-			return utility::wallet{ false,true,"","" } ;
 		}() ;
 
 		if( w.opened ){

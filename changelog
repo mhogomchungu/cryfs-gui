@@ -14,3 +14,18 @@ version 1.1.0
 
 -- Add ability to unmount all volumes at the same time(Menu->UnmountAll)
 -- Add ability to generate mounting dialog with a single action(Menu->Favorites->Mount All)
+
+version 1.2.0
+
+-- Add ability to auto unlock a volume from CLI.An example of how to do this is:
+
+   cryfs_gui -d /home/mtz/cryfs.volume -b "internal"
+
+   The "-b" option gives a passphrase storage backend to use to retrieve the password to unlock
+   the volume. Currently,only 3 backends are supported:
+   1. "internal" backend is always there and its backed by libgcrypt.
+   2. "kwallet" is backed ny KDE wallet is a compile time dependency of the project.
+   3. "gnomewallet" is backed by GNOME's libsecret and is a compile time dependency of the project.
+
+   Set the backed to use a blank passphrase(not recommended) if you want to be able to unlock
+   your volumes without being prompt for a backend password.
