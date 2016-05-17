@@ -172,6 +172,8 @@ void cryfsGUI::setUpAppMenu()
 
 		auto ac = new QAction( e,this ) ;
 
+		m_actionPair.append( { ac,e } ) ;
+
 		if( p ){
 
 			ac->setCheckable( p ) ;
@@ -188,6 +190,8 @@ void cryfsGUI::setUpAppMenu()
 	auto _addMenu = [ m,this ]( const QString& r,const char * t,const char * s ){
 
 		auto e = m->addMenu( r ) ;
+
+		m_menuPair.append( { m,r } ) ;
 
 		e->setFont( this->font() ) ;
 
@@ -243,7 +247,7 @@ void cryfsGUI::setUpAppMenu()
 				    SLOT( favoriteClicked( QAction * ) ),
 				    SLOT( showFavorites() ) ) ;
 
-	m_languageAction = m->addAction( tr( "Select Language" ) ) ;
+	m_language_menu = _addMenu( tr( "Select Language" ),SLOT( languageMenu( QAction * ) ),nullptr ) ;
 
 	m->addAction( _addAction( false,false,tr( "Check For Update" ),SLOT( updateCheck() ) ) ) ;
 
@@ -372,12 +376,24 @@ void cryfsGUI::showFavorites()
 
 void cryfsGUI::setLocalizationLanguage( bool translate )
 {
-	utility::setLocalizationLanguage( translate,this,m_languageAction,"cryfs-gui" ) ;
+	utility::setLocalizationLanguage( translate,m_language_menu,"cryfs-gui" ) ;
 }
 
 void cryfsGUI::languageMenu( QAction * ac )
 {
-	utility::languageMenu( this,m_languageAction->menu(),ac,"cryfs-gui" ) ;
+	utility::languageMenu( this,m_language_menu,ac,"cryfs-gui" ) ;
+
+	m_ui->retranslateUi( this ) ;
+
+	for( auto& it : m_actionPair ){
+
+		it.first->setText( tr( it.second.toLatin1().constData() ) ) ;
+	}
+
+	for( auto& it : m_menuPair ){
+
+		it.first->setTitle( tr( it.second.toLatin1().constData() ) ) ;
+	}
 }
 
 static QString _autoOpenFolderConfigPath()

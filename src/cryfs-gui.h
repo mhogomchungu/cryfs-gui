@@ -147,11 +147,13 @@ private:
 	QMenu * m_hidden_volume_menu = nullptr ;
 	QMenu * m_not_hidden_volume_menu = nullptr ;
 	QMenu * m_key_manager_menu = nullptr ;
+	QMenu * m_language_menu = nullptr ;
+
+	QVector< std::pair< QAction *,QString > > m_actionPair ;
+	QVector< std::pair< QMenu *,QString > > m_menuPair ;
 
 	QAction * m_unMountAll = nullptr ;
 	QAction * m_change_password_action = nullptr ;
-
-	QAction * m_languageAction = nullptr ;
 
 	bool m_startHidden ;
 	bool m_autoMount ;

@@ -729,79 +729,70 @@ void utility::trayProperty( QSystemTrayIcon * trayIcon,bool zuluCrypt )
 	}
 }
 
-static void _set_checked( QMenu * m,const QString& e )
+class translator
 {
-	for( auto& it : m->actions() ){
+public:
+	void set( const QString& app,const QByteArray& r )
+	{
+		QCoreApplication::installTranslator( [ & ](){
 
-		QString p = it->text() ;
+			if( m_translator ){
 
-		p.remove( "&" ) ;
+				QCoreApplication::removeTranslator( m_translator ) ;
 
-		it->setChecked( e == p ) ;
+				delete m_translator ;
+			}
+
+			m_translator = new QTranslator() ;
+
+			m_translator->load( r.constData(),utility::localizationLanguagePath( app ) ) ;
+
+			return m_translator ;
+		}() ) ;
 	}
+	~translator()
+	{
+		//QCoreApplication::removeTranslator( m_translator ) ;
+		delete m_translator ;
+	}
+
+private:
+	QTranslator * m_translator = nullptr ;
+} static _translator ;
+
+static void _selectOption( QMenu * m,const QString& opt )
+{
+	utility::selectMenuOption s( m,false ) ;
+	s.selectOption( opt ) ;
 }
 
-void utility::setLocalizationLanguage( bool translate,QWidget * w,QAction * ac,const char * app )
+void utility::setLocalizationLanguage( bool translate,QMenu * m,const QString& app )
 {
 	auto r = utility::localizationLanguage( app ).toLatin1() ;
 
-	auto e = utility::localizationLanguagePath( app ) ;
-
 	if( translate ){
 
-		auto translator = new QTranslator( w ) ;
-
-		if( r == "en_US" ){
-			/*
-			 * english_US language,its the default and hence dont load anything
-			 */
-		}else{
-			translator->load( r.constData(),e ) ;
-			QCoreApplication::installTranslator( translator ) ;
-		}
-
+		_translator.set( app,r ) ;
 	}else{
-		auto m = new QMenu( w ) ;
-
-		m->setFont( w->font() ) ;
-
-		w->connect( m,SIGNAL( triggered( QAction * ) ),w,SLOT( languageMenu( QAction * ) ) ) ;
-
-		QDir d( e ) ;
-
-		auto q = m->addAction( "en_US" ) ;
-
-		q->setCheckable( true ) ;
-		q->setChecked( true ) ;
-		q->setEnabled( false ) ;
-
-		if( ac ){
-
-			ac->setMenu( m ) ;
-		}
-
-		return ;
+		QDir d( utility::localizationLanguagePath( app ) ) ;
 
 		auto t = d.entryList() ;
 
-		if( !t.isEmpty() ){
+		t.removeOne( "." ) ;
+		t.removeOne( ".." ) ;
 
-			t.removeOne( "." ) ;
-			t.removeOne( ".." ) ;
+		for( auto& it : t ){
 
-			for( auto& it : t ){
-
-				m->addAction( it.remove( ".qm" ) )->setCheckable( true ) ;
-			}
+			m->addAction( it.remove( ".qm" ) )->setCheckable( true ) ;
 		}
 
-		_set_checked( m,r ) ;
+		_selectOption( m,r ) ;
 	}
 }
 
 void utility::languageMenu( QWidget * w,QMenu * m,QAction * ac,const char * app )
 {
-	Q_UNUSED( m ) ;
+	Q_UNUSED( w ) ;
 
 	auto e = ac->text() ;
 
@@ -809,9 +800,46 @@ void utility::languageMenu( QWidget * w,QMenu * m,QAction * ac,const char * app 
 
 	utility::setLocalizationLanguage( app,e ) ;
 
-	DialogMsg msg( w ) ;
+	utility::setLocalizationLanguage( true,m,app ) ;
 
-	msg.ShowUIOK( QObject::tr( "INFO" ),QObject::tr( "Translation will be done the next time you restart." ) ) ;
+	_selectOption( m,e ) ;
+}
+
+static QString _language_path( const QString& program )
+{
+	return utility::homePath() + "/.cryfs-gui/" + program + ".lang" ;
+}
+
+QString utility::localizationLanguage( const QString& program )
+{
+	QFile f( _language_path( program ) ) ;
+
+	if( f.open( QIODevice::ReadOnly ) ){
+
+		QString e = f.readAll() ;
+
+		e.remove( "\n" ) ;
+
+		return e ;
+	}else{
+		return "en_US" ;
+	}
+}
+
+void utility::setLocalizationLanguage( const QString& program,const QString& language )
+{
+	QFile f( _language_path( program ) ) ;
+
+	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
+
+		f.write( language.toLatin1() ) ;
+	}
+}
+
+QString utility::localizationLanguagePath( const QString& program )
+{
+	Q_UNUSED( program ) ;
+	return QString( TRANSLATION_PATH ) ;
 }
 
 QStringList utility::directoryList( const QString& e )
@@ -885,42 +913,6 @@ void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,c
 
 	_add_actions( l ) ;
 	_add_actions( e ) ;
-}
-
-static QString _language_path( const QString& program )
-{
-	return utility::homePath() + "/.cryfs-gui/" + program + ".lang" ;
-}
-
-QString utility::localizationLanguage( const QString& program )
-{
-	QFile f( _language_path( program ) ) ;
-
-	if( f.open( QIODevice::ReadOnly ) ){
-
-		QString e = f.readAll() ;
-
-		e.remove( "\n" ) ;
-
-		return e ;
-	}else{
-		return "en_US" ;
-	}
-}
-
-void utility::setLocalizationLanguage( const QString& program,const QString& language )
-{
-	QFile f( _language_path( program ) ) ;
-
-	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
-
-		f.write( language.toLatin1() ) ;
-	}
-}
-
-QString utility::localizationLanguagePath( const QString& program )
-{
-	return QString( TRANSLATION_PATH ) + program ;
 }
 
 QString utility::walletName()

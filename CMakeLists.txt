@@ -29,7 +29,7 @@ if( LIB_SUFFIX )
 	set( CMAKE_INSTALL_FULL_LIBDIR "${CMAKE_INSTALL_PREFIX}/${LIB_SUFFIX}" )
 endif()
 
-file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${CMAKE_INSTALL_FULL_DATADIR}/zuluCrypt/translations/\"\n")
+file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${CMAKE_INSTALL_FULL_DATADIR}/cryfs-gui/translations/\"\n")
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
 
@@ -77,6 +77,7 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/readonlywarning.h
 		src/walletconfig.h
 		src/walletconfiginput.h
+		src/utility.h
  )
 
 set( SRC 	src/main.cpp
@@ -156,6 +157,8 @@ PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_
 
 install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps/ )
 install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps )
+
+install ( FILES translations/en_US.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
 
 #install ( FILES cryfs-gui.png DESTINATION share/icons/hicolor/32x32/apps )
 
