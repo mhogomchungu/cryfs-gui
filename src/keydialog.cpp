@@ -251,9 +251,10 @@ void keyDialog::pbFolderPath()
 
 void keyDialog::enableAll()
 {
+	m_ui->pbMountPoint->setEnabled( true ) ;
 	m_ui->pbOptions->setEnabled( false ) ;
 	m_ui->label_2->setEnabled( true ) ;
-	m_ui->lineEditMountPoint->setEnabled( m_create ) ;
+	m_ui->lineEditMountPoint->setEnabled( !m_create ) ;
 	m_ui->pbOpenFolderPath->setEnabled( true ) ;
 	m_ui->pbCancel->setEnabled( true ) ;
 	m_ui->pbOpen->setEnabled( true ) ;
@@ -272,6 +273,7 @@ void keyDialog::enableAll()
 
 void keyDialog::disableAll()
 {
+	m_ui->pbMountPoint->setEnabled( false ) ;
 	m_ui->cbKeyType->setEnabled( false ) ;
 	m_ui->pbOptions->setEnabled( false ) ;
 	m_ui->pbkeyOption->setEnabled( false ) ;
