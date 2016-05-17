@@ -43,14 +43,18 @@ favorites::favorites( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::favor
 
 	connect( m_ui->pbAdd,SIGNAL( clicked() ),this,SLOT( add() ) ) ;
 	connect( m_ui->pbFolderPath,SIGNAL( clicked() ),this,SLOT( folderPath() ) ) ;
+	connect( m_ui->pbMountPointPath,SIGNAL( clicked() ),this,SLOT( mountPointPath() ) ) ;
 	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( cancel() ) ) ;
 	connect( m_ui->tableWidget,SIGNAL( currentItemChanged( QTableWidgetItem *,QTableWidgetItem * ) ),this,
 		SLOT( currentItemChanged( QTableWidgetItem *,QTableWidgetItem * ) ) ) ;
 	connect( m_ui->tableWidget,SIGNAL( itemClicked( QTableWidgetItem * ) ),this,
 		SLOT( itemClicked( QTableWidgetItem * ) ) ) ;
-	connect( m_ui->lineEditDeviceAddress,SIGNAL( textChanged( QString ) ),this,SLOT( devicePathTextChange( QString ) ) ) ;
+	connect( m_ui->lineEditEncryptedFolderPath,SIGNAL( textChanged( QString ) ),this,SLOT( devicePathTextChange( QString ) ) ) ;
 
-	m_ui->pbFolderPath->setIcon( QIcon( ":/file.png" ) ) ;
+	m_ui->pbFolderPath->setIcon( QIcon( ":/cryfs-gui.png" ) ) ;
+	m_ui->pbMountPointPath->setIcon( QIcon( ":/folder.png" ) ) ;
+
+	m_ui->lineEditEncryptedFolderPath->setEnabled( false ) ;
 
 	this->addAction( [ this ](){
 
@@ -121,7 +125,7 @@ void favorites::ShowUI()
 		_add_entry( utility::split( it,'\t' ) ) ;
 	}
 
-	m_ui->lineEditDeviceAddress->clear() ;
+	m_ui->lineEditEncryptedFolderPath->clear() ;
 	m_ui->lineEditMountPath->clear() ;
 	m_ui->tableWidget->setFocus() ;
 
@@ -196,7 +200,7 @@ void favorites::add()
 {
 	DialogMsg msg( this ) ;
 
-	auto dev = m_ui->lineEditDeviceAddress->text() ;
+	auto dev = m_ui->lineEditEncryptedFolderPath->text() ;
 	auto path = m_ui->lineEditMountPath->text() ;
 
 	if( dev.isEmpty() ){
@@ -214,7 +218,7 @@ void favorites::add()
 
 	utility::addToFavorite( dev,path ) ;
 
-	m_ui->lineEditDeviceAddress->clear() ; ;
+	m_ui->lineEditEncryptedFolderPath->clear() ; ;
 	m_ui->lineEditMountPath->clear() ;
 
 	m_ui->tableWidget->setEnabled( true ) ;
@@ -226,7 +230,24 @@ void favorites::folderPath()
 
 	if( !e.isEmpty() ){
 
-		m_ui->lineEditDeviceAddress->setText( e ) ;
+		m_ui->lineEditEncryptedFolderPath->setText( e ) ;
+	}
+}
+
+void favorites::mountPointPath()
+{
+	auto e = QFileDialog::getExistingDirectory( this,tr( "Path To Mount Folder" ),QDir::homePath(),0 ) ;
+
+	if( !e.isEmpty() ){
+
+		auto z = m_ui->lineEditMountPath->text() ;
+
+		if( !z.isEmpty() ){
+
+			z = z.split( '/' ).last() ;
+
+			m_ui->lineEditMountPath->setText( e + "/" + z ) ;
+		}
 	}
 }
 

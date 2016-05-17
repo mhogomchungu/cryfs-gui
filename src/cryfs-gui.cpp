@@ -191,9 +191,15 @@ void cryfsGUI::setUpAppMenu()
 
 		e->setFont( this->font() ) ;
 
-		connect( e,SIGNAL( triggered( QAction * ) ),this,t ) ;
+		if( t ){
 
-		connect( e,SIGNAL( aboutToShow() ),this,s ) ;
+			connect( e,SIGNAL( triggered( QAction * ) ),this,t ) ;
+		}
+
+		if( s ){
+
+			connect( e,SIGNAL( aboutToShow() ),this,s ) ;
+		}
 
 		return e ;
 	} ;
@@ -203,13 +209,16 @@ void cryfsGUI::setUpAppMenu()
 
 	m->addAction( _addAction( false,false,tr( "Unmount All" ),SLOT( unMountAll() ) ) ) ;
 
-	m_change_password_action = [ m,this ](){
+	m_change_password_action = [ &_addMenu,&_addAction ](){
 
-		auto e = m->addMenu( tr( "Internal Wallet" ) )->addAction( tr( "Change PassWord" ) ) ;
+		auto m = _addMenu( tr( "Internal Wallet" ),nullptr,nullptr ) ;
 
-		connect( e,SIGNAL( triggered() ),this,SLOT( changeInternalWalletPassWord() ) ) ;
+		auto ac = _addAction( false,false,tr( "Change Password" ),
+				       SLOT( changeInternalWalletPassWord() ) ) ;
 
-		return e ;
+		m->addAction( ac ) ;
+
+		return ac ;
 	}() ;
 
 	m_key_manager_menu = [ &_addMenu ](){

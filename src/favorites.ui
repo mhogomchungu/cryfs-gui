@@ -19,9 +19,9 @@
   <widget class="QPushButton" name="pbAdd">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>200</x>
      <y>290</y>
-     <width>81</width>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
@@ -86,7 +86,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Volume ID</string>
+    <string>Encrypted Folder Path</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -105,7 +105,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Mount Point</string>
+    <string>Mount Point Path</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -124,7 +124,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEditDeviceAddress">
+  <widget class="QLineEdit" name="lineEditEncryptedFolderPath">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -155,7 +155,7 @@
     <rect>
      <x>320</x>
      <y>290</y>
-     <width>81</width>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
@@ -163,10 +163,23 @@
     <string>&amp;Done</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pbMountPointPath">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>260</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>tableWidget</tabstop>
-  <tabstop>lineEditDeviceAddress</tabstop>
+  <tabstop>lineEditEncryptedFolderPath</tabstop>
   <tabstop>pbFolderPath</tabstop>
   <tabstop>lineEditMountPath</tabstop>
   <tabstop>pbAdd</tabstop>

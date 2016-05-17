@@ -53,6 +53,7 @@ private slots:
 	void add( void ) ;
 	void cancel( void ) ;
 	void folderPath( void ) ;
+	void mountPointPath( void ) ;
 	void currentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous ) ;
 	void itemClicked( QTableWidgetItem * current,bool ) ;
 	void itemClicked( QTableWidgetItem * current ) ;
