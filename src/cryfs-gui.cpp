@@ -253,14 +253,23 @@ void cryfsGUI::setUpAppMenu()
 
 	m->addAction( _addAction( false,false,tr( "About" ),SLOT( licenseInfo() ) ) ) ;
 
-	m->addAction( _addAction( false,false,tr( "Quit" ),SLOT( closeApplication() ) ) ) ;
+	auto ac = _addAction( false,false,tr( "Quit" ),SLOT( closeApplication() ) ) ;
 
-	m_trayIcon.setContextMenu( m ) ;
+	m->addAction( ac ) ;
+
+	m_ui->pbmenu->setMenu( m ) ;
+
+	m_trayIcon.setContextMenu( [ this,ac ](){
+
+		auto m = new QMenu( this ) ;
+
+		m->addAction( ac ) ;
+
+		return m ;
+	}() ) ;
 
 	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
 		 this,SLOT( slotTrayClicked( QSystemTrayIcon::ActivationReason ) ) ) ;
-
-	m_ui->pbmenu->setMenu( m ) ;
 }
 
 void cryfsGUI::startAutoMonitor()

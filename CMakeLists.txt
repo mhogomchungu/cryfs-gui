@@ -159,6 +159,7 @@ install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/
 install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps )
 
 install ( FILES translations/en_US.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
+install ( FILES translations/fr_FR.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
 
 #install ( FILES cryfs-gui.png DESTINATION share/icons/hicolor/32x32/apps )
 

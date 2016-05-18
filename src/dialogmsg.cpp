@@ -89,36 +89,13 @@ void DialogMsg::ShowUI( const QString& title,const QString& msg )
 
 void DialogMsg::ShowPermissionProblem( const QString& device )
 {
-	Q_UNUSED( device ) ;
-	QString msg = tr( "\n\
-\"system volumes\" are volumes that either udev has identify them as such if udev is enabled \
-or have an entry in \"/etc/fstab\",\"/etc/crypttab\" or \"/etc/zuluCrypt/system_volumes.list\".\n\
-\n\
-If you prefer for a volume not to be considered a system volume,start the tool\
-from root account and then go to \"menu->options->manage non system partitions\" \
-and add the volume to the list and the volume will stop being considered as \"system\".\n\n\
-Alternatively,you can add yourself to group \"zulucrypt\" and \"zulumount\" and all restrictions will go away." ) ;
-
-	this->ShowUIInfo( tr( "INFORMATION" ),msg ) ;
+	Q_UNUSED( device ) ;	
 }
 
 void DialogMsg::ShowPermissionProblem( const QString& msg,const QString& device )
 {
-	QString msg1 ;
-
-	if( device.startsWith( "/dev/" ) ){
-
-		if( msg == "reading" ){
-
-			msg1 = tr( "Insufficient privilege to access a system device,\nonly root user or members of group zulucrypt can do that" ) ;
-		}else{
-			msg1 = tr( "Insufficient privilege to access a system device in read/write mode,\nonly root user or members of group zulucrypt-write can do that" ) ;
-		}
-	}else{
-		msg1 = tr( "You do not seem to have proper permissions to access the encrypted file in %1 mode,check file permissions and try again" ).arg( msg ) ;
-	}
-
-	this->ShowUIOK( tr( "INFORMATION"),msg1 ) ;
+	Q_UNUSED( device ) ;
+	Q_UNUSED( msg ) ;
 }
 
 void DialogMsg::setDimentions( const QString& msg )
@@ -195,54 +172,8 @@ void DialogMsg::HideLabels()
 
 void DialogMsg::ShowUIVolumeProperties( const QString& title,const QString& m )
 {
-	m_ui->pbYes->setHidden( true ) ;
-	m_ui->pbNo->setHidden( true ) ;
-	m_ui->pbOk->setHidden( false ) ;
-
-	m_ui->label->setHidden( true ) ;
-	QString msg = m ;
-	msg.replace( "   ","" ) ;
-
-	QStringList stl = msg.split( "\n" ) ;
-
-	auto _trancate_long_path = []( QString e ){
-
-		const int len    = 40 ;
-		const int length = e.length() ;
-
-		if( length <= len ){
-
-			return e ;
-		}else{
-			return e.replace( 25,length - len,"......" ) ;
-		}
-	} ;
-
-	if( stl.size() >= 14 ){
-
-		this->setFixedSize( this->size() ) ;
-
-		m_ui->labelType->setText( stl.at( 0 ) ) ;
-		m_ui->labelCipher->setText( stl.at( 1 ) ) ;
-		m_ui->labelKeySize->setText( stl.at( 2 ) ) ;
-		m_ui->labelOffset->setText( stl.at( 3 ) ) ;
-		m_ui->labelDevice->setText( _trancate_long_path( stl.at( 4 ) ) ) ;
-		m_ui->labelLoop->setText( _trancate_long_path( stl.at( 5 ) ) ) ;
-		m_ui->labelSize->setText( stl.at( 6 ) ) ;
-		m_ui->labelMode->setText( stl.at( 7 ) ) ;
-		m_ui->labelActiveSlots->setText( stl.at( 8 ) ) ;
-		m_ui->labelFs->setText( stl.at( 9 ) ) ;
-		m_ui->labelSize_2->setText( stl.at( 10 ) ) ;
-		m_ui->labelUsed->setText( stl.at( 11 ) ) ;
-		m_ui->labelUnused->setText( stl.at( 12 ) ) ;
-		m_ui->labelUsedPerc->setText( stl.at( 13 ) ) ;
-
-		//QString m = stl.at( 15 ) ;
-		//m.replace( QString( "mount point2" ),QString( "public mount point" ) ) ;
-		//m_ui->labelUsedPerc->setText( m ) ;
-
-		this->ShowUI( title,msg ) ;
-	}
+	Q_UNUSED( title ) ;
+	Q_UNUSED( m ) ;
 }
 
 void DialogMsg::ShowUIInfo( const QString& title,const QString& msg )
@@ -306,25 +237,10 @@ int  DialogMsg::ShowUIYesNoDefaultNo( const QString& title,const QString& msg )
 
 bool DialogMsg::ShowUIOKDoNotShowOption( const QString& title,const QString& msg )
 {
-	QCheckBox checkBox( tr( "Do not show this dialog again" ),this ) ;
+	Q_UNUSED( title ) ;
+	Q_UNUSED( msg ) ;
 
-	this->setFixedSize( 270,110 ) ;
-
-	checkBox.setGeometry( 30,40,251,31 ) ;
-
-	m_ui->label->setGeometry( 10,10,251,31 ) ;
-	m_ui->label->setFixedSize( m_ui->label->size() ) ;
-	m_ui->pbOk->setGeometry( 100,70,75,31 ) ;
-
-	m_ui->pbYes->setHidden( true ) ;
-	m_ui->pbNo->setHidden( true ) ;
-	m_ui->pbOk->setHidden( false ) ;
-
-	this->HideLabels() ;
-
-	this->ShowUI( title,msg ) ;
-
-	return checkBox.isChecked() ;
+	return true ;
 }
 
 DialogMsg::~DialogMsg()

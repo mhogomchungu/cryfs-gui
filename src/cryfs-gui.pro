@@ -57,3 +57,4 @@ FORMS += cryfs-gui.ui \
     lxqt_wallet/frontend/changepassworddialog.ui
 
 TRANSLATIONS = ../translations/en_US.ts
+TRANSLATIONS = ../translations/fr_FR.ts
