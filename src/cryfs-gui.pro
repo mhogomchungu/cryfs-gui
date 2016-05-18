@@ -20,7 +20,8 @@ SOURCES += lxqt_wallet/frontend/password_dialog.cpp \
     walletconfiginput.cpp \
     dialogmsg.cpp \
     monitor_mountinfo.cpp \
-    tablewidget.cpp
+    tablewidget.cpp \
+    options.cpp
 
 HEADERS += checkforupdates.h \
     favorites.h \
@@ -36,6 +37,7 @@ HEADERS += checkforupdates.h \
     dialogmsg.h \
     monitor_mountinfo.h \
     tablewidget.h \
+    options.h \
     lxqt_wallet/backend/lxqtwallet.h \
     lxqt_wallet/frontend/password_dialog.h \
     lxqt_wallet/frontend/task.h \
@@ -43,7 +45,7 @@ HEADERS += checkforupdates.h \
     lxqt_wallet/frontend/lxqt_secret_service.h \
     lxqt_wallet/frontend/lxqt_kwallet.h \
     lxqt_wallet/frontend/lxqt_internal_wallet.h \
-    lxqt_wallet/frontend/changepassworddialog.h \
+    lxqt_wallet/frontend/changepassworddialog.h
 
 FORMS += cryfs-gui.ui \
     favorites.ui \
@@ -53,6 +55,7 @@ FORMS += cryfs-gui.ui \
     keydialog.ui \
     readonlywarning.ui \
     walletconfig.ui \
+    options.ui \
     lxqt_wallet/frontend/password_dialog.ui \
     lxqt_wallet/frontend/changepassworddialog.ui
 

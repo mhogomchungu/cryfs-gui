@@ -67,6 +67,7 @@ signals:
 	void mounted( QString ) ;
 	void cryptoOpen( QString ) ;
 private slots:
+	void mountOptions( void ) ;
 	void textChanged( QString ) ;
 	void cbActicated( int ) ;
 	void pbkeyOption( void ) ;

@@ -64,6 +64,7 @@ set( UI_FILES 	src/cryfs-gui.ui
 		src/readonlywarning.ui
 		src/walletconfig.ui
 		src/walletconfiginput.ui
+		src/options.ui
 )
 
 set( MOC_FILES 	src/cryfs-gui.h
@@ -78,6 +79,7 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/walletconfig.h
 		src/walletconfiginput.h
 		src/utility.h
+		src/options.h
  )
 
 set( SRC 	src/main.cpp
@@ -95,6 +97,7 @@ set( SRC 	src/main.cpp
 		src/readonlywarning.cpp
 		src/walletconfig.cpp
 		src/walletconfiginput.cpp
+		src/options.cpp
 )
 
 if( QT5 )

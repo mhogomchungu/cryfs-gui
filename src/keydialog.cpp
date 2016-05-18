@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QFile>
 
+#include "options.h"
 #include "dialogmsg.h"
 #include "task.h"
 #include "utility.h"
@@ -131,8 +132,6 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption( "cryfs-gui" ) ) ;
 
-	m_ui->pbkeyOption->setEnabled( false ) ;
-
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Password ) ;
 
 	connect( m_ui->pbOptions,SIGNAL( clicked() ),this,SLOT( pbOptions() ) ) ;
@@ -171,9 +170,25 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 		m_ui->lineEditKey->setFocus() ;
 	}
 
-	m_ui->pbOptions->setEnabled( false ) ;
-
 	this->installEventFilter( this ) ;
+
+	m_ui->pbOptions->setMenu( [ this ](){
+
+		auto m = new QMenu( this ) ;
+
+		connect( m->addAction( tr( "Set Idle Timeout" ) ),
+			 SIGNAL( triggered() ),this,SLOT( mountOptions() ) ) ;
+
+		return m ;
+	}() ) ;
+}
+
+void keyDialog::mountOptions()
+{
+	options::instance( this,[ this ]( const QString& e ){
+
+		m_options = e ;
+	} ) ;
 }
 
 bool keyDialog::eventFilter( QObject * watched,QEvent * event )
@@ -504,7 +519,7 @@ void keyDialog::encryptedFolderCreate()
 		return this->enableAll() ;
 	}
 
-	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_success,false } ) ;
+	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,false,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 
@@ -545,7 +560,7 @@ void keyDialog::encryptedFolderMount()
 		return this->enableAll() ;
 	}
 
-	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_success,ro } ) ;
+	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_options,ro,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 

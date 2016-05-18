@@ -133,6 +133,7 @@ struct arguments
 	const QString& type ;
 	const QString& arguments ;
 	const QString& m_point ;
+	const QString& m_options ;
 };
 
 static QString _args( const arguments& args )
@@ -140,27 +141,50 @@ static QString _args( const arguments& args )
 	auto c = args.opt.cipherFolder ;
 	c.replace( "\"","\"\"\"" ) ;
 
-	QString m ;
+	auto m = [ & ]()->QString{
 
-	if( args.m_point.isEmpty() ){
+		if( args.m_point.isEmpty() ){
 
-		m = args.opt.plainFolder ;
-	}else{
-		m = args.m_point ;
-	}
+			return args.opt.plainFolder ;
+		}else{
+			return args.m_point ;
+		}
+	}() ;
 
 	m.replace( "\"","\"\"\"" ) ;
 
-	const char * opts ;
+	QString mOpt = [ & ](){
 
-	if( args.opt.ro ){
+		auto e = args.opt.mOpt ;
 
-		opts = "\"%1\" \"%2\" %3 -o ro -o fsname=%4@\"%5\" -o subtype=%6" ;
-	}else{
-		opts = "\"%1\" \"%2\" %3 -o rw -o fsname=%4@\"%5\" -o subtype=%6" ;
-	}
+		if( e.isEmpty() ){
 
-	return QString( opts ).arg( c,m,args.arguments,args.type,c,args.type ) ;
+			return QString() ;
+		}else{
+			if( args.type == "cryfs" ){
+
+				return QString( "--unmount-idle %1" ).arg( e ) ;
+
+			}else if( args.type == "encfs" ){
+
+				return QString( "--idle=%1" ).arg( e ) ;
+			}else{
+				return QString() ;
+			}
+		}
+	}() ;
+
+	const char * opts = [ & ]{
+
+		if( args.opt.ro ){
+
+			return "\"%1\" \"%2\" %3 %4 -o ro -o fsname=%5@\"%6\" -o subtype=%7" ;
+		}else{
+			return  "\"%1\" \"%2\" %3 %4 -o rw -o fsname=%5@\"%6\" -o subtype=%7" ;
+		}
+	}() ;
+
+	return QString( opts ).arg( c,m,mOpt,args.arguments,args.type,c,args.type ) ;
 }
 
 Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
@@ -188,7 +212,9 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
 			return _mount( [ & ](){
 
-				return _cmd( "cryfs",cs::cryfs,_args( { opt,"cryfs","--","" } ),opt.key ) ;
+				auto e = _args( { opt,"cryfs","--","",opt.mOpt } ) ;
+
+				return _cmd( "cryfs",cs::cryfs,e,opt.key ) ;
 			} ) ;
 		}
 
@@ -200,7 +226,9 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
 			return _mount( [ & ](){
 
-				return _cmd( "encfs",cs::encfs,_args( { opt,"encfs","-S","" } ),opt.key ) ;
+				auto e = _args( { opt,"encfs","-S","",opt.mOpt, } ) ;
+
+				return _cmd( "encfs",cs::encfs,e,opt.key ) ;
 			} ) ;
 		}
 
@@ -218,9 +246,11 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 			if( _create_mount_point( m ) ){
 
-				auto e = _cmd( "cryfs",cs::cryfs,_args( { opt,"cryfs","--",m } ),opt.key ) ;
+				auto e = _args( { opt,"cryfs","--",m,opt.mOpt } ) ;
 
-				if( e == cs::success ){
+				auto z = _cmd( "cryfs",cs::cryfs,e,opt.key ) ;
+
+				if( z == cs::success ){
 
 					opt.openFolder( m ) ;
 				}else{
@@ -228,7 +258,7 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 					_delete_mount_point( opt.cipherFolder ) ;
 				}
 
-				return e ;
+				return z ;
 			}else{
 				_delete_mount_point( opt.cipherFolder ) ;
 
@@ -272,7 +302,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 			return QString::number( hash ) ;
 		} ;
 
-		auto _decode = []( QString path,bool set_offset ){
+		auto _dcd = []( QString path,bool set_offset ){
 
 			path.replace( "\\012","\n" ) ;
 			path.replace( "\\040"," " ) ;
@@ -322,9 +352,9 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 				if( utility::startsWithAtLeastOne( cf,"encfs@","cryfs@" ) ){
 
-					e.append( { _decode( cf,true ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
+					e.append( { _dcd( cf,true ),_dcd( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}else{
-					e.append( { _hash( m ),_decode( m,false ),_fs( fs ),_ro( k ) } ) ;
+					e.append( { _hash( m ),_dcd( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}
 			}
 		}

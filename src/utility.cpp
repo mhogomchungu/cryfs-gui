@@ -91,7 +91,8 @@ options:\n\
 	-k   When opening a volume from CLI,a value of \"rw\" will open the volume in read\\write\n\
 	     mode and a value of \"ro\" will open the volume in read only mode.\n\
 	-z   Full path of the mount point to be used when the volume is opened from CLI.\n\
-	     This option is optional.\n\n" ) ;
+	     This option is optional.\n\
+	-i   Set inactivity timeout(in minutes) to dismount the volume when mounted from CLI.\n\n" ) ;
 
 	std::cout << helpMsg.toLatin1().constData() << std::endl ;
 

@@ -17,6 +17,8 @@ version 1.1.0
 
 version 1.2.0
 
+-- Add French translations.
+
 -- Add ability to auto unlock a volume from CLI.An example of how to do this is:
 
    cryfs_gui -d /home/mtz/cryfs.volume -b "internal"

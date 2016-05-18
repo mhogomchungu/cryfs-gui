@@ -87,27 +87,28 @@ options:
 	     mode and a value of &quot;ro&quot; will open the volume in read only mode.
 	-z   Full path of the mount point to be used when the volume is opened from CLI.
 	     This option is optional.
+	-i   Set inactivity timeout(in minutes) to dismount the volume when mounted from CLI.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="433"/>
+        <location filename="../src/utility.cpp" line="434"/>
         <source>Manage Favorites</source>
         <translation>Gérer les Favoris</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="434"/>
+        <location filename="../src/utility.cpp" line="435"/>
         <source>Mount All</source>
         <translation>Tout Monter</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="461"/>
+        <location filename="../src/utility.cpp" line="462"/>
         <source>about cryfs-gui</source>
         <translation>A propos de cryfs-gui</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="651"/>
+        <location filename="../src/utility.cpp" line="652"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -120,7 +121,7 @@ Ce plugin génère une clé en utilisant la formule ci-dessous:
 key = hmac(sha256,passphrase,keyfile contents)</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="656"/>
+        <location filename="../src/utility.cpp" line="657"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -134,7 +135,7 @@ key = passphrase + keyfile contents
 </translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="661"/>
+        <location filename="../src/utility.cpp" line="662"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
@@ -143,12 +144,12 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
 Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé symétrique</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="679"/>
+        <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="679"/>
+        <location filename="../src/utility.cpp" line="680"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation>Ne trouve pas de &quot;gpg&quot; executable dans &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; ou &quot;/usr/sbin&quot;</translation>
     </message>
@@ -315,7 +316,7 @@ Dernière version disponible : %2.</translation>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="218"/>
         <location filename="../src/cryfs-gui.cpp" line="239"/>
-        <location filename="../src/cryfs-gui.cpp" line="297"/>
+        <location filename="../src/cryfs-gui.cpp" line="306"/>
         <source>Internal Wallet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,13 +332,13 @@ Dernière version disponible : %2.</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="240"/>
-        <location filename="../src/cryfs-gui.cpp" line="301"/>
+        <location filename="../src/cryfs-gui.cpp" line="310"/>
         <source>KDE Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="241"/>
-        <location filename="../src/cryfs-gui.cpp" line="305"/>
+        <location filename="../src/cryfs-gui.cpp" line="314"/>
         <source>Gnome Wallet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -367,68 +368,68 @@ Dernière version disponible : %2.</translation>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="351"/>
+        <location filename="../src/cryfs-gui.cpp" line="360"/>
         <source>Manage Favorites</source>
         <translation>Gérer les favoris</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="355"/>
+        <location filename="../src/cryfs-gui.cpp" line="364"/>
         <source>Mount All</source>
         <translation>Monter tout</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="489"/>
+        <location filename="../src/cryfs-gui.cpp" line="501"/>
         <source>ERROR: Volume Path Not Given.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="521"/>
+        <location filename="../src/cryfs-gui.cpp" line="533"/>
         <source>ERROR: Key Not Found In The Backend.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="541"/>
+        <location filename="../src/cryfs-gui.cpp" line="553"/>
         <source>ERROR: Failed To Unlock Requested Volume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="546"/>
+        <location filename="../src/cryfs-gui.cpp" line="558"/>
         <source>ERROR: Failed To Unlock Requested Backend.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="563"/>
+        <location filename="../src/cryfs-gui.cpp" line="575"/>
         <source>Unmount</source>
         <translation>Démonter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="564"/>
+        <location filename="../src/cryfs-gui.cpp" line="576"/>
         <source>Open Folder</source>
         <translation>Ouvrir Répertoire</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="568"/>
+        <location filename="../src/cryfs-gui.cpp" line="580"/>
         <source>Close Menu</source>
         <translation>Fermer le Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="620"/>
+        <location filename="../src/cryfs-gui.cpp" line="632"/>
         <source>WARNING</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="621"/>
+        <location filename="../src/cryfs-gui.cpp" line="633"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation>Impossible d&apos;ouvrir le point de montage parce que &quot;%1&quot; ne semble pas fonctionner correctement</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="738"/>
-        <location filename="../src/cryfs-gui.cpp" line="839"/>
+        <location filename="../src/cryfs-gui.cpp" line="750"/>
+        <location filename="../src/cryfs-gui.cpp" line="851"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="739"/>
+        <location filename="../src/cryfs-gui.cpp" line="751"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
@@ -437,12 +438,12 @@ ou
 le volume n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="759"/>
+        <location filename="../src/cryfs-gui.cpp" line="771"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="839"/>
+        <location filename="../src/cryfs-gui.cpp" line="851"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -545,14 +546,14 @@ le volume n&apos;est pas supporté</translation>
     </message>
     <message>
         <location filename="../src/keydialog.ui" line="58"/>
-        <location filename="../src/keydialog.cpp" line="158"/>
-        <location filename="../src/keydialog.cpp" line="636"/>
+        <location filename="../src/keydialog.cpp" line="157"/>
+        <location filename="../src/keydialog.cpp" line="651"/>
         <source>Key</source>
         <translation>Clé</translation>
     </message>
     <message>
         <location filename="../src/keydialog.ui" line="100"/>
-        <location filename="../src/keydialog.cpp" line="63"/>
+        <location filename="../src/keydialog.cpp" line="64"/>
         <source>Volume Name</source>
         <translation>Nom du montage</translation>
     </message>
@@ -574,182 +575,187 @@ le volume n&apos;est pas supporté</translation>
     <message>
         <location filename="../src/keydialog.ui" line="201"/>
         <source>Volume Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin du volume</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="61"/>
+        <location filename="../src/keydialog.cpp" line="62"/>
         <source>&amp;Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="82"/>
+        <location filename="../src/keydialog.cpp" line="83"/>
         <source>Create A New Cryfs Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="84"/>
+        <location filename="../src/keydialog.cpp" line="85"/>
         <source>Unlocking &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="88"/>
+        <location filename="../src/keydialog.cpp" line="89"/>
         <source>Mount Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="153"/>
+        <location filename="../src/keydialog.cpp" line="152"/>
         <source>Set File System Options</source>
         <translation>Régler les options du système de fichiers</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="159"/>
+        <location filename="../src/keydialog.cpp" line="158"/>
         <source>KeyFile</source>
         <translation>Fichier de clé</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="160"/>
+        <location filename="../src/keydialog.cpp" line="159"/>
         <source>Key+KeyFile</source>
         <translation>Clé+fichier de clé</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="161"/>
+        <location filename="../src/keydialog.cpp" line="160"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="228"/>
-        <location filename="../src/keydialog.cpp" line="241"/>
+        <location filename="../src/keydialog.cpp" line="179"/>
+        <source>Set Idle Timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/keydialog.cpp" line="243"/>
+        <location filename="../src/keydialog.cpp" line="256"/>
         <source>Select A Folder To Create A Mount Point In.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="297"/>
+        <location filename="../src/keydialog.cpp" line="312"/>
         <source>Select A File To Be Used As A Keyfile.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="330"/>
-        <location filename="../src/keydialog.cpp" line="341"/>
+        <location filename="../src/keydialog.cpp" line="345"/>
+        <location filename="../src/keydialog.cpp" line="356"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="361"/>
-        <location filename="../src/keydialog.cpp" line="368"/>
-        <location filename="../src/keydialog.cpp" line="410"/>
-        <location filename="../src/keydialog.cpp" line="443"/>
-        <location filename="../src/keydialog.cpp" line="448"/>
-        <location filename="../src/keydialog.cpp" line="453"/>
+        <location filename="../src/keydialog.cpp" line="376"/>
+        <location filename="../src/keydialog.cpp" line="383"/>
+        <location filename="../src/keydialog.cpp" line="425"/>
         <location filename="../src/keydialog.cpp" line="458"/>
         <location filename="../src/keydialog.cpp" line="463"/>
         <location filename="../src/keydialog.cpp" line="468"/>
         <location filename="../src/keydialog.cpp" line="473"/>
-        <location filename="../src/keydialog.cpp" line="476"/>
-        <location filename="../src/keydialog.cpp" line="493"/>
-        <location filename="../src/keydialog.cpp" line="502"/>
-        <location filename="../src/keydialog.cpp" line="534"/>
-        <location filename="../src/keydialog.cpp" line="543"/>
+        <location filename="../src/keydialog.cpp" line="478"/>
+        <location filename="../src/keydialog.cpp" line="483"/>
+        <location filename="../src/keydialog.cpp" line="488"/>
+        <location filename="../src/keydialog.cpp" line="491"/>
+        <location filename="../src/keydialog.cpp" line="508"/>
+        <location filename="../src/keydialog.cpp" line="517"/>
+        <location filename="../src/keydialog.cpp" line="549"/>
+        <location filename="../src/keydialog.cpp" line="558"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="361"/>
+        <location filename="../src/keydialog.cpp" line="376"/>
         <source>Volume Name Field Is Empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="368"/>
+        <location filename="../src/keydialog.cpp" line="383"/>
         <source>Key Field Is Empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="391"/>
+        <location filename="../src/keydialog.cpp" line="406"/>
         <source>ERROR!</source>
         <translation>ERREUR!</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="391"/>
+        <location filename="../src/keydialog.cpp" line="406"/>
         <source>Internal Wallet Is Not Configured.</source>
         <translation>Trousseau Interne non configuré</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="410"/>
+        <location filename="../src/keydialog.cpp" line="425"/>
         <source>The Volume Does Not Appear To Have An Entry In The Wallet.</source>
         <translation>Le volume ne semble pas avoir une entrée dans le trousseau</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="443"/>
+        <location filename="../src/keydialog.cpp" line="458"/>
         <source>Failed To Unlock A Cryfs Volume.
 Wrong Password Entered.</source>
         <translation>Echec de l&apos;ouverture du volume cryfs
 Mot de passe entré incorrect</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="448"/>
+        <location filename="../src/keydialog.cpp" line="463"/>
         <source>Failed To Unlock An Encfs Volume.
 Wrong Password Entered.</source>
         <translation>Echec de l&apos;ouverture du volume encfs
 Mot de passe entré incorrect</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="453"/>
+        <location filename="../src/keydialog.cpp" line="468"/>
         <source>Failed To Complete The Request.
 Cryfs Executable Could Not Be Found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="458"/>
+        <location filename="../src/keydialog.cpp" line="473"/>
         <source>Failed To Complete The Request.
 Encfs Executable Could Not Be Found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="463"/>
+        <location filename="../src/keydialog.cpp" line="478"/>
         <source>Failed To Create Mount Point.</source>
         <translation>Echec de la création du point de montage</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="468"/>
+        <location filename="../src/keydialog.cpp" line="483"/>
         <source>Failed To Unlock The Volume.
 Not Supported Volume Encountered.</source>
         <translation>Echec de l&apos;ouverture du volume.
 Volume non supporté rencontré</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="473"/>
+        <location filename="../src/keydialog.cpp" line="488"/>
         <source>Failed To Complete The Task.
 Backend Not Responding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="476"/>
+        <location filename="../src/keydialog.cpp" line="491"/>
         <source>Failed To Complete The Task.
 An Unknown Error Has Occured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="493"/>
+        <location filename="../src/keydialog.cpp" line="508"/>
         <source>Encrypted Folder Path Appear Already Taken.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="502"/>
-        <location filename="../src/keydialog.cpp" line="534"/>
+        <location filename="../src/keydialog.cpp" line="517"/>
+        <location filename="../src/keydialog.cpp" line="549"/>
         <source>Mount Point Path Already Taken.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="543"/>
+        <location filename="../src/keydialog.cpp" line="558"/>
         <source>Encrypted Folder Appear To Not Be Present.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="626"/>
+        <location filename="../src/keydialog.cpp" line="641"/>
         <source>Plugin name</source>
         <translation>Plugin name</translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="646"/>
+        <location filename="../src/keydialog.cpp" line="661"/>
         <source>Keyfile path</source>
         <translation>Chemin du fichier de clé</translation>
     </message>
@@ -765,6 +771,39 @@ An Unknown Error Has Occured.</source>
         <location filename="../src/oneinstance.cpp" line="115"/>
         <source>There seem to be another instance running,exiting this one</source>
         <translation>Il semble y avoir une autre instance en cours d&apos;exécution, sortie de celle-ci</translation>
+    </message>
+</context>
+<context>
+    <name>options</name>
+    <message>
+        <location filename="../src/options.ui" line="17"/>
+        <source>Set Mount Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/options.ui" line="38"/>
+        <source>&amp;Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/options.ui" line="51"/>
+        <source>&amp;Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../src/options.ui" line="64"/>
+        <source>Automatically Unmount After Specified Minutes of Inactivity Is Reached.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/options.cpp" line="90"/>
+        <source>ERROR</source>
+        <translation>ERREUR</translation>
+    </message>
+    <message>
+        <location filename="../src/options.cpp" line="90"/>
+        <source>Option Field Is Empty.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

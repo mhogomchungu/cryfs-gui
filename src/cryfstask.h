@@ -35,8 +35,9 @@ namespace cryfsTask
 		QString cipherFolder ;
 		QString plainFolder ;
 		QString key ;
-		std::function< void( const QString& ) > openFolder ;
+		QString mOpt ;
 		bool ro ;
+		std::function< void( const QString& ) > openFolder ;
 	};
 
 	enum class status
