@@ -168,30 +168,36 @@ void cryfsGUI::setUpAppMenu()
 
 	m->setFont( this->font() ) ;
 
-	auto _addAction = [ this ]( bool p,bool q,const QString& e,const char * s ){
+	auto _addAction = [ this ]( bool p,bool q,const QString& e,const char * z,const char * s ){
 
 		auto ac = new QAction( e,this ) ;
 
-		m_actionPair.append( { ac,e } ) ;
+		m_actionPair.append( { ac,z } ) ;
 
 		if( p ){
 
 			ac->setCheckable( p ) ;
 			ac->setChecked( q ) ;
 
-			connect( ac,SIGNAL( toggled( bool ) ),this,s ) ;
+			if( s ){
+
+				connect( ac,SIGNAL( toggled( bool ) ),this,s ) ;
+			}
 		}else{
-			connect( ac,SIGNAL( triggered() ),this,s ) ;
+			if( s ){
+
+				connect( ac,SIGNAL( triggered() ),this,s ) ;
+			}
 		}
 
 		return ac ;
 	} ;
 
-	auto _addMenu = [ m,this ]( const QString& r,const char * t,const char * s ){
+	auto _addMenu = [ m,this ]( const QString& r,const char * z,const char * t,const char * s ){
 
 		auto e = m->addMenu( r ) ;
 
-		m_menuPair.append( { m,r } ) ;
+		m_menuPair.append( { m,z } ) ;
 
 		e->setFont( this->font() ) ;
 
@@ -209,18 +215,18 @@ void cryfsGUI::setUpAppMenu()
 	} ;
 
 	m->addAction( _addAction( true,m_autoOpenFolderOnMount,tr( "Auto Open Mount Point" ),
-				  SLOT( autoOpenFolderOnMount( bool ) ) ) ) ;
+				  "Auto Open Mount Point",SLOT( autoOpenFolderOnMount( bool ) ) ) ) ;
 
 	m->addAction( _addAction( true,utility::reUseMountPoint(),tr( "Reuse Mount Point" ),
-				  SLOT( reuseMountPoint( bool ) ) ) ) ;
+				  "Reuse Mount Point",SLOT( reuseMountPoint( bool ) ) ) ) ;
 
-	m->addAction( _addAction( false,false,tr( "Unmount All" ),SLOT( unMountAll() ) ) ) ;
+	m->addAction( _addAction( false,false,tr( "Unmount All" ),"Unmount All",SLOT( unMountAll() ) ) ) ;
 
 	m_change_password_action = [ &_addMenu,&_addAction ](){
 
-		auto m = _addMenu( tr( "Internal Wallet" ),nullptr,nullptr ) ;
+		auto m = _addMenu( tr( "Internal Wallet" ),"Internal Wallet",nullptr,nullptr ) ;
 
-		auto ac = _addAction( false,false,tr( "Change Password" ),
+		auto ac = _addAction( false,false,tr( "Change Password" ),"Change Password",
 				       SLOT( changeInternalWalletPassWord() ) ) ;
 
 		m->addAction( ac ) ;
@@ -228,35 +234,41 @@ void cryfsGUI::setUpAppMenu()
 		return ac ;
 	}() ;
 
-	m_key_manager_menu = [ &_addMenu ](){
+	m_key_manager_menu = [ &_addMenu,&_addAction ](){
 
-		auto m = _addMenu( tr( "Key Storage" ),
+		auto m = _addMenu( tr( "Key Storage" ),"Key Storage",
 				   SLOT( keyManagerClicked( QAction * ) ),
 				   SLOT( aboutToShowMenu() ) ) ;
 
-		auto _addOption = [ & ]( const QString& e,LxQt::Wallet::walletBackEnd s ){
+		auto _addOption = [ & ]( const QString& e,const char * z,LxQt::Wallet::walletBackEnd s ){
 
-			m->addAction( e )->setEnabled( LxQt::Wallet::backEndIsSupported( s ) ) ;
+			auto ac = _addAction( false,false,e,z,nullptr ) ;
+
+			ac->setEnabled( LxQt::Wallet::backEndIsSupported( s ) ) ;
+
+			m->addAction( ac ) ;
 		} ;
 
-		_addOption( tr( "Internal Wallet" ),LxQt::Wallet::internalBackEnd ) ;
-		_addOption( tr( "KDE Wallet" ),LxQt::Wallet::kwalletBackEnd ) ;
-		_addOption( tr( "Gnome Wallet" ),LxQt::Wallet::secretServiceBackEnd ) ;
+		_addOption( tr( "Internal Wallet" ),"Internal Wallet",LxQt::Wallet::internalBackEnd ) ;
+		_addOption( tr( "KDE Wallet" ),"KDE Wallet",LxQt::Wallet::kwalletBackEnd ) ;
+		_addOption( tr( "Gnome Wallet" ),"Gnome Wallet",LxQt::Wallet::secretServiceBackEnd ) ;
 
 		return m ;
 	}() ;
 
-	m_favorite_menu = _addMenu( tr( "Favorites" ),
+	m_favorite_menu = _addMenu( tr( "Favorites" ),"Favorites",
 				    SLOT( favoriteClicked( QAction * ) ),
 				    SLOT( showFavorites() ) ) ;
 
-	m_language_menu = _addMenu( tr( "Select Language" ),SLOT( languageMenu( QAction * ) ),nullptr ) ;
+	m_language_menu = _addMenu( tr( "Select Language" ),"Select Language",
+				    SLOT( languageMenu( QAction * ) ),nullptr ) ;
 
-	m->addAction( _addAction( false,false,tr( "Check For Update" ),SLOT( updateCheck() ) ) ) ;
+	m->addAction( _addAction( false,false,tr( "Check For Update" ),"Check For Update",
+				  SLOT( updateCheck() ) ) ) ;
 
-	m->addAction( _addAction( false,false,tr( "About" ),SLOT( licenseInfo() ) ) ) ;
+	m->addAction( _addAction( false,false,tr( "About" ),"About",SLOT( licenseInfo() ) ) ) ;
 
-	auto ac = _addAction( false,false,tr( "Quit" ),SLOT( closeApplication() ) ) ;
+	auto ac = _addAction( false,false,tr( "Quit" ),"Quit",SLOT( closeApplication() ) ) ;
 
 	m->addAction( ac ) ;
 
@@ -399,12 +411,12 @@ void cryfsGUI::languageMenu( QAction * ac )
 
 	for( auto& it : m_actionPair ){
 
-		it.first->setText( tr( it.second.toLatin1().constData() ) ) ;
+		it.first->setText( tr( it.second ) ) ;
 	}
 
 	for( auto& it : m_menuPair ){
 
-		it.first->setTitle( tr( it.second.toLatin1().constData() ) ) ;
+		it.first->setTitle( tr( it.second ) ) ;
 	}
 }
 
