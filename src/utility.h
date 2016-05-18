@@ -126,6 +126,7 @@ namespace utility
 	QStringList directoryList( const QString& e ) ;
 
 	bool reUseMountPoint( void ) ;
+	void reUseMountPoint( bool ) ;
 
 	QString homePath() ;
 	QString mountPath( const QString& path ) ;

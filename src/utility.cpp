@@ -999,7 +999,24 @@ bool utility::getOpenVolumeReadOnlyOption( const QString& app )
 	return readOnlyWarning::getOpenVolumeReadOnlyOption( app ) ;
 }
 
+static QString _reUseMountPath()
+{
+	return utility::homePath() + "/.cryfs-gui/reUseMountPoint.option" ;
+}
+
 bool utility::reUseMountPoint()
 {
-	return utility::pathExists( utility::homePath() + "/.cryfs-gui/reUseMountPoint.option" ) ;
+	return utility::pathExists( _reUseMountPath() ) ;
+}
+
+void utility::reUseMountPoint( bool e )
+{
+	if( e ){
+
+		QFile f( _reUseMountPath() ) ;
+
+		f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+	}else{
+		QFile::remove( _reUseMountPath() ) ;
+	}
 }

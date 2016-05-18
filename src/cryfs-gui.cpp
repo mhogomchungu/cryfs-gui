@@ -211,6 +211,9 @@ void cryfsGUI::setUpAppMenu()
 	m->addAction( _addAction( true,m_autoOpenFolderOnMount,tr( "Auto Open Mount Point" ),
 				  SLOT( autoOpenFolderOnMount( bool ) ) ) ) ;
 
+	m->addAction( _addAction( true,utility::reUseMountPoint(),tr( "Reuse Mount Point" ),
+				  SLOT( reuseMountPoint( bool ) ) ) ) ;
+
 	m->addAction( _addAction( false,false,tr( "Unmount All" ),SLOT( unMountAll() ) ) ) ;
 
 	m_change_password_action = [ &_addMenu,&_addAction ](){
@@ -423,6 +426,11 @@ void cryfsGUI::autoOpenFolderOnMount( bool e )
 	}
 }
 
+void cryfsGUI::reuseMountPoint( bool e )
+{
+	utility::reUseMountPoint( e ) ;
+}
+
 bool cryfsGUI::autoOpenFolderOnMount( void )
 {
 	return !QFile::exists( _autoOpenFolderConfigPath() ) ;
@@ -533,14 +541,17 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 				qDebug() << tr( "ERROR: Key Not Found In The Backend." ) ;
 				QCoreApplication::exit( 1 ) ;
 			}else{
-				QString m ;
+				auto m = [ & ]()->QString{
 
-				if( mountPath.isEmpty() ){
+					if( mountPath.isEmpty() ){
 
-					m = utility::mountPath( utility::mountPathPostFix( volume.split( "/" ).last() ) ) ;
-				}else{
-					m = mountPath ;
-				}
+						auto e = utility::mountPathPostFix( volume.split( "/" ).last() ) ;
+
+						return utility::mountPath( e ) ;
+					}else{
+						return mountPath ;
+					}
+				}() ;
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
