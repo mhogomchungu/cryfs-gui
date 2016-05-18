@@ -954,6 +954,11 @@ QString utility::mountPath( const QString& path )
 
 QString utility::mountPathPostFix( const QString& path )
 {
+	return utility::mountPathPostFix( utility::mountPath( path ),path ) ;
+}
+
+QString utility::mountPathPostFix( const QString& e,const QString& path )
+{
 	if( path.isEmpty() ){
 
 		return path ;
@@ -962,8 +967,6 @@ QString utility::mountPathPostFix( const QString& path )
 
 			return !utility::pathExists( e ) ;
 		} ;
-
-		auto e = utility::mountPath( path ) ;
 
 		if( _usable_mount_point( e ) ){
 
@@ -994,4 +997,9 @@ bool utility::setOpenVolumeReadOnly( QWidget * parent,bool checked,const QString
 bool utility::getOpenVolumeReadOnlyOption( const QString& app )
 {
 	return readOnlyWarning::getOpenVolumeReadOnlyOption( app ) ;
+}
+
+bool utility::reUseMountPoint()
+{
+	return utility::pathExists( utility::homePath() + "/.cryfs-gui/reUseMountPoint.option" ) ;
 }

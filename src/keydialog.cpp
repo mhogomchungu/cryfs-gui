@@ -57,6 +57,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	m_create = e.volumeName().isEmpty() ;
 
+	m_reUseMountPoint = utility::reUseMountPoint() ;
+
 	if( m_create ){
 
 		m_ui->pbOpen->setText( tr( "&Create" ) ) ;
@@ -104,17 +106,46 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 		if( m.startsWith( "/" ) ){
 
-			m_ui->lineEditMountPoint->setText( m ) ;
-		}else{
-			m_ui->lineEditMountPoint->setText( utility::mountPath( [ &m,this ](){
+			m_ui->lineEditMountPoint->setText( [ & ]()->QString{
 
-				if( m.isEmpty() ){
+				if( m_reUseMountPoint ){
 
-					return utility::mountPathPostFix( m_path.split( "/" ).last() ) ;
+					return m ;
 				}else{
-					return utility::mountPathPostFix( m ) ;
+					auto y = m ;
+					auto r = y.lastIndexOf( '/' ) ;
+
+					if( r != -1 ){
+
+						y.truncate( r ) ;
+					}
+
+					return y + "/" + utility::mountPathPostFix( m,m.split( '/' ).last() ) ;
 				}
-			}() ) ) ;
+			}() ) ;
+		}else{
+			m_ui->lineEditMountPoint->setText( [ & ](){
+
+				if( m_reUseMountPoint ){
+
+					if( m.isEmpty() ){
+
+						return utility::mountPath( m_path.split( "/" ).last() ) ;
+					}else{
+						return utility::mountPath( m.split( "/" ).last() ) ;
+					}
+				}else{
+					return utility::mountPath( [ &m,this ](){
+
+						if( m.isEmpty() ){
+
+							return utility::mountPathPostFix( m_path.split( "/" ).last() ) ;
+						}else{
+							return utility::mountPathPostFix( m ) ;
+						}
+					}() ) ;
+				}
+			}() ) ;
 		}
 	}
 
@@ -505,12 +536,14 @@ void keyDialog::encryptedFolderCreate()
 
 		DialogMsg msg( this ) ;
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Encrypted Folder Path Appear Already Taken." ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Encrypted Folder Path Is Already Taken." ) ) ;
 
 		return this->enableAll() ;
 	}
 
-	if( utility::pathExists( utility::mountPath( utility::mountPathPostFix( m ) ) ) ){
+	m = utility::mountPath( utility::mountPathPostFix( m ) ) ;
+
+	if( utility::pathExists( m ) && !m_reUseMountPoint ){
 
 		DialogMsg msg( this ) ;
 
@@ -542,7 +575,7 @@ void keyDialog::encryptedFolderMount()
 
 	auto m = m_ui->lineEditMountPoint->text() ;
 
-	if( utility::pathExists( m ) ){
+	if( utility::pathExists( m ) && !m_reUseMountPoint ){
 
 		DialogMsg msg( this ) ;
 

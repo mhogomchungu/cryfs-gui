@@ -105,6 +105,8 @@ private :
 	QTableWidget * m_table ;
 	bool m_working ;
 	bool m_create ;
+	bool m_reUseMountPoint ;
+
 	enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } ;
 	std::function< void() > m_cancel ;
 	std::function< void( const QString& ) > m_success ;

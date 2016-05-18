@@ -125,10 +125,13 @@ namespace utility
 
 	QStringList directoryList( const QString& e ) ;
 
+	bool reUseMountPoint( void ) ;
+
 	QString homePath() ;
 	QString mountPath( const QString& path ) ;
 
 	QString mountPathPostFix( const QString& path ) ;
+	QString mountPathPostFix( const QString& prefix,const QString& path ) ;
 
 	bool pathIsReadable( const QString& ) ;
 

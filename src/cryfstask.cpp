@@ -28,8 +28,12 @@ using cs = cryfsTask::status ;
 
 static bool _delete_mount_point( const QString& m )
 {
-	QDir e;
-	e.rmdir( m ) ;
+	if( !utility::reUseMountPoint() ){
+
+		QDir e;
+		e.rmdir( m ) ;
+	}
+
 	return true ;
 }
 
@@ -37,9 +41,9 @@ static bool _create_mount_point( const QString& m )
 {
 	if( utility::pathExists( m ) ){
 
-		return false ;
+		return utility::reUseMountPoint() ;
 	}else{
-		QDir e( m ) ;
+		QDir e ;
 		return e.mkpath( m ) ;
 	}
 }
@@ -153,7 +157,7 @@ static QString _args( const arguments& args )
 
 	m.replace( "\"","\"\"\"" ) ;
 
-	QString mOpt = [ & ](){
+	auto mOpt = [ & ](){
 
 		auto e = args.opt.mOpt ;
 
@@ -242,19 +246,17 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 		if( _create_mount_point( opt.cipherFolder ) ){
 
-			auto m = utility::mountPath( utility::mountPathPostFix( opt.plainFolder ) ) ;
+			if( _create_mount_point( opt.plainFolder ) ){
 
-			if( _create_mount_point( m ) ){
-
-				auto e = _args( { opt,"cryfs","--",m,opt.mOpt } ) ;
+				auto e = _args( { opt,"cryfs","--",opt.plainFolder,opt.mOpt } ) ;
 
 				auto z = _cmd( "cryfs",cs::cryfs,e,opt.key ) ;
 
 				if( z == cs::success ){
 
-					opt.openFolder( m ) ;
+					opt.openFolder( opt.plainFolder ) ;
 				}else{
-					_delete_mount_point( m ) ;
+					_delete_mount_point( opt.plainFolder ) ;
 					_delete_mount_point( opt.cipherFolder ) ;
 				}
 
