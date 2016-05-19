@@ -102,11 +102,11 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 		m_ui->lineEditKey->setFocus() ;
 
-		const auto& m = e.mountPoint() ;
+		m_ui->lineEditMountPoint->setText( [ & ](){
 
-		if( m.startsWith( "/" ) ){
+			auto m = e.mountPoint() ;
 
-			m_ui->lineEditMountPoint->setText( [ & ]()->QString{
+			if( m.startsWith( "/" ) ){
 
 				if( m_reUseMountPoint ){
 
@@ -122,10 +122,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 					return y + "/" + utility::mountPathPostFix( m,m.split( '/' ).last() ) ;
 				}
-			}() ) ;
-		}else{
-			m_ui->lineEditMountPoint->setText( [ & ](){
-
+			}else{
 				if( m_reUseMountPoint ){
 
 					if( m.isEmpty() ){
@@ -145,8 +142,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 						}
 					}() ) ;
 				}
-			}() ) ;
-		}
+			}
+		}() ) ;
 	}
 
 	this->setWindowTitle( msg ) ;
