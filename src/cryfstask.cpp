@@ -178,7 +178,7 @@ static QString _args( const arguments& args )
 		}
 	}() ;
 
-	const char * opts = [ & ]{
+	auto opts = [ & ]{
 
 		if( args.opt.ro ){
 
