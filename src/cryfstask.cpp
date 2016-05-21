@@ -26,7 +26,7 @@
 
 using cs = cryfsTask::status ;
 
-static bool _delete_mount_point( const QString& m )
+static bool _delete_folder( const QString& m )
 {
 	if( !utility::reUseMountPoint() ){
 
@@ -37,7 +37,7 @@ static bool _delete_mount_point( const QString& m )
 	return true ;
 }
 
-static bool _create_mount_point( const QString& m )
+static bool _create_folder( const QString& m )
 {
 	if( utility::pathExists( m ) ){
 
@@ -57,7 +57,7 @@ bool cryfsTask::UnmountEncryptedFolder( const QString& m )
 
 		if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
 
-			return _delete_mount_point( m ) ;
+			return _delete_folder( m ) ;
 		}else{
 			return false ;
 		}
@@ -193,15 +193,15 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 {
 	return Task::run< cs >( [ opt ](){
 
-		auto _mount = [ & ]( const QString& app,const options& opt ){
+		auto _mount = []( const QString& app,const options& opt ){
 
-			if( _create_mount_point( opt.plainFolder ) ){
+			if( _create_folder( opt.plainFolder ) ){
 
 				auto e = _cmd( app,opt ) ;
 
 				if( e != cs::success ) {
 
-					_delete_mount_point( opt.plainFolder ) ;
+					_delete_folder( opt.plainFolder ) ;
 				}
 
 				return e ;
@@ -232,9 +232,9 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 {
 	return Task::run< cs >( [ opt ](){
 
-		if( _create_mount_point( opt.cipherFolder ) ){
+		if( _create_folder( opt.cipherFolder ) ){
 
-			if( _create_mount_point( opt.plainFolder ) ){
+			if( _create_folder( opt.plainFolder ) ){
 
 				auto e = _cmd( "cryfs",opt ) ;
 
@@ -242,13 +242,13 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 					opt.openFolder( opt.plainFolder ) ;
 				}else{
-					_delete_mount_point( opt.plainFolder ) ;
-					_delete_mount_point( opt.cipherFolder ) ;
+					_delete_folder( opt.plainFolder ) ;
+					_delete_folder( opt.cipherFolder ) ;
 				}
 
 				return e ;
 			}else{
-				_delete_mount_point( opt.cipherFolder ) ;
+				_delete_folder( opt.cipherFolder ) ;
 
 				return cs::failedToCreateMountPoint ;
 			}
