@@ -158,9 +158,43 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
 Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé symétrique</translation>
     </message>
     <message>
+        <location filename="../src/checkforupdates.cpp" line="41"/>
+        <location filename="../src/checkforupdates.cpp" line="70"/>
         <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="41"/>
+        <location filename="../src/checkforupdates.cpp" line="70"/>
+        <source>Failed To Check For Update.</source>
+        <translation>Echec de la vérification de la mise à jour de version.</translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="49"/>
+        <location filename="../src/checkforupdates.cpp" line="61"/>
+        <source>cryfs-gui Installed Version Is : %1.
+Latest Version Is : %2.</source>
+        <translation>cryfs-gui version installée : %1.
+Dernière version disponible : %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="53"/>
+        <location filename="../src/checkforupdates.cpp" line="65"/>
+        <source>cryfs Installed Version Is : %1.
+Latest Version Is : %2.</source>
+        <translation>cryfs version installée : %1.
+Dernière version disponible : %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="56"/>
+        <source>Update Available</source>
+        <translation>Mise à jour disponible</translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="68"/>
+        <source>Version Info</source>
+        <translation>Infos de Version</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="680"/>
@@ -232,42 +266,6 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Saisissez le mot de passe du trousseau ci-après pour créer un nouveau trousseau &apos;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;&apos; pour l&apos;application &apos;&lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;&apos;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>checkForUpdates</name>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="58"/>
-        <source>ERROR</source>
-        <translation>ERREUR</translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="58"/>
-        <source>Failed To Check For Update.</source>
-        <translation>Echec de la vérification de la mise à jour de version.</translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="49"/>
-        <location filename="../src/checkforupdates.cpp" line="55"/>
-        <source>
-Installed Version Is : %1.
-Latest Version Is : %2.
-</source>
-        <translation>
-Version installée : %1.
-Dernière version disponible : %2.</translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="50"/>
-        <source>Update Available</source>
-        <translation>Mise à jour disponible</translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="56"/>
-        <source>Version Info</source>
-        <translation>Infos de Version</translation>
     </message>
 </context>
 <context>

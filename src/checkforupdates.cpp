@@ -24,54 +24,145 @@
 #include <QtNetwork/QNetworkRequest>
 
 #include <QWidget>
+#include <QProcess>
 
 #include "utility.h"
 #include "dialogmsg.h"
 
 #include "version.h"
 
-void checkForUpdates::networkReply( QNetworkReply * p )
+static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
+				     QString l,const QStringList& e = QStringList() )
 {
-	QString l = p->readAll() ;
-
-	DialogMsg msg( m_widget ) ;
+	DialogMsg msg( w ) ;
 
 	if( l.isEmpty() ){
 
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Check For Update." ) ) ;
+		msg.ShowUIOK( QObject::tr( "ERROR" ),QObject::tr( "Failed To Check For Update." ) ) ;
 	}else{
 		l.replace( "\n","" ) ;
 
-		if( m_autocheck ){
+		if( autocheck ){
 
 			if( l != "Not Found" && l != THIS_VERSION ){
 
-				l = tr( "\nInstalled Version Is : %1.\nLatest Version Is : %2.\n" ).arg( THIS_VERSION,l ) ;
-				msg.ShowUIOK( tr( "Update Available" ),l ) ;
+				l = "\n" + QObject::tr( "cryfs-gui Installed Version Is : %1.\nLatest Version Is : %2." ).arg( THIS_VERSION,l ) ;
+
+				if( !e.isEmpty() ){
+
+					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( e.at( 0 ),e.at( 1 ) ) ;
+				}
+
+				msg.ShowUIOK( QObject::tr( "Update Available" ),l + "\n" ) ;
 			}
 		}else{
 			if( l != "Not Found" ){
 
-				l = tr( "\nInstalled Version Is : %1.\nLatest Version Is : %2.\n" ).arg( THIS_VERSION,l ) ;
-				msg.ShowUIOK( tr( "Version Info" ),l ) ;
+				l = "\n" + QObject::tr( "cryfs-gui Installed Version Is : %1.\nLatest Version Is : %2." ).arg( THIS_VERSION,l ) ;
+
+				if( !e.isEmpty() ){
+
+					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( e.at( 0 ),e.at( 1 ) ) ;
+				}
+
+				msg.ShowUIOK( QObject::tr( "Version Info" ),l + "\n" ) ;
 			}else{
-				msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Check For Update." ) ) ;
+				msg.ShowUIOK( QObject::tr( "ERROR" ),QObject::tr( "Failed To Check For Update." ) ) ;
 			}
 		}
 	}
 
-	this->deleteLater() ;
+	obj->deleteLater() ;
 }
+
+#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
+
+void checkForUpdates::networkReply( QNetworkReply * p )
+{
+	_show_cryfs_gui_version( this,m_autocheck,m_widget,p->readAll() ) ;
+}
+
+#else
+
+#include <QJsonDocument>
+
+void checkForUpdates::networkReply( QNetworkReply * p )
+{
+	if( m_firstTime ){
+
+		m_data = p->readAll() ;
+
+		this->getUpdate( false ) ;
+	}else{
+		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
+		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+
+		auto e = utility::Task::run( "cryfs" ).await().output().split( ' ' ) ;
+
+		if( e.size() >= 2 ){
+
+			QJsonParseError error ;
+
+			auto r = QJsonDocument::fromJson( p->readAll(),&error ) ;
+
+			if( error.error == QJsonParseError::NoError ){
+
+				auto m = r.toVariant().toMap() ;
+
+				if( !m.isEmpty() ){
+
+					m = m[ "version_info" ].toMap() ;
+				}
+
+				if( !m.isEmpty() ){
+
+					auto d = m[ "current" ].toString() ;
+
+					if( !d.isEmpty() ){
+
+						auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
+
+						return _show_cryfs_gui_version( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
+					}
+				}
+			}
+		}
+
+		_show_cryfs_gui_version( this,m_autocheck,m_widget,m_data ) ;
+	}
+}
+
+#endif
 
 checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) : m_widget( widget ),m_autocheck( autocheck )
 {
 	connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networkReply( QNetworkReply * ) ) ) ;
 
-	m_manager.get( [](){
+	this->getUpdate( true ) ;
+}
 
-		QNetworkRequest e( QUrl( "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ) ) ;
+void checkForUpdates::getUpdate( bool e )
+{
+	m_firstTime = e ;
 
-		e.setRawHeader( "Host","raw.githubusercontent.com" ) ;
+	m_manager.get( [ & ](){
+
+		auto e = [ & ](){
+
+			if( m_firstTime ){
+
+				QNetworkRequest e( QUrl( "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ) ) ;
+				e.setRawHeader( "Host","raw.githubusercontent.com" ) ;
+
+				return e ;
+			}else{
+				QNetworkRequest e( QUrl( "https://www.cryfs.org/version_info.json" ) ) ;
+				e.setRawHeader( "Host","www.cryfs.org" ) ;
+
+				return e ;
+			}
+		}() ;
+
 		e.setRawHeader( "User-Agent","Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0" ) ;
 		e.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
@@ -90,4 +181,8 @@ void checkForUpdates::instance( QWidget * widget,const QString& e )
 void checkForUpdates::instance( QWidget * widget )
 {
 	new checkForUpdates( widget,false ) ;
+}
+
+checkForUpdates::~checkForUpdates()
+{
 }

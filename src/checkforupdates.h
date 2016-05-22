@@ -36,14 +36,18 @@ class checkForUpdates : public QObject
 	Q_OBJECT
 public:
 	checkForUpdates( QWidget *,bool ) ;
+	~checkForUpdates() ;
 	static void instance( QWidget *,const QString& ) ;
 	static void instance( QWidget * ) ;
 public slots:
 	void networkReply( QNetworkReply * ) ;
 private:
+	void getUpdate( bool ) ;
 	QWidget * m_widget ;
 	bool m_autocheck ;
 	QNetworkAccessManager m_manager ;
+	bool m_firstTime = true ;
+	QString m_data ;
 };
 
 #endif // CHECKFORUPDATES_H
