@@ -24,7 +24,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #include <QWidget>
-#include <QProcess>
+#include <QFile>
 
 #include "utility.h"
 #include "dialogmsg.h"
@@ -42,15 +42,18 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 	}else{
 		l.replace( "\n","" ) ;
 
+		const auto& o = e.at( 0 ) ;
+		const auto& n = e.at( 1 ) ;
+
 		if( autocheck ){
 
-			if( l != "Not Found" && l != THIS_VERSION ){
+			if( ( l != "Not Found" && l != THIS_VERSION ) || o != n ){
 
 				l = "\n" + QObject::tr( "cryfs-gui Installed Version Is : %1.\nLatest Version Is : %2." ).arg( THIS_VERSION,l ) ;
 
 				if( !e.isEmpty() ){
 
-					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( e.at( 0 ),e.at( 1 ) ) ;
+					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( o,n ) ;
 				}
 
 				msg.ShowUIOK( QObject::tr( "Update Available" ),l + "\n" ) ;
@@ -62,7 +65,7 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 
 				if( !e.isEmpty() ){
 
-					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( e.at( 0 ),e.at( 1 ) ) ;
+					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( o,n ) ;
 				}
 
 				msg.ShowUIOK( QObject::tr( "Version Info" ),l + "\n" ) ;
@@ -170,9 +173,16 @@ void checkForUpdates::getUpdate( bool e )
 	}() ) ;
 }
 
+static QString _optionPath()
+{
+	return utility::homePath() + "/.cryfs-gui/autoCheckUpdates.cryfs-gui" ;
+}
+
 void checkForUpdates::instance( QWidget * widget,const QString& e )
 {
-	if( utility::pathExists( utility::homePath() + "/.cryfs-gui/autoCheckUpdates." + e ) ){
+	Q_UNUSED( e ) ;
+
+	if( utility::pathExists( _optionPath() ) ){
 
 		new checkForUpdates( widget,true ) ;
 	}
@@ -181,6 +191,23 @@ void checkForUpdates::instance( QWidget * widget,const QString& e )
 void checkForUpdates::instance( QWidget * widget )
 {
 	new checkForUpdates( widget,false ) ;
+}
+
+bool checkForUpdates::autoCheck()
+{
+	return utility::pathExists( _optionPath() ) ;
+}
+
+void checkForUpdates::autoCheck( bool e )
+{
+	QFile f( _optionPath() ) ;
+
+	if( e ){
+
+		f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+	}else{
+		f.remove() ;
+	}
 }
 
 checkForUpdates::~checkForUpdates()

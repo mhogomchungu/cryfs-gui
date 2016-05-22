@@ -159,40 +159,40 @@ Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé 
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="70"/>
+        <location filename="../src/checkforupdates.cpp" line="73"/>
         <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="70"/>
+        <location filename="../src/checkforupdates.cpp" line="73"/>
         <source>Failed To Check For Update.</source>
         <translation>Echec de la vérification de la mise à jour de version.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="49"/>
-        <location filename="../src/checkforupdates.cpp" line="61"/>
+        <location filename="../src/checkforupdates.cpp" line="52"/>
+        <location filename="../src/checkforupdates.cpp" line="64"/>
         <source>cryfs-gui Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation>cryfs-gui version installée : %1.
 Dernière version disponible : %2.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="53"/>
-        <location filename="../src/checkforupdates.cpp" line="65"/>
+        <location filename="../src/checkforupdates.cpp" line="56"/>
+        <location filename="../src/checkforupdates.cpp" line="68"/>
         <source>cryfs Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation>cryfs version installée : %1.
 Dernière version disponible : %2.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="56"/>
+        <location filename="../src/checkforupdates.cpp" line="59"/>
         <source>Update Available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="68"/>
+        <location filename="../src/checkforupdates.cpp" line="71"/>
         <source>Version Info</source>
         <translation>Infos de Version</translation>
     </message>
@@ -333,7 +333,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/cryfs-gui.cpp" line="227"/>
         <location filename="../src/cryfs-gui.cpp" line="252"/>
-        <location filename="../src/cryfs-gui.cpp" line="321"/>
+        <location filename="../src/cryfs-gui.cpp" line="324"/>
         <source>Internal Wallet</source>
         <translation>Trousseau interne</translation>
     </message>
@@ -349,13 +349,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="253"/>
-        <location filename="../src/cryfs-gui.cpp" line="325"/>
+        <location filename="../src/cryfs-gui.cpp" line="328"/>
         <source>KDE Wallet</source>
         <translation>Trousseau KDE</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="254"/>
-        <location filename="../src/cryfs-gui.cpp" line="329"/>
+        <location filename="../src/cryfs-gui.cpp" line="332"/>
         <source>Gnome Wallet</source>
         <translation>Trousseau Gnome</translation>
     </message>
@@ -376,77 +376,82 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="269"/>
+        <source>Autocheck For Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cryfs-gui.cpp" line="272"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="271"/>
+        <location filename="../src/cryfs-gui.cpp" line="274"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="375"/>
+        <location filename="../src/cryfs-gui.cpp" line="383"/>
         <source>Manage Favorites</source>
         <translation>Gérer les favoris</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="379"/>
+        <location filename="../src/cryfs-gui.cpp" line="387"/>
         <source>Mount All</source>
         <translation>Monter tout</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="521"/>
+        <location filename="../src/cryfs-gui.cpp" line="529"/>
         <source>ERROR: Volume Path Not Given.</source>
         <translation>ERREUR: Chemin du volume non fourni.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="553"/>
+        <location filename="../src/cryfs-gui.cpp" line="561"/>
         <source>ERROR: Key Not Found In The Backend.</source>
         <translation>ERREUR: Clé non trouvée dans le Gestionnaire.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="576"/>
+        <location filename="../src/cryfs-gui.cpp" line="584"/>
         <source>ERROR: Failed To Unlock Requested Volume.</source>
         <translation>ERREUR: Echec du déverrouillage du volume choisi.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="581"/>
+        <location filename="../src/cryfs-gui.cpp" line="589"/>
         <source>ERROR: Failed To Unlock Requested Backend.</source>
         <translation>ERREUR: Echec du déverrouillage du Gestionnaire sélectionné.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="598"/>
+        <location filename="../src/cryfs-gui.cpp" line="606"/>
         <source>Unmount</source>
         <translation>Démonter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="599"/>
+        <location filename="../src/cryfs-gui.cpp" line="607"/>
         <source>Open Folder</source>
         <translation>Ouvrir Répertoire</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="603"/>
+        <location filename="../src/cryfs-gui.cpp" line="611"/>
         <source>Close Menu</source>
         <translation>Fermer le Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="655"/>
+        <location filename="../src/cryfs-gui.cpp" line="663"/>
         <source>WARNING</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="656"/>
+        <location filename="../src/cryfs-gui.cpp" line="664"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation>Impossible d&apos;ouvrir le point de montage parce que l&apos;outil &quot;%1&quot; ne semble pas fonctionner correctement.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="773"/>
-        <location filename="../src/cryfs-gui.cpp" line="874"/>
+        <location filename="../src/cryfs-gui.cpp" line="781"/>
+        <location filename="../src/cryfs-gui.cpp" line="882"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="774"/>
+        <location filename="../src/cryfs-gui.cpp" line="782"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
@@ -455,12 +460,12 @@ ou
 le volume n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="794"/>
+        <location filename="../src/cryfs-gui.cpp" line="802"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation>Sélectionner un répertoire de volume Encfs/Cryfs</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="874"/>
+        <location filename="../src/cryfs-gui.cpp" line="882"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation>Impossible de démonter le Volume %1</translation>
     </message>

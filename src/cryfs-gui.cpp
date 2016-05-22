@@ -266,6 +266,9 @@ void cryfsGUI::setUpAppMenu()
 	m->addAction( _addAction( false,false,tr( "Check For Update" ),"Check For Update",
 				  SLOT( updateCheck() ) ) ) ;
 
+	m->addAction( _addAction( true,checkForUpdates::autoCheck(),tr( "Autocheck For Updates" ),
+				  "Autocheck For Updates",SLOT( autoCheckUpdates( bool ) ) ) ) ;
+
 	m->addAction( _addAction( false,false,tr( "About" ),"About",SLOT( licenseInfo() ) ) ) ;
 
 	auto ac = _addAction( false,false,tr( "Quit" ),"Quit",SLOT( closeApplication() ) ) ;
@@ -345,6 +348,11 @@ void cryfsGUI::updateCheck()
 void cryfsGUI::autoUpdateCheck()
 {
 	checkForUpdates::instance( this,"cryfs-gui" ) ;
+}
+
+void cryfsGUI::autoCheckUpdates( bool e )
+{
+	checkForUpdates::autoCheck( e ) ;
 }
 
 QString cryfsGUI::resolveFavoriteMountPoint( const QString& e )

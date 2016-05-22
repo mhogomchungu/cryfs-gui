@@ -84,6 +84,7 @@ public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
 private slots:
+	void autoCheckUpdates( bool ) ;
 	void reuseMountPoint( bool ) ;
 	void unlockVolume( const QString&,const QString&,const QString&,const QString&,bool ) ;
 	void aboutToShowMenu( void ) ;
