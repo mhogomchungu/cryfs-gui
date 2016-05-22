@@ -31,35 +31,42 @@
 
 #include "version.h"
 
-static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
-				     QString l,const QStringList& e = QStringList() )
+static QString _tr( const QString& n,const QString& a,const QStringList& l )
+{
+	auto e = QObject::tr( "%1\"%2\" Installed Version Is : %3.\nLatest Version Is : %4." ) ;
+	return e.arg( n,a,l.at( 0 ),l.at( 1 ) ) ;
+}
+
+static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStringList& e )
 {
 	DialogMsg msg( w ) ;
 
 	if( l.isEmpty() ){
 
-		msg.ShowUIOK( QObject::tr( "ERROR" ),QObject::tr( "Failed To Check For Update." ) ) ;
+		auto e = QObject::tr( "Failed To Check For Update." ) ;
+		msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
 	}else{
 		l.replace( "\n","" ) ;
 
-		QString o ;
-		QString n ;
-
-		if( e.size() >= 2 ){
-
-			o = e.at( 0 ) ;
-			n = e.at( 1 ) ;
-		}
-
 		if( autocheck ){
 
-			if( ( l != "Not Found" && l != THIS_VERSION ) || o != n ){
+			auto _mismatch = [ & ]{
 
-				l = "\n" + QObject::tr( "cryfs-gui Installed Version Is : %1.\nLatest Version Is : %2." ).arg( THIS_VERSION,l ) ;
+				if( e.size() == 2 ){
+
+					return e.at( 0 ) != e.at( 1 ) ;
+				}else{
+					return false ;
+				}
+			} ;
+
+			if( ( l != "Not Found" && l != THIS_VERSION ) || _mismatch() ){
+
+				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
-					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( o,n ) ;
+					l += _tr( "\n\n","cryfs",e ) ;
 				}
 
 				msg.ShowUIOK( QObject::tr( "Update Available" ),l + "\n" ) ;
@@ -67,16 +74,18 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 		}else{
 			if( l != "Not Found" ){
 
-				l = "\n" + QObject::tr( "cryfs-gui Installed Version Is : %1.\nLatest Version Is : %2." ).arg( THIS_VERSION,l ) ;
+				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
-					l += "\n\n" + QObject::tr( "cryfs Installed Version Is : %1.\nLatest Version Is : %2." ).arg( o,n ) ;
+					l += _tr( "\n\n","cryfs",e ) ;
 				}
 
 				msg.ShowUIOK( QObject::tr( "Version Info" ),l + "\n" ) ;
 			}else{
-				msg.ShowUIOK( QObject::tr( "ERROR" ),QObject::tr( "Failed To Check For Update." ) ) ;
+				auto e = QObject::tr( "Failed To Check For Update." ) ;
+
+				msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
 			}
 		}
 	}
@@ -88,7 +97,7 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 
 void checkForUpdates::networkReply( QNetworkReply * p )
 {
-	_show_cryfs_gui_version( this,m_autocheck,m_widget,p->readAll() ) ;
+	_show( this,m_autocheck,m_widget,p->readAll(),{} ) ;
 }
 
 #else
@@ -131,21 +140,23 @@ void checkForUpdates::networkReply( QNetworkReply * p )
 
 						auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
 
-						return _show_cryfs_gui_version( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
+						return _show( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
 					}
 				}
 			}
 		}
 
-		_show_cryfs_gui_version( this,m_autocheck,m_widget,m_data ) ;
+		_show( this,m_autocheck,m_widget,m_data,{} ) ;
 	}
 }
 
 #endif
 
-checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) : m_widget( widget ),m_autocheck( autocheck )
+checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
+	m_widget( widget ),m_autocheck( autocheck )
 {
-	connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networkReply( QNetworkReply * ) ) ) ;
+	connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),
+		 this,SLOT( networkReply( QNetworkReply * ) ) ) ;
 
 	this->getUpdate( true ) ;
 }
@@ -154,25 +165,32 @@ void checkForUpdates::getUpdate( bool e )
 {
 	m_firstTime = e ;
 
+	auto url_0 = "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ;
+	auto url_1 = "https://www.cryfs.org/version_info.json" ;
+
+	auto user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0" ;
+
 	m_manager.get( [ & ](){
 
 		auto e = [ & ](){
 
 			if( m_firstTime ){
 
-				QNetworkRequest e( QUrl( "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ) ) ;
+				QNetworkRequest e( [ & ](){ QUrl u( url_0 ) ; return u ; }() ) ;
+
 				e.setRawHeader( "Host","raw.githubusercontent.com" ) ;
 
 				return e ;
 			}else{
-				QNetworkRequest e( QUrl( "https://www.cryfs.org/version_info.json" ) ) ;
+				QNetworkRequest e( [ & ](){ QUrl u( url_1 ) ; return u ; }() ) ;
+
 				e.setRawHeader( "Host","www.cryfs.org" ) ;
 
 				return e ;
 			}
 		}() ;
 
-		e.setRawHeader( "User-Agent","Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0" ) ;
+		e.setRawHeader( "User-Agent",user_agent ) ;
 		e.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
 		return e ;

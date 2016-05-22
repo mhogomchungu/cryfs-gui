@@ -133,39 +133,31 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="79"/>
+        <location filename="../src/checkforupdates.cpp" line="47"/>
+        <location filename="../src/checkforupdates.cpp" line="88"/>
         <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="79"/>
+        <location filename="../src/checkforupdates.cpp" line="46"/>
+        <location filename="../src/checkforupdates.cpp" line="86"/>
         <source>Failed To Check For Update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="58"/>
-        <location filename="../src/checkforupdates.cpp" line="70"/>
-        <source>cryfs-gui Installed Version Is : %1.
-Latest Version Is : %2.</source>
+        <location filename="../src/checkforupdates.cpp" line="36"/>
+        <source>%1&quot;%2&quot; Installed Version Is : %3.
+Latest Version Is : %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="62"/>
-        <location filename="../src/checkforupdates.cpp" line="74"/>
-        <source>cryfs Installed Version Is : %1.
-Latest Version Is : %2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="65"/>
+        <location filename="../src/checkforupdates.cpp" line="72"/>
         <source>Update Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="77"/>
+        <location filename="../src/checkforupdates.cpp" line="84"/>
         <source>Version Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -290,56 +282,56 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="223"/>
+        <location filename="../src/cryfs-gui.cpp" line="226"/>
         <source>Unmount All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="227"/>
-        <location filename="../src/cryfs-gui.cpp" line="252"/>
+        <location filename="../src/cryfs-gui.cpp" line="230"/>
+        <location filename="../src/cryfs-gui.cpp" line="255"/>
         <location filename="../src/cryfs-gui.cpp" line="324"/>
         <source>Internal Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="229"/>
+        <location filename="../src/cryfs-gui.cpp" line="232"/>
         <source>Change Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="239"/>
+        <location filename="../src/cryfs-gui.cpp" line="242"/>
         <source>Key Storage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="253"/>
+        <location filename="../src/cryfs-gui.cpp" line="256"/>
         <location filename="../src/cryfs-gui.cpp" line="328"/>
         <source>KDE Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="254"/>
+        <location filename="../src/cryfs-gui.cpp" line="257"/>
         <location filename="../src/cryfs-gui.cpp" line="332"/>
         <source>Gnome Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="259"/>
+        <location filename="../src/cryfs-gui.cpp" line="262"/>
         <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="263"/>
+        <location filename="../src/cryfs-gui.cpp" line="266"/>
         <source>Select Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="266"/>
+        <location filename="../src/cryfs-gui.cpp" line="269"/>
         <source>Check For Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="269"/>
+        <location filename="../src/cryfs-gui.cpp" line="223"/>
         <source>Autocheck For Updates</source>
         <translation type="unfinished"></translation>
     </message>

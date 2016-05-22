@@ -220,6 +220,9 @@ void cryfsGUI::setUpAppMenu()
 	m->addAction( _addAction( true,utility::reUseMountPoint(),tr( "Reuse Mount Point" ),
 				  "Reuse Mount Point",SLOT( reuseMountPoint( bool ) ) ) ) ;
 
+	m->addAction( _addAction( true,checkForUpdates::autoCheck(),tr( "Autocheck For Updates" ),
+				  "Autocheck For Updates",SLOT( autoCheckUpdates( bool ) ) ) ) ;
+
 	m->addAction( _addAction( false,false,tr( "Unmount All" ),"Unmount All",SLOT( unMountAll() ) ) ) ;
 
 	m_change_password_action = [ &_addMenu,&_addAction ](){
@@ -265,9 +268,6 @@ void cryfsGUI::setUpAppMenu()
 
 	m->addAction( _addAction( false,false,tr( "Check For Update" ),"Check For Update",
 				  SLOT( updateCheck() ) ) ) ;
-
-	m->addAction( _addAction( true,checkForUpdates::autoCheck(),tr( "Autocheck For Updates" ),
-				  "Autocheck For Updates",SLOT( autoCheckUpdates( bool ) ) ) ) ;
 
 	m->addAction( _addAction( false,false,tr( "About" ),"About",SLOT( licenseInfo() ) ) ) ;
 
