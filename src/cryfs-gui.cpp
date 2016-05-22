@@ -266,7 +266,7 @@ void cryfsGUI::setUpAppMenu()
 	m_language_menu = _addMenu( tr( "Select Language" ),"Select Language",
 				    SLOT( languageMenu( QAction * ) ),nullptr ) ;
 
-	m->addAction( _addAction( false,false,tr( "Check For Update" ),"Check For Update",
+	m->addAction( _addAction( false,false,tr( "Check For Updates" ),"Check For Updates",
 				  SLOT( updateCheck() ) ) ) ;
 
 	m->addAction( _addAction( false,false,tr( "About" ),"About",SLOT( licenseInfo() ) ) ) ;

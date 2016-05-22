@@ -43,8 +43,11 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 
 	if( l.isEmpty() ){
 
-		auto e = QObject::tr( "Failed To Check For Update." ) ;
-		msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
+		if( !autocheck ){
+
+			auto e = QObject::tr( "Failed To Check For Updates." ) ;
+			msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
+		}
 	}else{
 		l.replace( "\n","" ) ;
 
@@ -83,7 +86,7 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 
 				msg.ShowUIOK( QObject::tr( "Version Info" ),l + "\n" ) ;
 			}else{
-				auto e = QObject::tr( "Failed To Check For Update." ) ;
+				auto e = QObject::tr( "Failed To Check For Updates." ) ;
 
 				msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
 			}
