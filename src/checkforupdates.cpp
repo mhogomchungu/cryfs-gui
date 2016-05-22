@@ -28,7 +28,7 @@
 
 #include "utility.h"
 #include "dialogmsg.h"
-
+#include "cryfstask.h"
 #include "version.h"
 
 static QString _tr( const QString& n,const QString& a,const QStringList& l )
@@ -118,32 +118,37 @@ void checkForUpdates::networkReply( QNetworkReply * p )
 		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
 		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
 
-		auto e = utility::Task::run( "cryfs" ).await().output().split( ' ' ) ;
+		auto exe = utility::executableFullPath( "cryfs" ) ;
 
-		if( e.size() >= 3 ){
+		if( !exe.isEmpty() ){
 
-			QJsonParseError error ;
+			auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
 
-			auto r = QJsonDocument::fromJson( p->readAll(),&error ) ;
+			if( e.size() >= 3 ){
 
-			if( error.error == QJsonParseError::NoError ){
+				QJsonParseError error ;
 
-				auto m = r.toVariant().toMap() ;
+				auto r = QJsonDocument::fromJson( p->readAll(),&error ) ;
 
-				if( !m.isEmpty() ){
+				if( error.error == QJsonParseError::NoError ){
 
-					m = m[ "version_info" ].toMap() ;
-				}
+					auto m = r.toVariant().toMap() ;
 
-				if( !m.isEmpty() ){
+					if( !m.isEmpty() ){
 
-					auto d = m[ "current" ].toString() ;
+						m = m[ "version_info" ].toMap() ;
+					}
 
-					if( !d.isEmpty() ){
+					if( !m.isEmpty() ){
 
-						auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
+						auto d = m[ "current" ].toString() ;
 
-						return _show( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
+						if( !d.isEmpty() ){
+
+							auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
+
+							return _show( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
+						}
 					}
 				}
 			}

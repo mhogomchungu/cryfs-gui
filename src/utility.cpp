@@ -267,56 +267,40 @@ bool utility::eventFilter( QObject * gui,QObject * watched,QEvent * event,std::f
 	return false ;
 }
 
-static QString _absolute_exe_path( const QString& exe )
+QString utility::executableFullPath( const QString& e )
 {
-	QString e = "/usr/local/bin/" + exe ;
+	QString exe ;
 
-	if( utility::pathExists( e ) ){
+	for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/","/bin/","/sbin/" } ){
 
-		return e ;
+		exe = it + e ;
+
+		qDebug() << exe ;
+
+		if( utility::pathExists( exe ) ){
+
+			return exe ;
+		}
 	}
 
-	e = "/usr/local/sbin/" + exe ;
-
-	if( utility::pathExists( e ) ){
-
-		return e ;
-	}
-
-	e = "/usr/bin/" + exe ;
-
-	if( utility::pathExists( e ) ){
-
-		return e ;
-	}
-
-	e = "/usr/sbin/" + exe ;
-
-	if( utility::pathExists( e ) ){
-
-		return e ;
-	}
-
-	e = "/bin/" + exe ;
-
-	if( utility::pathExists( e ) ){
-
-		return e ;
-	}
-
-	e = "/sbin/" + exe ;
-
-	if( utility::pathExists( e ) ){
-
-		return e ;
-	}
-
-	return exe ;
+	return QString() ;
 }
 
 QString utility::cmdArgumentValue( const QStringList& l,const QString& arg,const QString& defaulT )
 {
 	int j = l.size() ;
+
+	auto _absolute_exe_path = []( const QString& exe ){
+
+		auto e = utility::executableFullPath( exe ) ;
+
+		if( e.isEmpty() ){
+
+			return exe ;
+		}else{
+			return e ;
+		}
+	} ;
 
 	for( int i = 0 ; i < j ; i++ ){
 

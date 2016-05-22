@@ -125,6 +125,8 @@ namespace utility
 
 	QStringList directoryList( const QString& e ) ;
 
+	QString executableFullPath( const QString& ) ;
+
 	bool reUseMountPoint( void ) ;
 	void reUseMountPoint( bool ) ;
 

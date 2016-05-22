@@ -93,22 +93,22 @@ options:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="434"/>
+        <location filename="../src/utility.cpp" line="418"/>
         <source>Manage Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="435"/>
+        <location filename="../src/utility.cpp" line="419"/>
         <source>Mount All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="462"/>
+        <location filename="../src/utility.cpp" line="446"/>
         <source>about cryfs-gui</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="652"/>
+        <location filename="../src/utility.cpp" line="636"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -117,7 +117,7 @@ key = hmac(sha256,passphrase,keyfile contents)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="657"/>
+        <location filename="../src/utility.cpp" line="641"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -126,23 +126,17 @@ key = passphrase + keyfile contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="662"/>
+        <location filename="../src/utility.cpp" line="646"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="47"/>
-        <location filename="../src/checkforupdates.cpp" line="88"/>
-        <location filename="../src/utility.cpp" line="680"/>
+        <location filename="../src/checkforupdates.cpp" line="49"/>
+        <location filename="../src/checkforupdates.cpp" line="91"/>
+        <location filename="../src/utility.cpp" line="664"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/checkforupdates.cpp" line="46"/>
-        <location filename="../src/checkforupdates.cpp" line="86"/>
-        <source>Failed To Check For Update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -152,17 +146,23 @@ Latest Version Is : %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="72"/>
+        <location filename="../src/checkforupdates.cpp" line="48"/>
+        <location filename="../src/checkforupdates.cpp" line="89"/>
+        <source>Failed To Check For Updates.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/checkforupdates.cpp" line="75"/>
         <source>Update Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="84"/>
+        <location filename="../src/checkforupdates.cpp" line="87"/>
         <source>Version Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="680"/>
+        <location filename="../src/utility.cpp" line="664"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -326,13 +326,13 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="269"/>
-        <source>Check For Update</source>
+        <location filename="../src/cryfs-gui.cpp" line="223"/>
+        <source>Autocheck For Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="223"/>
-        <source>Autocheck For Updates</source>
+        <location filename="../src/cryfs-gui.cpp" line="269"/>
+        <source>Check For Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

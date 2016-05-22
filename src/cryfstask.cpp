@@ -48,41 +48,36 @@ static bool _create_folder( const QString& m )
 	}
 }
 
-bool cryfsTask::UnmountEncryptedFolder( const QString& m )
-{
-	auto _umount = [ & ](){
-
-		auto mm = m ;
-		mm.replace( "\"","\"\"\"" ) ;
-
-		if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
-
-			return _delete_folder( m ) ;
-		}else{
-			return false ;
-		}
-	} ;
-
-	utility::Task::waitForOneSecond() ;
-
-	for( int i = 0 ; i < 5 ; i++ ){
-
-		if( _umount() ){
-
-			return true ;
-		}else{
-			utility::Task::waitForOneSecond() ;
-		}
-	}
-
-	return false ;
-}
-
 Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
-		return cryfsTask::UnmountEncryptedFolder( m ) ;
+		auto _umount = [ & ](){
+
+			auto mm = m ;
+			mm.replace( "\"","\"\"\"" ) ;
+
+			if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
+
+				return _delete_folder( m ) ;
+			}else{
+				return false ;
+			}
+		} ;
+
+		utility::Task::waitForOneSecond() ;
+
+		for( int i = 0 ; i < 5 ; i++ ){
+
+			if( _umount() ){
+
+				return true ;
+			}else{
+				utility::Task::waitForOneSecond() ;
+			}
+		}
+
+		return false ;
 	} ) ;
 }
 
@@ -99,17 +94,15 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 
 		auto mountOptions = [ & ](){
 
-			auto e = opt.mOpt ;
-
-			if( !e.isEmpty() ){
+			if( !opt.mOpt.isEmpty() ){
 
 				if( type == "encfs" ){
 
-					return QString( "--unmount-idle %1" ).arg( e ) ;
+					return QString( "--unmount-idle %1" ).arg( opt.mOpt ) ;
 
 				}else if( type == "encfs" ){
 
-					return QString( "--idle=%1" ).arg( e ) ;
+					return QString( "--idle=%1" ).arg( opt.mOpt ) ;
 				}
 			}
 
@@ -143,50 +136,47 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 		return o.arg( exe,cipherFolder,mountPoint,mountOptions,separator,type,cipherFolder,type ) ;
 	} ;
 
-	for( const auto& it : { "/usr/local/bin/","/usr/local/sbin/","/usr/bin/","/usr/sbin/" } ){
+	auto exe = utility::executableFullPath( app ) ;
 
-		auto exe = it + app ;
+	if( exe.isEmpty() ){
 
-		if( utility::pathExists( exe ) ){
+		if( app == "cryfs" ){
 
-			setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-			setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
-
-			QProcess e ;
-
-			e.start( _args( exe,opt,app ) ) ;
-
-			e.waitForStarted() ;
-
-			e.write( opt.key.toLatin1() + '\n' ) ;
-
-			e.closeWriteChannel() ;
-
-			if( e.waitForFinished( 20000 ) ){
-
-				if( e.exitCode() == 0 ){
-
-					return cs::success ;
-				}else{
-					if( app == "cryfs" ){
-
-						return cs::cryfs ;
-					}else{
-						return cs::encfs ;
-					}
-				}
-			}else{
-				return cs::backendFail ;
-			}
+			return cs::cryfsNotFound ;
+		}else{
+			return cs::encfsNotFound ;
 		}
-	}
-
-	if( app == "cryfs" ){
-
-		return cs::cryfsNotFound ;
 	}else{
-		return cs::encfsNotFound ;
-	}
+		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
+		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+
+		QProcess e ;
+
+		e.start( _args( exe,opt,app ) ) ;
+
+		e.waitForStarted() ;
+
+		e.write( opt.key.toLatin1() + '\n' ) ;
+
+		e.closeWriteChannel() ;
+
+		if( e.waitForFinished( 20000 ) ){
+
+			if( e.exitCode() == 0 ){
+
+				return cs::success ;
+			}else{
+				if( app == "cryfs" ){
+
+					return cs::cryfs ;
+				}else{
+					return cs::encfs ;
+				}
+			}
+		}else{
+			return cs::backendFail ;
+		}
+	}	
 }
 
 Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
