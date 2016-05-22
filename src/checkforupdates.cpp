@@ -42,8 +42,14 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 	}else{
 		l.replace( "\n","" ) ;
 
-		const auto& o = e.at( 0 ) ;
-		const auto& n = e.at( 1 ) ;
+		QString o ;
+		QString n ;
+
+		if( e.size() >= 2 ){
+
+			o = e.at( 0 ) ;
+			n = e.at( 1 ) ;
+		}
 
 		if( autocheck ){
 
@@ -79,7 +85,6 @@ static void _show_cryfs_gui_version( QObject * obj,bool autocheck,QWidget * w,
 }
 
 #if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
-
 void checkForUpdates::networkReply( QNetworkReply * p )
 {
 	_show_cryfs_gui_version( this,m_autocheck,m_widget,p->readAll() ) ;

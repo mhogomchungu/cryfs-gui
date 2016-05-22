@@ -159,40 +159,40 @@ Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé 
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="73"/>
+        <location filename="../src/checkforupdates.cpp" line="79"/>
         <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="73"/>
+        <location filename="../src/checkforupdates.cpp" line="79"/>
         <source>Failed To Check For Update.</source>
         <translation>Echec de la vérification de la mise à jour de version.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="52"/>
-        <location filename="../src/checkforupdates.cpp" line="64"/>
+        <location filename="../src/checkforupdates.cpp" line="58"/>
+        <location filename="../src/checkforupdates.cpp" line="70"/>
         <source>cryfs-gui Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation>cryfs-gui version installée : %1.
 Dernière version disponible : %2.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="56"/>
-        <location filename="../src/checkforupdates.cpp" line="68"/>
+        <location filename="../src/checkforupdates.cpp" line="62"/>
+        <location filename="../src/checkforupdates.cpp" line="74"/>
         <source>cryfs Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation>cryfs version installée : %1.
 Dernière version disponible : %2.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="59"/>
+        <location filename="../src/checkforupdates.cpp" line="65"/>
         <source>Update Available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="71"/>
+        <location filename="../src/checkforupdates.cpp" line="77"/>
         <source>Version Info</source>
         <translation>Infos de Version</translation>
     </message>

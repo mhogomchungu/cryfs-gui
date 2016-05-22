@@ -134,38 +134,38 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="73"/>
+        <location filename="../src/checkforupdates.cpp" line="79"/>
         <location filename="../src/utility.cpp" line="680"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="41"/>
-        <location filename="../src/checkforupdates.cpp" line="73"/>
+        <location filename="../src/checkforupdates.cpp" line="79"/>
         <source>Failed To Check For Update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="52"/>
-        <location filename="../src/checkforupdates.cpp" line="64"/>
+        <location filename="../src/checkforupdates.cpp" line="58"/>
+        <location filename="../src/checkforupdates.cpp" line="70"/>
         <source>cryfs-gui Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="56"/>
-        <location filename="../src/checkforupdates.cpp" line="68"/>
+        <location filename="../src/checkforupdates.cpp" line="62"/>
+        <location filename="../src/checkforupdates.cpp" line="74"/>
         <source>cryfs Installed Version Is : %1.
 Latest Version Is : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="59"/>
+        <location filename="../src/checkforupdates.cpp" line="65"/>
         <source>Update Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="71"/>
+        <location filename="../src/checkforupdates.cpp" line="77"/>
         <source>Version Info</source>
         <translation type="unfinished"></translation>
     </message>
