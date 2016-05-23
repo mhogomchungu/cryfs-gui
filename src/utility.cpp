@@ -275,8 +275,6 @@ QString utility::executableFullPath( const QString& e )
 
 		exe = it + e ;
 
-		qDebug() << exe ;
-
 		if( utility::pathExists( exe ) ){
 
 			return exe ;

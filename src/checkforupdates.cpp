@@ -173,36 +173,26 @@ void checkForUpdates::getUpdates( bool e )
 {
 	m_firstTime = e ;
 
-	auto url_0 = "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ;
-	auto url_1 = "https://www.cryfs.org/version_info.json" ;
+	QUrl url ;
+	QNetworkRequest request ;
 
-	auto user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0" ;
+	if( m_firstTime ){
 
-	m_manager.get( [ & ](){
+		url.setUrl( "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ) ;
+		request.setRawHeader( "Host","raw.githubusercontent.com" ) ;
+	}else{
+		url.setUrl( "https://www.cryfs.org/version_info.json" ) ;
+		request.setRawHeader( "Host","www.cryfs.org" ) ;
+	}
 
-		auto e = [ & ](){
+	auto u = "Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0" ;
 
-			if( m_firstTime ){
+	request.setRawHeader( "User-Agent",u ) ;
+	request.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
-				QNetworkRequest e( [ & ](){ QUrl u( url_0 ) ; return u ; }() ) ;
+	request.setUrl( url ) ;
 
-				e.setRawHeader( "Host","raw.githubusercontent.com" ) ;
-
-				return e ;
-			}else{
-				QNetworkRequest e( [ & ](){ QUrl u( url_1 ) ; return u ; }() ) ;
-
-				e.setRawHeader( "Host","www.cryfs.org" ) ;
-
-				return e ;
-			}
-		}() ;
-
-		e.setRawHeader( "User-Agent",user_agent ) ;
-		e.setRawHeader( "Accept-Encoding","text/plain" ) ;
-
-		return e ;
-	}() ) ;
+	m_manager.get( request ) ;
 }
 
 static QString _optionPath()
