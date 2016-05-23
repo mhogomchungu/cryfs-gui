@@ -30,7 +30,7 @@ static bool _delete_folder( const QString& m )
 {
 	if( !utility::reUseMountPoint() ){
 
-		QDir e;
+		QDir e ;
 		e.rmdir( m ) ;
 	}
 
@@ -82,14 +82,13 @@ Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 }
 
 static cs _cmd( const QString& app,const cryfsTask::options& opt )
-{	
+{
 	auto _args = []( const QString& exe,const cryfsTask::options& opt,const QString& type ){
 
 		auto cipherFolder = opt.cipherFolder ;
 		cipherFolder.replace( "\"","\"\"\"" ) ;
 
 		auto mountPoint = opt.plainFolder ;
-
 		mountPoint.replace( "\"","\"\"\"" ) ;
 
 		auto mountOptions = [ & ](){
@@ -176,7 +175,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 		}else{
 			return cs::backendFail ;
 		}
-	}	
+	}
 }
 
 Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
@@ -203,18 +202,18 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 		if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
 
 			return _mount( "cryfs",opt ) ;
+		}else{
+			auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
+			auto encfs5 = opt.cipherFolder + "/.encfs5" ;
+			auto encfs4 = opt.cipherFolder + "/.encfs4" ;
+
+			if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
+
+				return _mount( "encfs",opt ) ;
+			}else{
+				return cs::unknown ;
+			}
 		}
-
-		auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
-		auto encfs5 = opt.cipherFolder + "/.encfs5" ;
-		auto encfs4 = opt.cipherFolder + "/.encfs4" ;
-
-		if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
-
-			return _mount( "encfs",opt ) ;
-		}
-
-		return cs::unknown ;
 	} ) ;
 }
 
@@ -253,6 +252,12 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 	return Task::run< QVector< volumeInfo > >( [](){
 
 		auto _hash = []( const QString& e ){
+
+			/*
+			 * jenkins one at a time hash function.
+			 *
+			 * https://en.wikipedia.org/wiki/Jenkins_hash_function
+			 */
 
 			uint32_t hash = 0 ;
 

@@ -113,7 +113,7 @@ void checkForUpdates::networkReply( QNetworkReply * p )
 
 		m_data = p->readAll() ;
 
-		this->getUpdate( false ) ;
+		this->getUpdates( false ) ;
 	}else{
 		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
 		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
@@ -166,10 +166,10 @@ checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
 	connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),
 		 this,SLOT( networkReply( QNetworkReply * ) ) ) ;
 
-	this->getUpdate( true ) ;
+	this->getUpdates( true ) ;
 }
 
-void checkForUpdates::getUpdate( bool e )
+void checkForUpdates::getUpdates( bool e )
 {
 	m_firstTime = e ;
 

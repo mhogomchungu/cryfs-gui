@@ -45,7 +45,7 @@ public:
 public slots:
 	void networkReply( QNetworkReply * ) ;
 private:
-	void getUpdate( bool ) ;
+	void getUpdates( bool ) ;
 	QWidget * m_widget ;
 	bool m_autocheck ;
 	QNetworkAccessManager m_manager ;
