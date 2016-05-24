@@ -119,64 +119,86 @@ static QNetworkRequest _request( bool e )
 checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
 	m_autocheck( autocheck ),m_widget( widget )
 {
-	auto e = m_networkAccess.get( _request( true ) ) ;
+	m_networkAccess.get( _request( true ),[ this ]( QNetworkReply * e ){
 
-	_show( this,m_autocheck,m_widget,e->readAll() ) ;
+		_show( this,m_autocheck,m_widget,e->readAll() ) ;
+	} ) ;
+}
+
+void checkForUpdates::show( const QByteArray& e,const QByteArray& r )
+{
+	Q_UNUSED( e ) ;
+	Q_UNUSED( r ) ;
 }
 
 #else
 
 #include <QJsonDocument>
 
-checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
-	m_autocheck( autocheck ),m_widget( widget )
+void checkForUpdates::show( const QByteArray& cryfs,const QByteArray& cryfs_gui )
 {
-	QString outPut = m_networkAccess.get( _request( true ) )->readAll() ;
+	auto f = [](){
 
-	setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-	setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
+		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
 
-	auto exe = utility::executableFullPath( "cryfs" ) ;
+		auto exe = utility::executableFullPath( "cryfs" ) ;
 
-	if( !exe.isEmpty() ){
+		if( !exe.isEmpty() ){
 
-		auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
+			auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
 
-		if( e.size() >= 3 ){
+			if( e.size() >= 3 ){
 
-			QJsonParseError error ;
+				return e.at( 2 ).split( '\n' ).first() ;
+			}
+		}
 
-			auto o = m_networkAccess.get( _request( false ) )->readAll() ;
+		return QByteArray() ;
+	}() ;
 
-			auto r = QJsonDocument::fromJson( o,&error ) ;
+	auto d = [ & ](){
 
-			if( error.error == QJsonParseError::NoError ){
+		QJsonParseError error ;
 
-				auto m = r.toVariant().toMap() ;
+		auto r = QJsonDocument::fromJson( cryfs,&error ) ;
+
+		if( error.error == QJsonParseError::NoError ){
+
+			auto m = r.toVariant().toMap() ;
+
+			if( !m.isEmpty() ){
+
+				m = m[ "version_info" ].toMap() ;
 
 				if( !m.isEmpty() ){
 
-					m = m[ "version_info" ].toMap() ;
-				}
-
-				if( !m.isEmpty() ){
-
-					auto d = m[ "current" ].toString() ;
-
-					if( !d.isEmpty() ){
-
-						auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
-
-						_show( this,m_autocheck,m_widget,outPut,{ f,d } ) ;
-
-						return ;
-					}
+					return m[ "current" ].toString() ;
 				}
 			}
 		}
-	}
 
-	_show( this,m_autocheck,m_widget,outPut ) ;
+		return QString() ;
+	}() ;
+
+	if( !f.isEmpty() && !d.isEmpty() ){
+
+		_show( this,m_autocheck,m_widget,cryfs_gui,{ f,d } ) ;
+	}else{
+		_show( this,m_autocheck,m_widget,cryfs_gui ) ;
+	}
+}
+
+checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
+	m_autocheck( autocheck ),m_widget( widget )
+{
+	m_networkAccess.get( _request( true ),[ this ]( QNetworkReply * r ){
+
+		m_networkAccess.get( _request( false ),[ this,r ]( QNetworkReply * e ){
+
+			this->show( e->readAll(),r->readAll() ) ;
+		} ) ;
+	} ) ;
 }
 
 #endif

@@ -100,6 +100,7 @@ public:
 	static void instance( QWidget *,const QString& ) ;
 	static void instance( QWidget * ) ;
 private:
+	void show( const QByteArray&,const QByteArray& ) ;
 	bool m_autocheck ;
 	QWidget * m_widget ;
 	NetworkAccess m_networkAccess ;
