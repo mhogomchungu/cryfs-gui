@@ -19,11 +19,6 @@
 
 #include "checkforupdates.h"
 
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-
-#include <QWidget>
 #include <QFile>
 
 #include "utility.h"
@@ -37,7 +32,7 @@ static QString _tr( const QString& n,const QString& a,const QStringList& l )
 	return e.arg( n,a,l.at( 0 ),l.at( 1 ) ) ;
 }
 
-static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStringList& e )
+static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStringList& e = QStringList() )
 {
 	DialogMsg msg( w ) ;
 
@@ -96,88 +91,12 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 	obj->deleteLater() ;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
-
-void checkForUpdates::networkReply( QNetworkReply * p )
+static QNetworkRequest _request( bool e )
 {
-	_show( this,m_autocheck,m_widget,p->readAll(),{} ) ;
-}
-
-#else
-
-#include <QJsonDocument>
-
-void checkForUpdates::networkReply( QNetworkReply * p )
-{
-	if( m_firstTime ){
-
-		m_data = p->readAll() ;
-
-		this->getUpdates( false ) ;
-	}else{
-		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
-
-		auto exe = utility::executableFullPath( "cryfs" ) ;
-
-		if( !exe.isEmpty() ){
-
-			auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
-
-			if( e.size() >= 3 ){
-
-				QJsonParseError error ;
-
-				auto r = QJsonDocument::fromJson( p->readAll(),&error ) ;
-
-				if( error.error == QJsonParseError::NoError ){
-
-					auto m = r.toVariant().toMap() ;
-
-					if( !m.isEmpty() ){
-
-						m = m[ "version_info" ].toMap() ;
-					}
-
-					if( !m.isEmpty() ){
-
-						auto d = m[ "current" ].toString() ;
-
-						if( !d.isEmpty() ){
-
-							auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
-
-							return _show( this,m_autocheck,m_widget,m_data,{ f,d } ) ;
-						}
-					}
-				}
-			}
-		}
-
-		_show( this,m_autocheck,m_widget,m_data,{} ) ;
-	}
-}
-
-#endif
-
-checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
-	m_widget( widget ),m_autocheck( autocheck )
-{
-	connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),
-		 this,SLOT( networkReply( QNetworkReply * ) ) ) ;
-
-	this->getUpdates( true ) ;
-}
-
-void checkForUpdates::getUpdates( bool e )
-{
-	m_firstTime = e ;
-
 	QUrl url ;
 	QNetworkRequest request ;
 
-	if( m_firstTime ){
-
+	if( e ){
 		url.setUrl( "https://raw.githubusercontent.com/mhogomchungu/cryfs-gui/master/version" ) ;
 		request.setRawHeader( "Host","raw.githubusercontent.com" ) ;
 	}else{
@@ -192,8 +111,75 @@ void checkForUpdates::getUpdates( bool e )
 
 	request.setUrl( url ) ;
 
-	m_manager.get( request ) ;
+	return request ;
 }
+
+#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
+
+checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
+	m_autocheck( autocheck ),m_widget( widget )
+{
+	auto e = m_networkAccess.get( _request( true ) ) ;
+
+	_show( this,m_autocheck,m_widget,e->readAll() ) ;
+}
+
+#else
+
+#include <QJsonDocument>
+
+checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
+	m_autocheck( autocheck ),m_widget( widget )
+{
+	QString outPut = m_networkAccess.get( _request( true ) )->readAll() ;
+
+	setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
+	setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+
+	auto exe = utility::executableFullPath( "cryfs" ) ;
+
+	if( !exe.isEmpty() ){
+
+		auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
+
+		if( e.size() >= 3 ){
+
+			QJsonParseError error ;
+
+			auto o = m_networkAccess.get( _request( false ) )->readAll() ;
+
+			auto r = QJsonDocument::fromJson( o,&error ) ;
+
+			if( error.error == QJsonParseError::NoError ){
+
+				auto m = r.toVariant().toMap() ;
+
+				if( !m.isEmpty() ){
+
+					m = m[ "version_info" ].toMap() ;
+				}
+
+				if( !m.isEmpty() ){
+
+					auto d = m[ "current" ].toString() ;
+
+					if( !d.isEmpty() ){
+
+						auto f = QString( e.at( 2 ) ).split( '\n' ).first() ;
+
+						_show( this,m_autocheck,m_widget,outPut,{ f,d } ) ;
+
+						return ;
+					}
+				}
+			}
+		}
+	}
+
+	_show( this,m_autocheck,m_widget,outPut ) ;
+}
+
+#endif
 
 static QString _optionPath()
 {

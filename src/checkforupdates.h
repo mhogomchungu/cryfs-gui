@@ -20,16 +20,72 @@
 #ifndef CHECKFORUPDATES_H
 #define CHECKFORUPDATES_H
 
+#include <QVector>
 #include <QObject>
+#include <QWidget>
+
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
-class QWidget ;
-class QNetworkReply ;
+#include <QEventLoop>
 
-#include <memory>
+#include <functional>
+#include <utility>
 
-class QNetworkReply ;
-class QWidget ;
+class NetworkAccess : public QObject
+{
+	Q_OBJECT
+public:
+	NetworkAccess()
+	{
+		connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),
+			 this,SLOT( networkReply( QNetworkReply * ) ),Qt::QueuedConnection ) ;
+	}
+	void get( const QNetworkRequest& r,std::function< void( QNetworkReply * ) >&& f )
+	{
+		m_functions.append( f ) ;
+
+		m_replies.append( m_manager.get( r ) ) ;
+	}
+	QNetworkReply * get( const QNetworkRequest& r )
+	{
+		QNetworkReply * reply ;
+
+		QEventLoop l ;
+
+		this->get( r,[ & ]( QNetworkReply * e ){
+
+			reply = e ;
+
+			l.quit() ;
+		} ) ;
+
+		l.exec() ;
+
+		return reply ;
+	}
+private slots:
+	void networkReply( QNetworkReply * r )
+	{
+		auto s = m_replies.size() ;
+
+		for( decltype( s ) i = 0 ; i < s ; i++ ){
+
+			if( m_replies.at( i ) == r ){
+
+				m_functions.at( i )( r ) ;
+
+				m_replies.remove( i ) ;
+				m_functions.remove( i ) ;
+			}
+		}
+	}
+private:
+	QVector< std::function< void( QNetworkReply * ) > > m_functions ;
+	QVector< QNetworkReply * > m_replies ;
+	QNetworkAccessManager m_manager ;
+};
 
 class checkForUpdates : public QObject
 {
@@ -40,17 +96,13 @@ public:
 
 	checkForUpdates( QWidget *,bool ) ;
 	~checkForUpdates() ;
+
 	static void instance( QWidget *,const QString& ) ;
 	static void instance( QWidget * ) ;
-public slots:
-	void networkReply( QNetworkReply * ) ;
 private:
-	void getUpdates( bool ) ;
-	QWidget * m_widget ;
 	bool m_autocheck ;
-	QNetworkAccessManager m_manager ;
-	bool m_firstTime = true ;
-	QString m_data ;
+	QWidget * m_widget ;
+	NetworkAccess m_networkAccess ;
 };
 
 #endif // CHECKFORUPDATES_H
