@@ -181,11 +181,11 @@ void checkForUpdates::show( const QByteArray& cryfs,const QByteArray& cryfs_gui 
 		return QString() ;
 	}() ;
 
-	if( !f.isEmpty() && !d.isEmpty() ){
+	if( f.isEmpty() || d.isEmpty() ){
 
-		_show( this,m_autocheck,m_widget,cryfs_gui,{ f,d } ) ;
-	}else{
 		_show( this,m_autocheck,m_widget,cryfs_gui ) ;
+	}else{
+		_show( this,m_autocheck,m_widget,cryfs_gui,{ f,d } ) ;
 	}
 }
 
