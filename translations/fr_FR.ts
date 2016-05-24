@@ -107,22 +107,22 @@ options:
 </translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="418"/>
+        <location filename="../src/utility.cpp" line="416"/>
         <source>Manage Favorites</source>
         <translation>Gérer les Favoris</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="419"/>
+        <location filename="../src/utility.cpp" line="417"/>
         <source>Mount All</source>
         <translation>Tout Monter</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="446"/>
+        <location filename="../src/utility.cpp" line="444"/>
         <source>about cryfs-gui</source>
         <translation>A propos de cryfs-gui</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="636"/>
+        <location filename="../src/utility.cpp" line="634"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -135,7 +135,7 @@ Ce plugin génère une clé en utilisant la formule ci-dessous:
 key = hmac(sha256,passphrase,keyfile contents)</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="641"/>
+        <location filename="../src/utility.cpp" line="639"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -149,7 +149,7 @@ key = passphrase + keyfile contents
 </translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="646"/>
+        <location filename="../src/utility.cpp" line="644"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
@@ -158,37 +158,37 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
 Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé symétrique</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="49"/>
-        <location filename="../src/checkforupdates.cpp" line="91"/>
-        <location filename="../src/utility.cpp" line="664"/>
+        <location filename="../src/checkforupdates.cpp" line="44"/>
+        <location filename="../src/checkforupdates.cpp" line="86"/>
+        <location filename="../src/utility.cpp" line="662"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="36"/>
+        <location filename="../src/checkforupdates.cpp" line="31"/>
         <source>%1&quot;%2&quot; Installed Version Is : %3.
 Latest Version Is : %4.</source>
         <translation>%1&quot;%2&quot; version installée : %3.
 Dernière version disponible : %4.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="48"/>
-        <location filename="../src/checkforupdates.cpp" line="89"/>
+        <location filename="../src/checkforupdates.cpp" line="43"/>
+        <location filename="../src/checkforupdates.cpp" line="84"/>
         <source>Failed To Check For Updates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="75"/>
+        <location filename="../src/checkforupdates.cpp" line="70"/>
         <source>Update Available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="87"/>
+        <location filename="../src/checkforupdates.cpp" line="82"/>
         <source>Version Info</source>
         <translation>Infos de Version</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="664"/>
+        <location filename="../src/utility.cpp" line="662"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation>Ne trouve pas de &quot;gpg&quot; executable dans &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; ou &quot;/usr/sbin&quot;</translation>
     </message>

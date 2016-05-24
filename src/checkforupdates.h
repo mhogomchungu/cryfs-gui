@@ -44,9 +44,7 @@ public:
 	}
 	void get( const QNetworkRequest& r,std::function< void( QNetworkReply * ) >&& f )
 	{
-		m_functions.append( f ) ;
-
-		m_replies.append( m_manager.get( r ) ) ;
+		m_entries.append( { m_manager.get( r ),f } ) ;
 	}
 	QNetworkReply * get( const QNetworkRequest& r )
 	{
@@ -68,22 +66,22 @@ public:
 private slots:
 	void networkReply( QNetworkReply * r )
 	{
-		auto s = m_replies.size() ;
+		auto s = m_entries.size() ;
 
 		for( decltype( s ) i = 0 ; i < s ; i++ ){
 
-			if( m_replies.at( i ) == r ){
+			if( m_entries.at( i ).first == r ){
 
-				m_functions.at( i )( r ) ;
+				m_entries.at( i ).second( r ) ;
 
-				m_replies.remove( i ) ;
-				m_functions.remove( i ) ;
+				m_entries.remove( i ) ;
 			}
 		}
 	}
 private:
-	QVector< std::function< void( QNetworkReply * ) > > m_functions ;
-	QVector< QNetworkReply * > m_replies ;
+	using pair_t = std::pair< QNetworkReply *,std::function< void( QNetworkReply * ) > > ;
+
+	QVector< pair_t > m_entries ;
 	QNetworkAccessManager m_manager ;
 };
 
