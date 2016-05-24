@@ -33,11 +33,11 @@
 #include <functional>
 #include <utility>
 
-class NetworkAccess : public QObject
+class NetworkAccessManager : public QObject
 {
 	Q_OBJECT
 public:
-	NetworkAccess()
+	NetworkAccessManager()
 	{
 		connect( &m_manager,SIGNAL( finished( QNetworkReply * ) ),
 			 this,SLOT( networkReply( QNetworkReply * ) ),Qt::QueuedConnection ) ;
@@ -70,9 +70,11 @@ private slots:
 
 		for( decltype( s ) i = 0 ; i < s ; i++ ){
 
-			if( m_entries.at( i ).first == r ){
+			const auto& q = m_entries.at( i ) ;
 
-				m_entries.at( i ).second( r ) ;
+			if( q.first == r ){
+
+				q.second( r ) ;
 
 				m_entries.remove( i ) ;
 
@@ -89,7 +91,6 @@ private:
 
 class checkForUpdates : public QObject
 {
-	Q_OBJECT
 public:
 	static bool autoCheck( void ) ;
 	static void autoCheck( bool ) ;
@@ -103,7 +104,7 @@ private:
 	void show( const QByteArray&,const QByteArray& ) ;
 	bool m_autocheck ;
 	QWidget * m_widget ;
-	NetworkAccess m_networkAccess ;
+	NetworkAccessManager m_networkAccessManager ;
 };
 
 #endif // CHECKFORUPDATES_H

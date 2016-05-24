@@ -175,7 +175,7 @@ Dernière version disponible : %4.</translation>
         <location filename="../src/checkforupdates.cpp" line="43"/>
         <location filename="../src/checkforupdates.cpp" line="84"/>
         <source>Failed To Check For Updates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de tester si la version est à jour.</translation>
     </message>
     <message>
         <location filename="../src/checkforupdates.cpp" line="70"/>
@@ -363,12 +363,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/cryfs-gui.cpp" line="223"/>
         <source>Autocheck For Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour automatique du logiciel</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="269"/>
         <source>Check For Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester si la version du logiciel est à jour</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="272"/>
