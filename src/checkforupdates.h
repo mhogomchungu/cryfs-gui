@@ -75,6 +75,8 @@ private slots:
 				m_entries.at( i ).second( r ) ;
 
 				m_entries.remove( i ) ;
+
+				break ;
 			}
 		}
 	}
