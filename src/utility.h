@@ -121,7 +121,7 @@ namespace utility
 
 	QString cmdArgumentValue( const QStringList&,const QString& arg,const QString& defaulT = QString() ) ;
 
-	QIcon getIcon( const QString& ) ;
+	QIcon getIcon() ;
 
 	QStringList directoryList( const QString& e ) ;
 
@@ -130,6 +130,7 @@ namespace utility
 	bool reUseMountPoint( void ) ;
 	void reUseMountPoint( bool ) ;
 
+	QString homeConfigPath( const QString& = QString() ) ;
 	QString homePath() ;
 	QString mountPath( const QString& path ) ;
 
@@ -138,9 +139,8 @@ namespace utility
 
 	bool pathIsReadable( const QString& ) ;
 
-	void suspend( int ) ;
-	bool setOpenVolumeReadOnly( QWidget * parent,bool check,const QString& app ) ;
-	bool getOpenVolumeReadOnlyOption( const QString& app ) ;
+	bool setOpenVolumeReadOnly( QWidget * parent,bool check ) ;
+	bool getOpenVolumeReadOnlyOption() ;
 
 	QStringList split( const QString&,char = '\n' ) ;
 	void addToFavorite( const QString& dev,const QString& m_point ) ;
@@ -149,9 +149,9 @@ namespace utility
 	void readFavorites( QMenu *,bool = false ) ;
 	void removeFavoriteEntry( const QString& ) ;
 	QString getVolumeID( const QString&,bool = false ) ;
-	QString localizationLanguage( const QString& ) ;
-	QString localizationLanguagePath( const QString& ) ;
-	void setLocalizationLanguage( const QString&,const QString& ) ;
+	QString localizationLanguage() ;
+	QString localizationLanguagePath() ;
+	void setLocalizationLanguage( const QString& ) ;
 	QString walletName( void ) ;
 	QString applicationName( void ) ;
 	bool eventFilter( QObject * gui,QObject * watched,QEvent * event,std::function< void() > ) ;
@@ -159,15 +159,15 @@ namespace utility
 	void showTrayIcon( QAction *,QSystemTrayIcon *,bool = true ) ;
 	void trayProperty( QSystemTrayIcon *,bool = true ) ;
 
-	void setLocalizationLanguage( bool translate,QMenu * m,const QString& app ) ;
-	void languageMenu( QWidget *,QMenu *,QAction *,const char * ) ;
+	void setLocalizationLanguage( bool translate,QMenu * m ) ;
+	void languageMenu( QWidget *,QMenu *,QAction * ) ;
 
 	using array_t = std::array< int,8 > ;
 
-	utility::array_t getWindowDimensions( const QString& application ) ;
-	void setWindowDimensions( const QString& application,const std::initializer_list<int>& ) ;
+	utility::array_t getWindowDimensions() ;
+	void setWindowDimensions( const std::initializer_list<int>& ) ;
 
-	void createPlugInMenu( QMenu *,const QString&,const QString&,const QString&,bool ) ;
+	void createPlugInMenu( QMenu *,const QString&,const QString&,const QString& ) ;
 
 	int pluginKey( QDialog *,QString *,const QString& ) ;
 

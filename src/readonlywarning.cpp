@@ -27,19 +27,19 @@
 #include <QCloseEvent>
 #include <QEvent>
 
-static QString _configPathReadOnly( const QString& app )
+static QString _configPathReadOnly()
 {
-	return utility::homePath() + "/.cryfs-gui/" + app + "-readOnlyOption" ;
+	return utility::homeConfigPath( "readOnlyOption" ) ;
 }
 
-static QString _configPathShowUI( const QString& app )
+static QString _configPathShowUI()
 {
-	return utility::homePath() + "/.cryfs-gui/" + app + "-readOnlyUIWarningOption" ;
+	return utility::homeConfigPath( "readOnlyUIWarningOption" ) ;
 }
 
-bool readOnlyWarning::getOpenVolumeReadOnlyOption( const QString& app )
+bool readOnlyWarning::getOpenVolumeReadOnlyOption()
 {
-	QFile f( _configPathReadOnly( app ) ) ;
+	QFile f( _configPathReadOnly() ) ;
 
 	if( f.exists() ){
 
@@ -54,8 +54,8 @@ bool readOnlyWarning::getOpenVolumeReadOnlyOption( const QString& app )
 	}
 }
 
-readOnlyWarning::readOnlyWarning( QWidget * parent,bool checked,const QString& app ) :
-	QDialog( parent ),m_ui( new Ui::readOnlyWarning ),m_checked( checked ),m_app( app )
+readOnlyWarning::readOnlyWarning( QWidget * parent,bool checked ) :
+	QDialog( parent ),m_ui( new Ui::readOnlyWarning ),m_checked( checked )
 {
 	m_ui->setupUi( this ) ;
 
@@ -67,8 +67,8 @@ readOnlyWarning::readOnlyWarning( QWidget * parent,bool checked,const QString& a
 
 	this->installEventFilter( this ) ;
 
-	m_configPathReadOnly = _configPathReadOnly( app ) ;
-	m_configPathShowUI   = _configPathShowUI( app ) ;
+	m_configPathReadOnly = _configPathReadOnly() ;
+	m_configPathShowUI   = _configPathShowUI() ;
 
 	this->setReadOnlyOption( m_checked ) ;
 }

@@ -208,19 +208,17 @@ static QString _optionPath()
 	return utility::homePath() + "/.cryfs-gui/autoCheckUpdates.cryfs-gui" ;
 }
 
-void checkForUpdates::instance( QWidget * widget,const QString& e )
+void checkForUpdates::instance( QWidget * widget,bool e )
 {
-	Q_UNUSED( e ) ;
+	if( e ){
 
-	if( utility::pathExists( _optionPath() ) ){
+		if( utility::pathExists( _optionPath() ) ){
 
-		new checkForUpdates( widget,true ) ;
+			new checkForUpdates( widget,true ) ;
+		}
+	}else{
+		new checkForUpdates( widget,false ) ;
 	}
-}
-
-void checkForUpdates::instance( QWidget * widget )
-{
-	new checkForUpdates( widget,false ) ;
 }
 
 bool checkForUpdates::autoCheck()

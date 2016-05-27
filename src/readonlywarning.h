@@ -34,14 +34,14 @@ class readOnlyWarning : public QDialog
 {
 	Q_OBJECT
 public:
-	static bool showWarning( QWidget * parent = 0,bool checked = false,const QString& app = QString() )
+	static bool showWarning( QWidget * parent = 0,bool checked = false )
 	{
-		auto w = new readOnlyWarning( parent,checked,app ) ;
+		auto w = new readOnlyWarning( parent,checked ) ;
 		w->ShowUI() ;
 		return checked ;
 	}
-	static bool getOpenVolumeReadOnlyOption( const QString& app ) ;
-	explicit readOnlyWarning( QWidget * parent = 0,bool checked = false,const QString& app = QString() ) ;
+	static bool getOpenVolumeReadOnlyOption() ;
+	explicit readOnlyWarning( QWidget * parent = 0,bool checked = false ) ;
 	~readOnlyWarning() ;
 	void ShowUI( void ) ;
 	void HideUI( void ) ;
@@ -55,7 +55,6 @@ private:
 	bool eventFilter( QObject * watched,QEvent * event ) ;
 	Ui::readOnlyWarning * m_ui ;
 	bool m_checked ;
-	QString m_app ;
 	QString m_configPathReadOnly ;
 	QString m_configPathShowUI ;
 };

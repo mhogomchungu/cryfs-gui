@@ -29,21 +29,31 @@ class QTableWidgetItem ;
 
 namespace tablewidget
 {
-	void selectTableRow( QTableWidgetItem * current,QTableWidgetItem * previous ) ;
-	void addRowToTable( QTableWidget *,const QStringList&,const QFont& = QFont() ) ;
-	void updateRowInTable( QTableWidget *,const QStringList&,int row,const QFont& ) ;
-	void setRowFont( QTableWidget *,int row,const QFont& ) ;
-	void deleteRowFromTable( QTableWidget *,int row ) ;
-	void deleteTableRow( QTableWidget *,const QString&,int = 0 ) ;
+	void selectRow( QTableWidgetItem * current,QTableWidgetItem * previous ) ;
+
+	void addRow( QTableWidget *,const QStringList&,const QFont& = QFont() ) ;
+	void updateRow( QTableWidget *,const QStringList&,int row,const QFont& = QFont() ) ;
+
+	void setFont( QTableWidget *,int row,const QFont& ) ;
+
+	void deleteRow( QTableWidget *,int row ) ;
+	void deleteRow( QTableWidget *,const QString&,int = 0 ) ;
+
 	void selectRow( QTableWidget *,int row ) ;
 	void selectRow( QTableWidget *,const QString& ) ;
+
 	void selectLastRow( QTableWidget * ) ;
+
 	void setText( QTableWidget *,int row,int col,const QString& text ) ;
+
 	int addEmptyRow( QTableWidget * ) ;
 	int columnHasEntry( QTableWidget *,const QString&,int = 0 ) ;
-	QStringList tableColumnEntries( QTableWidget * table,int = 0 ) ;
-	QStringList tableRowEntries( QTableWidget * table,int = 0 ) ;
+
+	QStringList columnEntries( QTableWidget * table,int = 0 ) ;
+	QStringList rowEntries( QTableWidget * table,int = 0 ) ;
+
 	void clearTable( QTableWidget * ) ;
+
 	void setRowToolTip( QTableWidget *,int row,const QString& ) ;
 }
 

@@ -65,7 +65,7 @@ bool walletconfig::eventFilter( QObject * watched,QEvent * event )
 
 void walletconfig::currentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous )
 {
-	tablewidget::selectTableRow( current,previous ) ;
+	tablewidget::selectRow( current,previous ) ;
 }
 
 void walletconfig::itemClicked( QTableWidgetItem * item )
@@ -89,7 +89,7 @@ void walletconfig::itemClicked( QTableWidgetItem * item )
 
 		} ).then( [ this ](){
 
-			tablewidget::deleteRowFromTable( m_ui->tableWidget,m_row ) ;
+			tablewidget::deleteRow( m_ui->tableWidget,m_row ) ;
 			this->enableAll() ;
 			m_ui->tableWidget->setFocus() ;
 		} ) ;
@@ -154,7 +154,7 @@ void walletconfig::pbAdd()
 
 			if( success ){
 
-				tablewidget::addRowToTable( m_ui->tableWidget,{ m_volumeID,m_comment } ) ;
+				tablewidget::addRow( m_ui->tableWidget,{ m_volumeID,m_comment } ) ;
 			}else{
 				DialogMsg msg( this ) ;
 				msg.ShowUIOK( tr( "ERROR!" ),tr( "Failed To Add the Key In The Wallet." ) ) ;
@@ -231,7 +231,7 @@ void walletconfig::walletIsOpen( bool opened )
 
 					if( !acc.endsWith( COMMENT ) ){
 
-						tablewidget::addRowToTable( table,{ acc,_getEntry( acc + COMMENT ) } ) ;
+						tablewidget::addRow( table,{ acc,_getEntry( acc + COMMENT ) } ) ;
 					}
 				}
 			} ;

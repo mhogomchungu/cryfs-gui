@@ -91,7 +91,7 @@ static QTableWidgetItem * _set_item( QTableWidgetItem * item,
 	return item ;
 }
 
-void tablewidget::selectTableRow( QTableWidgetItem * current,QTableWidgetItem * previous )
+void tablewidget::selectRow( QTableWidgetItem * current,QTableWidgetItem * previous )
 {
 	if( current && previous && previous->row() == current->row() ){
 
@@ -139,7 +139,7 @@ int tablewidget::columnHasEntry( QTableWidget * table,const QString& entry,int c
 	}
 }
 
-void tablewidget::addRowToTable( QTableWidget * table,const QStringList& list,const QFont& font )
+void tablewidget::addRow( QTableWidget * table,const QStringList& list,const QFont& font )
 {
 	count_t j = list.size() ;
 
@@ -158,7 +158,7 @@ void tablewidget::addRowToTable( QTableWidget * table,const QStringList& list,co
 	}
 }
 
-void tablewidget::updateRowInTable( QTableWidget * table,const QStringList& list,int row,const QFont& font )
+void tablewidget::updateRow( QTableWidget * table,const QStringList& list,int row,const QFont& font )
 {
 	count_t j = list.size() ;
 
@@ -173,7 +173,7 @@ void tablewidget::updateRowInTable( QTableWidget * table,const QStringList& list
 	}
 }
 
-void tablewidget::setRowFont( QTableWidget * table ,int row,const QFont& font )
+void tablewidget::setFont( QTableWidget * table ,int row,const QFont& font )
 {
 	_for_each_column( table,row,[ & ]( count_t row,count_t col ){
 
@@ -181,7 +181,7 @@ void tablewidget::setRowFont( QTableWidget * table ,int row,const QFont& font )
 	} ) ;
 }
 
-void tablewidget::deleteRowFromTable( QTableWidget * table,int row )
+void tablewidget::deleteRow( QTableWidget * table,int row )
 {
 	if( row >= 0 && row < table->rowCount() ){
 
@@ -191,9 +191,9 @@ void tablewidget::deleteRowFromTable( QTableWidget * table,int row )
 	}
 }
 
-void tablewidget::deleteTableRow( QTableWidget * table,const QString& value,int column )
+void tablewidget::deleteRow( QTableWidget * table,const QString& value,int column )
 {
-	tablewidget::deleteRowFromTable( table,tablewidget::columnHasEntry( table,value,column ) ) ;
+	tablewidget::deleteRow( table,tablewidget::columnHasEntry( table,value,column ) ) ;
 }
 
 void tablewidget::selectRow( QTableWidget * table,int row )
@@ -221,7 +221,7 @@ void tablewidget::setText( QTableWidget * table,int row,int col,const QString& t
 	table->setItem( row,col,_set_item( new QTableWidgetItem,text,table->item( row,col )->font() ) ) ;
 }
 
-QStringList tablewidget::tableColumnEntries( QTableWidget * table,int col )
+QStringList tablewidget::columnEntries( QTableWidget * table,int col )
 {
 	QStringList l ;
 
@@ -233,7 +233,7 @@ QStringList tablewidget::tableColumnEntries( QTableWidget * table,int col )
 	return l ;
 }
 
-QStringList tablewidget::tableRowEntries( QTableWidget * table,int row )
+QStringList tablewidget::rowEntries( QTableWidget * table,int row )
 {
 	QStringList l ;
 

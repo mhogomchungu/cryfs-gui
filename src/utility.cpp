@@ -164,19 +164,6 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 	} ) ;
 }
 
-void utility::suspend( int s )
-{
-	QTimer t ;
-
-	QEventLoop l ;
-
-	QObject::connect( &t,SIGNAL( timeout() ),&l,SLOT( quit() ) ) ;
-
-	t.start( 1000 * s ) ;
-
-	l.exec() ;
-}
-
 utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,const QString& keyID,const QString& pwd )
 {
 	utility::wallet w{ false,false,"","" } ;
@@ -343,7 +330,7 @@ void utility::addToFavorite( const QString& dev,const QString& m_point )
 
 		auto fav = QString( "%1\t%2\n" ).arg( dev,m_point ) ;
 
-		QFile f( utility::homePath() + "/.cryfs-gui/favorites" ) ;
+		QFile f( utility::homeConfigPath( "favorites" ) ) ;
 
 		f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
 
@@ -353,7 +340,7 @@ void utility::addToFavorite( const QString& dev,const QString& m_point )
 
 QStringList utility::readFavorites()
 {
-	QFile f( utility::homePath() + "/.cryfs-gui/favorites" ) ;
+	QFile f( utility::homeConfigPath( "favorites" ) ) ;
 
 	if( f.open( QIODevice::ReadOnly ) ){
 
@@ -376,7 +363,7 @@ void utility::removeFavoriteEntry( const QString& entry )
 
 	l.removeOne( entry ) ;
 
-	QFile f( utility::homePath() + "/.cryfs-gui/favorites" ) ;
+	QFile f( utility::homeConfigPath( "favorites" ) ) ;
 
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
 
@@ -517,21 +504,21 @@ static utility::array_t _dimensions( const QString& path,const char * defaults,i
 	}
 }
 
-static QString _windowDimensionsConfigPath( const QString& application )
+static QString _windowDimensionsConfigPath()
 {
-	return utility::homePath() + "/.cryfs-gui/" + application + "-gui.dimensions" ;
+	return utility::homeConfigPath( "cryfs-gui.dimensions" ) ;
 }
 
-utility::array_t utility::getWindowDimensions( const QString& application )
+utility::array_t utility::getWindowDimensions()
 {
-	auto path = _windowDimensionsConfigPath( application ) ;
+	auto path = _windowDimensionsConfigPath() ;
 
 	return _dimensions( path,"205 149 861 466 326 320 101 76",8 ) ;
 }
 
-void utility::setWindowDimensions( const QString& application,const std::initializer_list<int>& e )
+void utility::setWindowDimensions( const std::initializer_list<int>& e )
 {
-	QFile f( _windowDimensionsConfigPath( application ) ) ;
+	QFile f( _windowDimensionsConfigPath() ) ;
 
 	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
 
@@ -544,7 +531,7 @@ void utility::setWindowDimensions( const QString& application,const std::initial
 
 QFont utility::getFont( QWidget * widget )
 {
-	QString fontPath = utility::homePath() + "/.cryfs-gui/font" ;
+	QString fontPath = utility::homeConfigPath( "font" ) ;
 
 	QFile x( fontPath ) ;
 
@@ -594,7 +581,7 @@ QFont utility::getFont( QWidget * widget )
 
 void utility::saveFont( const QFont& Font )
 {
-	QFile f( utility::homePath() + "/.cryfs-gui/font" ) ;
+	QFile f( utility::homeConfigPath( "font" ) ) ;
 
 	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
 
@@ -686,11 +673,11 @@ int utility::pluginKey( QDialog * w,QString * key,const QString& p )
 	return l.exec() ;
 }
 
-void utility::trayProperty( QSystemTrayIcon * trayIcon,bool zuluCrypt )
+void utility::trayProperty( QSystemTrayIcon * trayIcon,bool e )
 {
-	Q_UNUSED( zuluCrypt ) ;
+	Q_UNUSED( e ) ;
 
-	QFile f( utility::homePath() + "/.cryfs-gui/tray" ) ;
+	QFile f( utility::homeConfigPath( "tray" ) ) ;
 
 	f.open( QIODevice::ReadOnly ) ;
 
@@ -715,7 +702,7 @@ void utility::trayProperty( QSystemTrayIcon * trayIcon,bool zuluCrypt )
 class translator
 {
 public:
-	void set( const QString& app,const QByteArray& r )
+	void set( const QByteArray& e )
 	{
 		QCoreApplication::installTranslator( [ & ](){
 
@@ -728,7 +715,7 @@ public:
 
 			m_translator = new QTranslator() ;
 
-			m_translator->load( r.constData(),utility::localizationLanguagePath( app ) ) ;
+			m_translator->load( e.constData(),utility::localizationLanguagePath() ) ;
 
 			return m_translator ;
 		}() ) ;
@@ -749,15 +736,15 @@ static void _selectOption( QMenu * m,const QString& opt )
 	s.selectOption( opt ) ;
 }
 
-void utility::setLocalizationLanguage( bool translate,QMenu * m,const QString& app )
+void utility::setLocalizationLanguage( bool translate,QMenu * m )
 {
-	auto r = utility::localizationLanguage( app ).toLatin1() ;
+	auto r = utility::localizationLanguage().toLatin1() ;
 
 	if( translate ){
 
-		_translator.set( app,r ) ;
+		_translator.set( r ) ;
 	}else{
-		QDir d( utility::localizationLanguagePath( app ) ) ;
+		QDir d( utility::localizationLanguagePath() ) ;
 
 		auto t = d.entryList() ;
 
@@ -773,7 +760,7 @@ void utility::setLocalizationLanguage( bool translate,QMenu * m,const QString& a
 	}
 }
 
-void utility::languageMenu( QWidget * w,QMenu * m,QAction * ac,const char * app )
+void utility::languageMenu( QWidget * w,QMenu * m,QAction * ac )
 {
 	Q_UNUSED( w ) ;
 
@@ -781,21 +768,21 @@ void utility::languageMenu( QWidget * w,QMenu * m,QAction * ac,const char * app 
 
 	e.remove( "&" ) ;
 
-	utility::setLocalizationLanguage( app,e ) ;
+	utility::setLocalizationLanguage( e ) ;
 
-	utility::setLocalizationLanguage( true,m,app ) ;
+	utility::setLocalizationLanguage( true,m ) ;
 
 	_selectOption( m,e ) ;
 }
 
-static QString _language_path( const QString& program )
+static QString _language_path()
 {
-	return utility::homePath() + "/.cryfs-gui/" + program + ".lang" ;
+	return utility::homeConfigPath( "cryfs-gui.lang" ) ;
 }
 
-QString utility::localizationLanguage( const QString& program )
+QString utility::localizationLanguage()
 {
-	QFile f( _language_path( program ) ) ;
+	QFile f( _language_path() ) ;
 
 	if( f.open( QIODevice::ReadOnly ) ){
 
@@ -809,9 +796,9 @@ QString utility::localizationLanguage( const QString& program )
 	}
 }
 
-void utility::setLocalizationLanguage( const QString& program,const QString& language )
+void utility::setLocalizationLanguage( const QString& language )
 {
-	QFile f( _language_path( program ) ) ;
+	QFile f( _language_path() ) ;
 
 	if( f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ){
 
@@ -819,9 +806,8 @@ void utility::setLocalizationLanguage( const QString& program,const QString& lan
 	}
 }
 
-QString utility::localizationLanguagePath( const QString& program )
+QString utility::localizationLanguagePath()
 {
-	Q_UNUSED( program ) ;
 	return QString( TRANSLATION_PATH ) ;
 }
 
@@ -837,11 +823,16 @@ QStringList utility::directoryList( const QString& e )
 	return l ;
 }
 
-QIcon utility::getIcon( const QString& application )
+QIcon utility::getIcon()
 {
-	QIcon icon( INSTALL_PREFIX "/share/icons/hicolor/48x48/apps/" + application + ".png" ) ;
+	QIcon icon( INSTALL_PREFIX "/share/icons/hicolor/48x48/apps/cryfs-gui.png" ) ;
 
-	return QIcon::fromTheme( application,icon ) ;
+	return QIcon::fromTheme( "cryfs-gui",icon ) ;
+}
+
+QString utility::homeConfigPath( const QString& e )
+{
+	return utility::homePath() + "/.cryfs-gui/" + e ;
 }
 
 QString utility::homePath()
@@ -866,10 +857,8 @@ QStringList utility::split( const QString& e,char token )
 	return e.split( token,QString::SkipEmptyParts ) ;
 }
 
-void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,const QString& c,bool addPlugIns )
+void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,const QString& c )
 {
-	Q_UNUSED( addPlugIns ) ;
-
 	QStringList l ;
 	QStringList e ;
 
@@ -914,7 +903,7 @@ QString utility::mountPath( const QString& path )
 {
 	if( _mountPath.isEmpty() ){
 
-		QFile f( utility::homePath() + "/.cryfs-gui/mountPrefix" ) ;
+		QFile f( utility::homeConfigPath( "mountPrefix" ) );
 
 		if( f.open( QIODevice::ReadOnly ) ){
 
@@ -971,19 +960,19 @@ QString utility::mountPathPostFix( const QString& e,const QString& path )
 	}
 }
 
-bool utility::setOpenVolumeReadOnly( QWidget * parent,bool checked,const QString& app )
+bool utility::setOpenVolumeReadOnly( QWidget * parent,bool checked )
 {
-	return readOnlyWarning::showWarning( parent,checked,app ) ;
+	return readOnlyWarning::showWarning( parent,checked ) ;
 }
 
-bool utility::getOpenVolumeReadOnlyOption( const QString& app )
+bool utility::getOpenVolumeReadOnlyOption()
 {
-	return readOnlyWarning::getOpenVolumeReadOnlyOption( app ) ;
+	return readOnlyWarning::getOpenVolumeReadOnlyOption() ;
 }
 
 static QString _reUseMountPath()
 {
-	return utility::homePath() + "/.cryfs-gui/reUseMountPoint.option" ;
+	return utility::homeConfigPath( "reUseMountPoint.option" ) ;
 }
 
 bool utility::reUseMountPoint()

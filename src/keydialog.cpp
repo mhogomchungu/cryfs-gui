@@ -158,7 +158,7 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 	this->setWindowFlags( Qt::Window | Qt::Dialog ) ;
 	this->setFont( parent->font() ) ;
 
-	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption( "cryfs-gui" ) ) ;
+	m_ui->checkBoxOpenReadOnly->setChecked( utility::getOpenVolumeReadOnlyOption() ) ;
 
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Password ) ;
 
@@ -236,8 +236,10 @@ void keyDialog::doAction( QAction * ac )
 
 void keyDialog::cbMountReadOnlyStateChanged( int state )
 {
+	auto e = utility::setOpenVolumeReadOnly( this,state == Qt::Checked ) ;
+
 	m_ui->checkBoxOpenReadOnly->setEnabled( false ) ;
-	m_ui->checkBoxOpenReadOnly->setChecked( utility::setOpenVolumeReadOnly( this,state == Qt::Checked,QString( "cryfs-gui" ) ) ) ;
+	m_ui->checkBoxOpenReadOnly->setChecked( e ) ;
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
 	if( m_ui->lineEditKey->text().isEmpty() ){
@@ -363,8 +365,7 @@ void keyDialog::pbkeyOption()
 
 void keyDialog::Plugin()
 {
-	utility::createPlugInMenu( m_menu,tr( INTERNAL_WALLET ),
-				   tr( GNOME_WALLET ),tr( KWALLET ),true ) ;
+	utility::createPlugInMenu( m_menu,tr( INTERNAL_WALLET ),tr( GNOME_WALLET ),tr( KWALLET ) ) ;
 
 	m_menu->setFont( this->font() ) ;
 

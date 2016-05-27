@@ -75,7 +75,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 	m_ui->pbmenu->setMinimumHeight( 31 ) ;
 	m_ui->pbupdate->setMinimumHeight( 31 ) ;
 
-	auto f = utility::getWindowDimensions( "cryfs" ) ;
+	auto f = utility::getWindowDimensions() ;
 
 	auto e = f.data() ;
 
@@ -122,7 +122,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	this->setUpFont() ;
 
-	const auto& icon = utility::getIcon( "cryfs-gui" ) ;
+	const auto& icon = utility::getIcon() ;
 
 	this->setAcceptDrops( true ) ;
 	this->setWindowIcon( icon ) ;
@@ -136,7 +136,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	m_trayIcon.show() ;
 
-	auto dirPath = utility::homePath() + "/.cryfs-gui/" ;
+	auto dirPath = utility::homeConfigPath() ;
 	QDir dir( dirPath ) ;
 
 	if( !dir.exists() ){
@@ -340,12 +340,12 @@ void cryfsGUI::licenseInfo()
 
 void cryfsGUI::updateCheck()
 {
-	checkForUpdates::instance( this ) ;
+	checkForUpdates::instance( this,false ) ;
 }
 
 void cryfsGUI::autoUpdateCheck()
 {
-	checkForUpdates::instance( this,"cryfs-gui" ) ;
+	checkForUpdates::instance( this,true ) ;
 }
 
 void cryfsGUI::autoCheckUpdates( bool e )
@@ -406,12 +406,12 @@ void cryfsGUI::showFavorites()
 
 void cryfsGUI::setLocalizationLanguage( bool translate )
 {
-	utility::setLocalizationLanguage( translate,m_language_menu,"cryfs-gui" ) ;
+	utility::setLocalizationLanguage( translate,m_language_menu ) ;
 }
 
 void cryfsGUI::languageMenu( QAction * ac )
 {
-	utility::languageMenu( this,m_language_menu,ac,"cryfs-gui" ) ;
+	utility::languageMenu( this,m_language_menu,ac ) ;
 
 	m_ui->retranslateUi( this ) ;
 
@@ -428,7 +428,7 @@ void cryfsGUI::languageMenu( QAction * ac )
 
 static QString _autoOpenFolderConfigPath()
 {
-	return utility::homePath() + "/.cryfs-gui/cryfs-gui.NoAutoOpenFolder" ;
+	return utility::homeConfigPath( "cryfs-gui.NoAutoOpenFolder" ) ;
 }
 
 void cryfsGUI::autoOpenFolderOnMount( bool e )
@@ -761,7 +761,7 @@ void cryfsGUI::slotMount()
 
 		auto row = table->currentRow() ;
 
-		this->mount( tablewidget::tableRowEntries( table,row ) ) ;
+		this->mount( tablewidget::rowEntries( table,row ) ) ;
 	}
 }
 
@@ -813,7 +813,7 @@ QFont cryfsGUI::getSystemVolumeFont()
 
 void cryfsGUI::addEntryToTable( const QStringList& l )
 {
-	tablewidget::addRowToTable( m_ui->tableWidget,l ) ;
+	tablewidget::addRow( m_ui->tableWidget,l ) ;
 }
 
 void cryfsGUI::addEntryToTable( const volumeInfo& e )
@@ -829,7 +829,7 @@ void cryfsGUI::removeEntryFromTable( QString volume )
 
 	if( r != -1 ){
 
-		tablewidget::deleteRowFromTable( table,r ) ;
+		tablewidget::deleteRow( table,r ) ;
 		this->enableAll() ;
 	}else{
 		this->pbUpdate() ;
@@ -849,7 +849,7 @@ void cryfsGUI::updateList( const volumeInfo& entry )
 			row = tablewidget::addEmptyRow( table ) ;
 		}
 
-		tablewidget::updateRowInTable( table,entry.entryList(),row,this->font() ) ;
+		tablewidget::updateRow( table,entry.entryList(),row,this->font() ) ;
 
 		tablewidget::selectRow( table,row ) ;
 	}
@@ -887,25 +887,27 @@ void cryfsGUI::unMountAll()
 
 	auto table = m_ui->tableWidget ;
 
-	auto l = tablewidget::tableColumnEntries( table,1 ) ;
+	auto l = tablewidget::columnEntries( table,1 ) ;
 
-	auto r = l.size() - 1 ;
+	int r = l.size() - 1 ;
 
 	if( r < 0 ){
 
-		utility::suspend( 1 ) ;
+		utility::Task::suspendForOneSecond() ;
 	}else{
-		for( int i = r ; i >= 0 ; i-- ){
-
-			const auto& e = l.at( i ) ;
+		do{
+			const auto& e = l.at( r ) ;
 
 			if( cryfsTask::encryptedFolderUnMount( e ).await() ){
 
-				tablewidget::deleteTableRow( table,e,1 ) ;
+				tablewidget::deleteRow( table,e,1 ) ;
 
-				utility::suspend( 1 ) ;
+				utility::Task::suspendForOneSecond() ;
 			}
-		}
+
+			r -= 1 ;
+
+		}while( r >= 0 ) ;
 	}
 
 	this->enableAll() ;
@@ -937,7 +939,7 @@ void cryfsGUI::updateVolumeList( const QVector< volumeInfo >& r )
 
 void cryfsGUI::slotCurrentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous )
 {
-	tablewidget::selectTableRow( current,previous ) ;
+	tablewidget::selectRow( current,previous ) ;
 }
 
 void cryfsGUI::disableAll()
@@ -976,14 +978,14 @@ cryfsGUI::~cryfsGUI()
 
 		const auto& r = this->window()->geometry() ;
 
-		utility::setWindowDimensions( "cryfs",{ r.x(),
-							r.y(),
-							r.width(),
-							r.height(),
-							q->columnWidth( 0 ),
-							q->columnWidth( 1 ),
-							q->columnWidth( 2 ),
-							q->columnWidth( 3 ) } ) ;
+		utility::setWindowDimensions( { r.x(),
+						r.y(),
+						r.width(),
+						r.height(),
+						q->columnWidth( 0 ),
+						q->columnWidth( 1 ),
+						q->columnWidth( 2 ),
+						q->columnWidth( 3 ) } ) ;
 
 		delete m_ui ;
 	}

@@ -98,8 +98,7 @@ public:
 	checkForUpdates( QWidget *,bool ) ;
 	~checkForUpdates() ;
 
-	static void instance( QWidget *,const QString& ) ;
-	static void instance( QWidget * ) ;
+	static void instance( QWidget *,bool ) ;
 private:
 	void show( const QByteArray&,const QByteArray& ) ;
 	bool m_autocheck ;
