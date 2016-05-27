@@ -111,7 +111,6 @@ private slots:
 	void itemEntered( QTableWidgetItem * ) ;
 	void addEntryToTable( const QStringList& ) ;
 	void addEntryToTable( const volumeInfo& ) ;
-	void autoMountToggled( bool ) ;
 	void autoOpenFolderOnMount( bool ) ;
 	void removeEntryFromTable( QString ) ;
 	void showFavorites( void ) ;
@@ -133,7 +132,6 @@ private:
 	void dropEvent( QDropEvent * ) ;
 	void showContextMenu( QTableWidgetItem *,bool ) ;
 	void startAutoMonitor( void ) ;
-	bool autoMount( void ) ;
 	void updateList( const volumeInfo& ) ;
 
 	void setUpAppMenu( void ) ;
@@ -158,7 +156,6 @@ private:
 	QAction * m_change_password_action = nullptr ;
 
 	bool m_startHidden ;
-	bool m_autoMount ;
 	QString m_sharedFolderPath ;
 	bool m_autoOpenFolderOnMount ;
 	bool m_removeAllVolumes = false ;

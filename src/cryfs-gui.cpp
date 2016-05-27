@@ -118,8 +118,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
 
-	m_autoMount = this->autoMount() ;
-
 	this->setUpShortCuts() ;
 
 	this->setUpFont() ;
@@ -722,11 +720,6 @@ void cryfsGUI::slotTrayClicked( QSystemTrayIcon::ActivationReason e )
 	}
 }
 
-void cryfsGUI::autoMountToggled( bool opt )
-{
-	m_autoMount = opt ;
-}
-
 void cryfsGUI::dragEnterEvent( QDragEnterEvent * e )
 {
 	e->accept() ;
@@ -973,14 +966,6 @@ void cryfsGUI::enableAll_1()
 {
 	m_removeAllVolumes = false ;
 	this->enableAll() ;
-}
-
-#define zuluMOUNT_AUTOPATH "/.zuluCrypt/cryfsGUI-gui.autoMountPartitions"
-
-bool cryfsGUI::autoMount()
-{
-	QFile f( utility::homePath() + zuluMOUNT_AUTOPATH ) ;
-	return f.exists() ;
 }
 
 cryfsGUI::~cryfsGUI()
