@@ -29,14 +29,14 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>10</y>
-     <width>411</width>
-     <height>71</height>
+     <width>391</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
-    <string>Setting this option will cause the volume to open in read only mode.</string>
+    <string>Setting This Option Will Cause The Volume To Open In Read Only Mode.</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
