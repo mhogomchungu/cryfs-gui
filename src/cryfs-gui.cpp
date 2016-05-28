@@ -846,7 +846,7 @@ void cryfsGUI::updateList( const volumeInfo& entry )
 
 		if( row == -1 ){
 
-			row = tablewidget::addEmptyRow( table ) ;
+			row = tablewidget::addRow( table ) ;
 		}
 
 		tablewidget::updateRow( table,entry.entryList(),row,this->font() ) ;

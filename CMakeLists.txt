@@ -74,12 +74,12 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/dialogmsg.h
 		src/plugin.h
 		src/favorites.h
-		src/checkforupdates.h
 		src/readonlywarning.h
 		src/walletconfig.h
 		src/walletconfiginput.h
 		src/utility.h
 		src/options.h
+		src/networkAccessManager.h
  )
 
 set( SRC 	src/main.cpp

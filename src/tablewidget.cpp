@@ -105,7 +105,7 @@ void tablewidget::selectRow( QTableWidgetItem * current,QTableWidgetItem * previ
 	}
 }
 
-int tablewidget::addEmptyRow( QTableWidget * table )
+int tablewidget::addRow( QTableWidget * table )
 {
 	count_t row = table->rowCount() ;
 
