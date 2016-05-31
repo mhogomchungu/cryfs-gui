@@ -1,5 +1,7 @@
 cmake_minimum_required( VERSION 2.6 )
 cmake_policy( SET CMP0017 OLD )
+cmake_policy( SET CMP0002 OLD )
+
 set_property( GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON )
 
 project( cryfs-gui )
@@ -33,7 +35,7 @@ file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
 
-set( PGR_VERSION "1.1.0" )
+set( PGR_VERSION "1.2.0" )
 
 file( WRITE ${PROJECT_BINARY_DIR}/version.h "
 #ifndef THIS_VERSION
