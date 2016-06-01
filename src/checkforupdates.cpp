@@ -119,7 +119,7 @@ static QNetworkRequest _request( bool e )
 checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
 	m_autocheck( autocheck ),m_widget( widget )
 {
-	m_networkAccessManager.get( _request( true ),[ this ]( QNetworkReply * e ){
+        m_networkAccessManager.get( _request( true ),[ this ]( NetworkAccessManager::NetworkReply e ){
 
 		_show( this,m_autocheck,m_widget,e->readAll() ) ;
 	} ) ;
@@ -192,11 +192,15 @@ void checkForUpdates::show( const QByteArray& cryfs,const QByteArray& cryfs_gui 
 checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
 	m_autocheck( autocheck ),m_widget( widget )
 {
-	m_networkAccessManager.get( _request( true ),[ this ]( QNetworkReply * r ){
+        m_networkAccessManager.get( _request( true ),[ this ]( NetworkAccessManager::NetworkReply r ){
 
-		m_networkAccessManager.get( _request( false ),[ this,r ]( QNetworkReply * e ){
+                auto k = r.release() ;
 
-			this->show( e->readAll(),r->readAll() ) ;
+                m_networkAccessManager.get( _request( false ),[ this,k ]( NetworkAccessManager::NetworkReply e ){
+
+                        NetworkAccessManager::NetworkReply r = k ;
+
+                        this->show( e->readAll(),r->readAll() ) ;
 		} ) ;
 	} ) ;
 }

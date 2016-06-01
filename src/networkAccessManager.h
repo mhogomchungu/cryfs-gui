@@ -26,12 +26,50 @@
 
 #include <functional>
 #include <utility>
+#include <memory>
 
 class NetworkAccessManager : public QObject
 {
 	Q_OBJECT
 public:
-	using function_t = std::function< void( QNetworkReply * ) > ;
+	class NetworkReply
+	{
+	public:
+		NetworkReply( QNetworkReply * e ) : m_QNetworkReply( e )
+		{
+		}
+		NetworkReply( NetworkReply&& other )
+		{
+			if( m_QNetworkReply ){
+
+				m_QNetworkReply->deleteLater() ;
+			}
+
+			m_QNetworkReply = other.m_QNetworkReply ;
+			other.m_QNetworkReply = nullptr ;
+		}
+		QNetworkReply * release()
+		{
+			auto e = m_QNetworkReply ;
+			m_QNetworkReply = nullptr ;
+			return e ;
+		}
+		~NetworkReply()
+		{
+			if( m_QNetworkReply ){
+
+				m_QNetworkReply->deleteLater() ;
+			}
+		}
+		QNetworkReply * operator->()
+		{
+			return m_QNetworkReply ;
+		}
+	private:
+		QNetworkReply * m_QNetworkReply = nullptr ;
+	};
+
+	using function_t = std::function< void( NetworkAccessManager::NetworkReply ) > ;
 
 	NetworkAccessManager()
 	{
@@ -60,9 +98,9 @@ public:
 
 		QEventLoop l ;
 
-		this->get( r,[ & ]( QNetworkReply * e ){
+		this->get( r,[ & ]( NetworkAccessManager::NetworkReply e ){
 
-			q = e ;
+			q = e.release() ;
 
 			l.quit() ;
 		} ) ;
@@ -92,9 +130,9 @@ public:
 
 		QEventLoop l ;
 
-		this->post( r,e,[ & ]( QNetworkReply * e ){
+		this->post( r,e,[ & ]( NetworkAccessManager::NetworkReply e ){
 
-			q = e ;
+			q = e.release() ;
 
 			l.quit() ;
 		} ) ;
@@ -121,9 +159,9 @@ public:
 
 		QEventLoop l ;
 
-		this->head( r,[ & ]( QNetworkReply * e ){
+		this->head( r,[ & ]( NetworkAccessManager::NetworkReply e ){
 
-			q = e ;
+			q = e.release() ;
 
 			l.quit() ;
 		} ) ;
