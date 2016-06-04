@@ -95,7 +95,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 
 			if( !opt.mOpt.isEmpty() ){
 
-				if( type == "encfs" ){
+				if( type == "cryfs" ){
 
 					return QString( "--unmount-idle %1" ).arg( opt.mOpt ) ;
 
