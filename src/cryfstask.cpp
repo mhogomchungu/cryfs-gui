@@ -128,7 +128,10 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
                         if( type == "cryfs" && !configFilePath.isEmpty() ){
 
-                                return QString( "--config %1" ).arg( configFilePath ) ;
+                                auto e = configFilePath ;
+                                e.replace( "\"","\"\"\"" ) ;
+
+                                return QString( "--config \"%1\"" ).arg( e ) ;
                         }else{
                                 return QString() ;
                         }
