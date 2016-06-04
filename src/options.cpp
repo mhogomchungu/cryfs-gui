@@ -21,18 +21,29 @@
 #include "ui_options.h"
 #include "dialogmsg.h"
 
-options::options( QWidget * parent,std::function< void( const QString& ) >&& function ) :
-	QDialog( parent ),m_ui( new Ui::options ),m_function( function )
+#include "utility.h"
+
+#include <QFileDialog>
+
+options::options( QWidget * parent,bool n,const QString& e,
+                  std::function< void( const QString& ) >&& function ) :
+        QDialog( parent ),m_ui( new Ui::options ),m_function( function )
 {
 	m_ui->setupUi( this ) ;
 
 	this->setFixedSize( this->size() ) ;
 
+        m_ui->label_2->setText( e ) ;
+
+        m_ui->pushButton->setEnabled( n ) ;
+
+        m_ui->pushButton->setIcon( QIcon( ":/file.png" ) ) ;
+
 	this->setWindowIcon( QIcon( ":/cryfs-gui.png" ) ) ;
 
 	this->addAction( [ this ](){
 
-		QAction * ac = new QAction( this ) ;
+                auto ac = new QAction( this ) ;
 
 		connect( ac,SIGNAL( triggered() ),this,SLOT( defaultButton() ) ) ;
 
@@ -42,10 +53,22 @@ options::options( QWidget * parent,std::function< void( const QString& ) >&& fun
 
 	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( pbCancel() ) ) ;
 	connect( m_ui->pbSet,SIGNAL( clicked() ),this,SLOT( pbSet() ) ) ;
+        connect( m_ui->pushButton,SIGNAL( clicked() ),this,SLOT( pushButton() ) ) ;
 
-	this->SetFocus() ;
+        this->SetFocus() ;
 
 	this->show() ;
+}
+
+void options::pushButton()
+{
+        auto e = QFileDialog::getOpenFileName( this,tr( "Select Cryfs Configuration File" ),
+                                               utility::homePath() ) ;
+
+        if( !e.isEmpty() ){
+
+                m_ui->lineEditKey->setText( e ) ;
+        }
 }
 
 void options::defaultButton()

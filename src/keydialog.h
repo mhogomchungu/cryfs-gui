@@ -67,6 +67,7 @@ signals:
 	void mounted( QString ) ;
 	void cryptoOpen( QString ) ;
 private slots:
+        void configFile( void ) ;
 	void mountOptions( void ) ;
 	void textChanged( QString ) ;
 	void cbActicated( int ) ;
@@ -78,12 +79,10 @@ private slots:
 	void key( void ) ;
 	void keyFile( void ) ;
 	void pbOpen( void ) ;
-	void pbOptions( void ) ;
 	void pbCancel( void ) ;
 	void Plugin( void ) ;
 	void KeyFile( void ) ;
 	void cbMountReadOnlyStateChanged( int ) ;
-	void doAction( QAction * ) ;
 	void encryptedFolderMount( void ) ;
 	void encryptedFolderCreate( void ) ;
 private :
@@ -100,8 +99,8 @@ private :
 	QStringList m_keyFiles ;
 	QString m_deviceOffSet ;
 	QString m_options ;
+        QString m_configFile ;
 	QMenu * m_menu ;
-	QMenu * m_menu_1 ;
 	QTableWidget * m_table ;
 	bool m_working ;
 	bool m_create ;

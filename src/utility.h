@@ -225,6 +225,20 @@ namespace utility
 
 		return false ;
 	}
+
+        template< typename E,typename ... F >
+        bool endsWithAtLeastOne( const E& e,const F& ... f )
+        {
+                for( const auto& it : { f ... } ){
+
+                        if( e.endsWith( it ) ){
+
+                                return true ;
+                        }
+                }
+
+                return false ;
+        }
 }
 
 namespace utility

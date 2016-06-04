@@ -162,7 +162,6 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Password ) ;
 
-	connect( m_ui->pbOptions,SIGNAL( clicked() ),this,SLOT( pbOptions() ) ) ;
 	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( pbCancel() ) ) ;
 	connect( m_ui->pbOpen,SIGNAL( clicked() ),this,SLOT( pbOpen() ) ) ;
 	connect( m_ui->pbkeyOption,SIGNAL( clicked() ),this,SLOT( pbkeyOption() ) ) ;
@@ -172,24 +171,12 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),this,SLOT( cbActicated( int ) ) ) ;
 	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),this,SLOT( textChanged( QString ) ) ) ;
 
-	m_menu_1 = [ this ](){
-
-		auto m = new QMenu( this ) ;
-
-		m->setFont( this->font() ) ;
-		m->addAction( tr( "Set File System Options" ) )->setEnabled( false ) ;
-
-		return m ;
-	}() ;
-
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Key+KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Plugin" ) ) ;
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
-
-	connect( m_menu_1,SIGNAL( triggered( QAction * ) ),this,SLOT( doAction( QAction * ) ) ) ;
 
 	if( m_create ){
 
@@ -207,31 +194,35 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 		connect( m->addAction( tr( "Set Idle Timeout" ) ),
 			 SIGNAL( triggered() ),this,SLOT( mountOptions() ) ) ;
 
+                connect( m->addAction( tr( "Set Cryfs Configuration File Path" ) ),
+                         SIGNAL( triggered() ),this,SLOT( configFile() ) ) ;
 		return m ;
 	}() ) ;
 }
 
 void keyDialog::mountOptions()
 {
-	options::instance( this,[ this ]( const QString& e ){
+        auto e = tr( "Automatically Unmount After Specified Minutes of Inactivity Is Reached." ) ;
+
+        options::instance( this,false,e,[ this ]( const QString& e ){
 
 		m_options = e ;
 	} ) ;
 }
 
+void keyDialog::configFile()
+{
+        auto e = tr( "Unlock A Cryfs Volume With Specified Configuration File." ) ;
+
+        options::instance( this,true,e,[ this ]( const QString& e ){
+
+                m_configFile = e ;
+        } ) ;
+}
+
 bool keyDialog::eventFilter( QObject * watched,QEvent * event )
 {
 	return utility::eventFilter( this,watched,event,[ this ](){ this->pbCancel() ; } ) ;
-}
-
-void keyDialog::pbOptions()
-{
-	m_menu_1->exec( QCursor::pos() ) ;
-}
-
-void keyDialog::doAction( QAction * ac )
-{
-	Q_UNUSED( ac ) ;
 }
 
 void keyDialog::cbMountReadOnlyStateChanged( int state )
@@ -297,7 +288,7 @@ void keyDialog::pbFolderPath()
 void keyDialog::enableAll()
 {
 	m_ui->pbMountPoint->setEnabled( true ) ;
-	m_ui->pbOptions->setEnabled( false ) ;
+        m_ui->pbOptions->setEnabled( true ) ;
 	m_ui->label_2->setEnabled( true ) ;
 	m_ui->lineEditMountPoint->setEnabled( !m_create ) ;
 	m_ui->pbOpenFolderPath->setEnabled( true ) ;
@@ -550,7 +541,7 @@ void keyDialog::encryptedFolderCreate()
 		return this->enableAll() ;
 	}
 
-	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,false,m_success } ) ;
+        auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,"",false,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 
@@ -591,7 +582,7 @@ void keyDialog::encryptedFolderMount()
 		return this->enableAll() ;
 	}
 
-	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_options,ro,m_success } ) ;
+        auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_options,m_configFile,ro,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 

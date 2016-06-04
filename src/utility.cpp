@@ -92,6 +92,7 @@ options:\n\
 	     mode and a value of \"ro\" will open the volume in read only mode.\n\
 	-z   Full path of the mount point to be used when the volume is opened from CLI.\n\
 	     This option is optional.\n\
+        -c   Set Cryfs Configuration File Path when a volume is opened from CLI.\n\
 	-i   Set inactivity timeout(in minutes) to dismount the volume when mounted from CLI.\n\n" ) ;
 
 	std::cout << helpMsg.toLatin1().constData() << std::endl ;

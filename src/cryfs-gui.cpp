@@ -498,6 +498,7 @@ void cryfsGUI::Show()
 	auto k = utility::cmdArgumentValue( l,"-k","rw" ) ;
 	auto z = utility::cmdArgumentValue( l,"-z","" ) ;
 	auto i = utility::cmdArgumentValue( l,"-i","" ) ;
+        auto c = utility::cmdArgumentValue( l,"-c","" ) ;
 
 	if( b.isEmpty() ){
 
@@ -515,12 +516,12 @@ void cryfsGUI::Show()
 		QMetaObject::invokeMethod( this,"unlockVolume",Qt::QueuedConnection,
 					   Q_ARG( QString,volume ),Q_ARG( QString,z ),
 					   Q_ARG( QString,b ),Q_ARG( QString,i ),
-					   Q_ARG( bool,k == "ro" ) ) ;
+                                           Q_ARG( QString,c ),Q_ARG( bool,k == "ro" ) ) ;
 	}
 }
 
 void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
-			     const QString& backEnd,const QString& mOpt,bool mode )
+                             const QString& backEnd,const QString& mOpt,const QString& cPath,bool mode )
 {
 	if( volume.isEmpty() ){
 
@@ -573,7 +574,7 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
-				auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,mode,o } ).await() ;
+                                auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,cPath,mode,o } ).await() ;
 
 				if( e == cryfsTask::status::success ){
 

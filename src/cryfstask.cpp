@@ -81,9 +81,11 @@ Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 	} ) ;
 }
 
-static cs _cmd( const QString& app,const cryfsTask::options& opt )
+static cs _cmd( const QString& app,const cryfsTask::options& opt,
+                const QString& configFilePath = QString() )
 {
-	auto _args = []( const QString& exe,const cryfsTask::options& opt,const QString& type ){
+        auto _args = []( const QString& exe,const cryfsTask::options& opt,
+                        const QString& type,const QString& configFilePath ){
 
 		auto cipherFolder = opt.cipherFolder ;
 		cipherFolder.replace( "\"","\"\"\"" ) ;
@@ -122,17 +124,28 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 			}
 		}() ;
 
+                auto configPath = [ & ](){
+
+                        if( type == "cryfs" && !configFilePath.isEmpty() ){
+
+                                return QString( "--config %1" ).arg( configFilePath ) ;
+                        }else{
+                                return QString() ;
+                        }
+                }() ;
+
 		auto o = [ & ]()->QString{
 
 			if( opt.ro ){
 
-				return "%1 \"%2\" \"%3\" %4 %5 -o ro -o fsname=%6@\"%7\" -o subtype=%8" ;
+                                return "%1 \"%2\" \"%3\" %4 %5 %6 -o ro -o fsname=%7@\"%8\" -o subtype=%9" ;
 			}else{
-				return "%1 \"%2\" \"%3\" %4 %5 -o rw -o fsname=%6@\"%7\" -o subtype=%8" ;
+                                return "%1 \"%2\" \"%3\" %4 %5 %6 -o rw -o fsname=%7@\"%8\" -o subtype=%9" ;
 			}
 		}() ;
 
-		return o.arg( exe,cipherFolder,mountPoint,mountOptions,separator,type,cipherFolder,type ) ;
+                return o.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
+                              separator,type,cipherFolder,type ) ;
 	} ;
 
 	auto exe = utility::executableFullPath( app ) ;
@@ -151,7 +164,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt )
 
 		QProcess e ;
 
-		e.start( _args( exe,opt,app ) ) ;
+                e.start( _args( exe,opt,app,configFilePath ) ) ;
 
 		e.waitForStarted() ;
 
@@ -182,11 +195,11 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 {
 	return Task::run< cs >( [ opt ](){
 
-		auto _mount = []( const QString& app,const options& opt ){
+                auto _mount = []( const QString& app,const options& opt,const QString& configFilePath ){
 
 			if( _create_folder( opt.plainFolder ) ){
 
-				auto e = _cmd( app,opt ) ;
+                                auto e = _cmd( app,opt,configFilePath ) ;
 
 				if( e != cs::success ) {
 
@@ -199,21 +212,31 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 			}
 		} ;
 
-		if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
+                if( opt.configFilePath.isEmpty() ){
 
-			return _mount( "cryfs",opt ) ;
-		}else{
-			auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
-			auto encfs5 = opt.cipherFolder + "/.encfs5" ;
-			auto encfs4 = opt.cipherFolder + "/.encfs4" ;
+                        if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
 
-			if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
+                                return _mount( "cryfs",opt,"" ) ;
+                        }else{
+                                auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
+                                auto encfs5 = opt.cipherFolder + "/.encfs5" ;
+                                auto encfs4 = opt.cipherFolder + "/.encfs4" ;
 
-				return _mount( "encfs",opt ) ;
-			}else{
-				return cs::unknown ;
-			}
-		}
+                                if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
+
+                                        return _mount( "encfs",opt,"" ) ;
+                                }else{
+                                        return cs::unknown ;
+                                }
+                        }
+                }else{
+                        if( opt.configFilePath.endsWith( "cryfs.config" ) ){
+
+                                return _mount( "cryfs",opt,opt.configFilePath ) ;
+                        }else{
+                                return cs::unknown ;
+                        }
+                }
 	} ) ;
 }
 
@@ -225,7 +248,7 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 			if( _create_folder( opt.plainFolder ) ){
 
-				auto e = _cmd( "cryfs",opt ) ;
+                                auto e = _cmd( "cryfs",opt ) ;
 
 				if( e == cs::success ){
 

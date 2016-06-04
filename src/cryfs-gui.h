@@ -86,7 +86,7 @@ public slots:
 private slots:
 	void autoCheckUpdates( bool ) ;
 	void reuseMountPoint( bool ) ;
-	void unlockVolume( const QString&,const QString&,const QString&,const QString&,bool ) ;
+        void unlockVolume( const QString&,const QString&,const QString&,const QString&,const QString&,bool ) ;
 	void aboutToShowMenu( void ) ;
 	void changeInternalWalletPassWord( void ) ;
 	void closeApplication( void ) ;
