@@ -10,7 +10,7 @@ cryfs-gui[3] is a Qt/C++ front end to cryfs[1][2]
 [3] https://github.com/mhogomchungu/cryfs-gui/blob/master/images/cryfs-gui.jpeg
 
 FAQ:
-===+
+===
 
 1.0 How do i change the default mount point prefix?
 ===================================================
