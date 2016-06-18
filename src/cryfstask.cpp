@@ -87,11 +87,16 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
         auto _args = []( const QString& exe,const cryfsTask::options& opt,
                         const QString& type,const QString& configFilePath ){
 
-		auto cipherFolder = opt.cipherFolder ;
-		cipherFolder.replace( "\"","\"\"\"" ) ;
+		auto _makePath = []( QString e ){
 
-		auto mountPoint = opt.plainFolder ;
-		mountPoint.replace( "\"","\"\"\"" ) ;
+			e.replace( "\"","\"\"\"" ) ;
+
+			return "\"" + e + "\"" ;
+		} ;
+
+		auto cipherFolder = _makePath( opt.cipherFolder ) ;
+
+		auto mountPoint   = _makePath( opt.plainFolder ) ;
 
 		auto mountOptions = [ & ](){
 
@@ -137,7 +142,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
                         }
                 }() ;
 
-		QString e = "%1 \"%2\" \"%3\" %4 %5 %6 -o fsname=%7@\"%8\" -o subtype=%9" ;
+		QString e = "%1 %2 %3 %4 %5 %6 -o fsname=%7@%8 -o subtype=%9" ;
 
 		auto opts = e.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
 				   separator,type,cipherFolder,type ) ;
