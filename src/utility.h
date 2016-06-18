@@ -384,7 +384,10 @@ namespace utility
 		Task()
 		{
 		}
-		Task( const QString& exe,int waitTime = -1,const QStringList& env = QStringList(),
+		Task( const QString& exe,
+		      int waitTime = -1,
+		      const QProcessEnvironment& env = QProcessEnvironment(),
+		      const QByteArray& password = QByteArray(),
 		      std::function< void() > f = [](){} )
 		{
 			class Process : public QProcess{
@@ -401,8 +404,19 @@ namespace utility
 				std::function< void() > m_function ;
 			} p( std::move( f ) ) ;
 
-			p.setEnvironment( env ) ;
+			p.setProcessEnvironment( env ) ;
+
 			p.start( exe ) ;
+
+			if( !password.isEmpty() ){
+
+				p.waitForStarted() ;
+
+				p.write( password + '\n' ) ;
+
+				p.closeWriteChannel() ;
+			}
+
 			m_finished   = p.waitForFinished( waitTime ) ;
 			m_exitCode   = p.exitCode() ;
 			m_exitStatus = p.exitStatus() ;

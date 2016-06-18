@@ -125,13 +125,15 @@ int utility::startApplication( const char * appName,std::function<int()> start )
 
 static bool _execute_process( const QString& m,const QString& exe,const QString& env )
 {
+	Q_UNUSED( env ) ;
+
 	if( exe.startsWith( "/" ) && utility::pathExists( exe ) ){
 
 		auto e = m ;
 
 		e.replace( "\"","\"\"\"" ) ;
 
-		return utility::Task( exe + " \"" + e + "\"",-1,env.split( "\n" ) ).success() ;
+		return utility::Task( exe + " \"" + e + "\"" ).success() ;
 	}else{
 		return false ;
 	}

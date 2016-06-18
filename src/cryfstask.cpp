@@ -48,16 +48,22 @@ static bool _create_folder( const QString& m )
 	}
 }
 
+static QString _makePath( QString e )
+{
+	e.replace( "\"","\"\"\"" ) ;
+
+	return "\"" + e + "\"" ;
+}
+
 Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
+		auto cmd = "fusermount -u " + _makePath( m ) ;
+
 		auto _umount = [ & ](){
 
-			auto mm = m ;
-			mm.replace( "\"","\"\"\"" ) ;
-
-			if( utility::Task( "fusermount -u \"" + mm + "\"",10000 ).success() ){
+			if( utility::Task( cmd,10000 ).success() ){
 
 				return _delete_folder( m ) ;
 			}else{
@@ -86,13 +92,6 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 {
         auto _args = []( const QString& exe,const cryfsTask::options& opt,
                         const QString& type,const QString& configFilePath ){
-
-		auto _makePath = []( QString e ){
-
-			e.replace( "\"","\"\"\"" ) ;
-
-			return "\"" + e + "\"" ;
-		} ;
 
 		auto cipherFolder = _makePath( opt.cipherFolder ) ;
 
@@ -163,22 +162,20 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 			return cs::encfsNotFound ;
 		}
 	}else{
-		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
+		auto e = utility::Task( _args( exe,opt,app,configFilePath ),20000,[](){
 
-		QProcess e ;
+			QProcessEnvironment env ;
 
-                e.start( _args( exe,opt,app,configFilePath ) ) ;
+			env.insert( "CRYFS_NO_UPDATE_CHECK","TRUE" ) ;
+			env.insert( "CRYFS_FRONTEND","noninteractive" ) ;
 
-		e.waitForStarted() ;
+			return env ;
 
-		e.write( opt.key.toLatin1() + '\n' ) ;
+		}(),opt.key.toLatin1() ) ;
 
-		e.closeWriteChannel() ;
+		if( e.finished() ){
 
-		if( e.waitForFinished( 20000 ) ){
-
-			if( e.exitCode() == 0 ){
+			if( e.success() ){
 
 				return cs::success ;
 			}else{
