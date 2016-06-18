@@ -133,10 +133,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
                         if( type == "cryfs" && !configFilePath.isEmpty() ){
 
-                                auto e = configFilePath ;
-                                e.replace( "\"","\"\"\"" ) ;
-
-                                return QString( "--config \"%1\"" ).arg( e ) ;
+				return "--config " + _makePath( configFilePath ) ;
                         }else{
                                 return QString() ;
                         }
@@ -324,15 +321,15 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 			if( set_offset ){
 
-				path = path.mid( 6 ) ;
+				return path.mid( 6 ) ;
+			}else{
+				return path ;
 			}
-
-			return path ;
 		} ;
 
 		auto _fs = []( const QString& e ){
 
-			return QString( e.toLatin1().constData() + 5 ) ;
+			return e.mid( 5 ) ;
 		} ;
 
 		auto _ro = []( const QStringList& l ){
