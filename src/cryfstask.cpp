@@ -137,18 +137,17 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
                         }
                 }() ;
 
-		auto o = [ & ]()->QString{
+		QString e = "%1 \"%2\" \"%3\" %4 %5 %6 -o fsname=%7@\"%8\" -o subtype=%9" ;
 
-			if( opt.ro ){
+		auto opts = e.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
+				   separator,type,cipherFolder,type ) ;
 
-                                return "%1 \"%2\" \"%3\" %4 %5 %6 -o ro -o fsname=%7@\"%8\" -o subtype=%9" ;
-			}else{
-                                return "%1 \"%2\" \"%3\" %4 %5 %6 -o rw -o fsname=%7@\"%8\" -o subtype=%9" ;
-			}
-		}() ;
+		if( opt.ro ){
 
-                return o.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
-                              separator,type,cipherFolder,type ) ;
+			return opts + " -o ro" ;
+		}else{
+			return opts + " -o rw" ;
+		}
 	} ;
 
 	auto exe = utility::executableFullPath( app ) ;

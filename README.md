@@ -24,7 +24,7 @@ and add the path you want to be used as mount point prefix in the file on the fi
 =======================================================
 
 Unique custom mount point path can be used through adding a volume to the favorite list and then
-set custom mount point path in the "mount point path" field.The volume should then be accessed
+setting custom mount point path in the "mount point path" field.The volume should then be accessed
 through the favorites list.
 
 Favorites list is access through Menu->Favorites.
