@@ -655,10 +655,13 @@ void cryfsGUI::properties()
 
 		return QString( [](){
 
-			QString a = "Block Size: %1\n\nUsed Blocks: %2\n\nFree" ;
-			QString b = "Blocks: %3\n\nUsed Space: %4\n\nFree Space: %5" ;
+			auto a = tr( "Block Size: %1" ) ;
+			auto b = tr( "Used Blocks: %2" ) ;
+			auto c = tr( "Free Blocks: %3" ) ;
+			auto d = tr( "Used Space: %4" ) ;
+			auto e = tr( "Free Space: %5" ) ;
 
-			return a + b ;
+			return a + "\n\n" + b + "\n\n" + c + "\n\n" + d + "\n\n" + e ;
 
 		}() ).arg( [ & ](){
 
