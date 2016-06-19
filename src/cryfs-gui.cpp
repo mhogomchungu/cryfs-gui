@@ -609,76 +609,78 @@ void cryfsGUI::properties()
 		}
 	}() ;
 
-	if( !mountPath.isEmpty() ){
+	DialogMsg msg( this ) ;
 
-		struct statfs vfs ;
+	struct statfs vfs ;
 
-		DialogMsg msg( this ) ;
+	if( statfs( mountPath.toLatin1().constData(),&vfs ) != 0 ){
 
-		if( statfs( mountPath.toLatin1().constData(),&vfs ) == 0 ){
-
-			msg.ShowUIInfo( tr( "INFORMATION" ),[ & ](){
-
-				auto _prettify = []( quint64 s ){
-
-					auto _convert = [ & ]( const char * p,double q ){
-
-						auto e = QString::number( double( s ) / q,'f',2 ) ;
-
-						return QString( "%1 %2" ).arg( e,p ) ;
-					} ;
-
-					switch( QString::number( s ).size() ){
-
-						case 0 :
-						case 1 : case 2 : case 3 :
-
-							return QString( "%1 B" ).arg( QString::number( s ) ) ;
-
-						case 4 : case 5 : case 6 :
-
-							return _convert( "KB",1024 ) ;
-
-						case 7 : case 8 : case 9 :
-
-							return _convert( "MB",1048576 ) ;
-
-						case 10: case 11 : case 12 :
-
-							return _convert( "GB",1073741824 ) ;
-
-						default:
-							return _convert( "TB",1024.0 * 1073741824 ) ;
-					}
-				} ;
-
-				auto z = "Block Size: %1\n\nUsed Blocks: %2\n\nFree Blocks: %3\n\nUsed Space: %4\n\nFree Space: %5" ;
-
-				return QString( z ).arg( [ & ](){
-
-					return _prettify( vfs.f_bsize ) ;
-
-				}(),[ & ](){
-
-					return QString::number( vfs.f_blocks - vfs.f_bavail ) ;
-
-				}(),[ & ](){
-
-					return QString::number( vfs.f_bfree ) ;
-
-				}(),[ & ](){
-
-					return _prettify( vfs.f_bsize * ( vfs.f_blocks - vfs.f_bavail ) ) ;
-
-				}(),[ & ](){
-
-					return _prettify( vfs.f_bsize * vfs.f_bavail ) ;
-				}() ) ;
-			}() ) ;
-		}else{
-			msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
-		}
+		return msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
 	}
+
+	msg.ShowUIInfo( tr( "INFORMATION" ),[ & ](){
+
+		auto _prettify = []( quint64 s ){
+
+			auto _convert = [ & ]( const char * p,double q ){
+
+				auto e = QString::number( double( s ) / q,'f',2 ) ;
+
+				return QString( "%1 %2" ).arg( e,p ) ;
+			} ;
+
+			switch( QString::number( s ).size() ){
+
+				case 0 :
+				case 1 : case 2 : case 3 :
+
+					return QString( "%1 B" ).arg( QString::number( s ) ) ;
+
+				case 4 : case 5 : case 6 :
+
+					return _convert( "KB",1024 ) ;
+
+				case 7 : case 8 : case 9 :
+
+					return _convert( "MB",1048576 ) ;
+
+				case 10: case 11 : case 12 :
+
+					return _convert( "GB",1073741824 ) ;
+
+				default:
+					return _convert( "TB",1024.0 * 1073741824 ) ;
+			}
+		} ;
+
+		return QString( [](){
+
+			QString a = "Block Size: %1\n\nUsed Blocks: %2\n\nFree" ;
+			QString b = "Blocks: %3\n\nUsed Space: %4\n\nFree Space: %5" ;
+
+			return a + b ;
+
+		}() ).arg( [ & ](){
+
+			return _prettify( vfs.f_bsize ) ;
+
+		}(),[ & ](){
+
+			return QString::number( vfs.f_blocks - vfs.f_bavail ) ;
+
+		}(),[ & ](){
+
+			return QString::number( vfs.f_bfree ) ;
+
+		}(),[ & ](){
+
+			return _prettify( vfs.f_bsize * ( vfs.f_blocks - vfs.f_bavail ) ) ;
+
+		}(),[ & ](){
+
+			return _prettify( vfs.f_bsize * vfs.f_bavail ) ;
+		}() ) ;
+	}() ) ;
 }
 
 void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
