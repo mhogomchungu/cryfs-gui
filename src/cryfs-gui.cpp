@@ -44,6 +44,8 @@
 #include <initializer_list>
 
 #include <unistd.h>
+#include <sys/vfs.h>
+
 #include "keydialog.h"
 #include "dialogmsg.h"
 #include "tablewidget.h"
@@ -591,19 +593,101 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 	}
 }
 
+void cryfsGUI::properties()
+{
+	auto mountPath = [ this ](){
+
+		auto table = m_ui->tableWidget ;
+
+		auto row = table->currentRow() ;
+
+		if( row >= 0 ){
+
+			return table->item( row,1 )->text() ;
+		}else{
+			return QString() ;
+		}
+	}() ;
+
+	if( !mountPath.isEmpty() ){
+
+		struct statfs vfs ;
+
+		DialogMsg msg( this ) ;
+
+		if( statfs( mountPath.toLatin1().constData(),&vfs ) == 0 ){
+
+			msg.ShowUIOK( tr( "INFORMATION" ),tr( "Used Space: %1" ).arg( [ & ]{
+
+				auto s = vfs.f_bsize * ( vfs.f_blocks - vfs.f_bavail ) ;
+
+				auto _convert = [ & ]( const char * p,double q ){
+
+					auto e = QString::number( double( s ) / q,'f',2 ) ;
+
+					return QString( "%1 %2" ).arg( e,p ) ;
+				} ;
+
+				switch( QString::number( s ).size() ){
+
+					case 0 :
+					case 1 : case 2 : case 3 :
+
+						return QString( "%1 B" ).arg( QString::number( s ) ) ;
+
+					case 4 : case 5 : case 6 :
+
+						return _convert( "KB",1024 ) ;
+
+					case 7 : case 8 : case 9 :
+
+						return _convert( "MB",1048576 ) ;
+
+					case 10: case 11 : case 12 :
+
+						return _convert( "GB",1073741824 ) ;
+
+					default:
+						return _convert( "TB",1024.0 * 1073741824 ) ;
+				}
+			}() ) ) ;
+		}else{
+			msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
+		}
+	}
+}
+
 void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
 {
 	QMenu m ;
 
 	m.setFont( this->font() ) ;
 
-	auto _addAction = [ & ]( const QString& txt,const char * slot ){
+	auto _addAction = [ & ]( const QString& txt,const char * slot,bool enable ){
 
-		connect( m.addAction( txt ),SIGNAL( triggered() ),this,slot ) ;
+		auto ac = m.addAction( txt ) ;
+		ac->setEnabled( enable ) ;
+
+		connect( ac,SIGNAL( triggered() ),this,slot ) ;
 	} ;
 
-	_addAction( tr( "Unmount" ),SLOT( pbUmount() ) ) ;
-	_addAction( tr( "Open Folder" ),SLOT( slotOpenFolder() ) ) ;
+	_addAction( tr( "Unmount" ),SLOT( pbUmount() ),true ) ;
+
+	_addAction( tr( "Open Folder" ),SLOT( slotOpenFolder() ),true ) ;
+
+	_addAction( tr( "Properties" ),SLOT( properties() ),[ this ](){
+
+		auto table = m_ui->tableWidget ;
+
+		auto row = table->currentRow() ;
+
+		if( row >= 0 ){
+
+			return table->item( row,2 )->text() == "cryfs" ;
+		}else{
+			return false ;
+		}
+	}() ) ;
 
 	m.addSeparator() ;
 
