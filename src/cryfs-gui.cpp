@@ -617,40 +617,64 @@ void cryfsGUI::properties()
 
 		if( statfs( mountPath.toLatin1().constData(),&vfs ) == 0 ){
 
-			msg.ShowUIOK( tr( "INFORMATION" ),tr( "Used Space: %1" ).arg( [ & ]{
+			msg.ShowUIInfo( tr( "INFORMATION" ),[ & ](){
 
-				auto s = vfs.f_bsize * ( vfs.f_blocks - vfs.f_bavail ) ;
+				auto _prettify = []( quint64 s ){
 
-				auto _convert = [ & ]( const char * p,double q ){
+					auto _convert = [ & ]( const char * p,double q ){
 
-					auto e = QString::number( double( s ) / q,'f',2 ) ;
+						auto e = QString::number( double( s ) / q,'f',2 ) ;
 
-					return QString( "%1 %2" ).arg( e,p ) ;
+						return QString( "%1 %2" ).arg( e,p ) ;
+					} ;
+
+					switch( QString::number( s ).size() ){
+
+						case 0 :
+						case 1 : case 2 : case 3 :
+
+							return QString( "%1 B" ).arg( QString::number( s ) ) ;
+
+						case 4 : case 5 : case 6 :
+
+							return _convert( "KB",1024 ) ;
+
+						case 7 : case 8 : case 9 :
+
+							return _convert( "MB",1048576 ) ;
+
+						case 10: case 11 : case 12 :
+
+							return _convert( "GB",1073741824 ) ;
+
+						default:
+							return _convert( "TB",1024.0 * 1073741824 ) ;
+					}
 				} ;
 
-				switch( QString::number( s ).size() ){
+				auto z = "Block Size: %1\n\nUsed Blocks: %2\n\nFree Blocks: %3\n\nUsed Space: %4\n\nFree Space: %5" ;
 
-					case 0 :
-					case 1 : case 2 : case 3 :
+				return QString( z ).arg( [ & ](){
 
-						return QString( "%1 B" ).arg( QString::number( s ) ) ;
+					return _prettify( vfs.f_bsize ) ;
 
-					case 4 : case 5 : case 6 :
+				}(),[ & ](){
 
-						return _convert( "KB",1024 ) ;
+					return QString::number( vfs.f_blocks - vfs.f_bavail ) ;
 
-					case 7 : case 8 : case 9 :
+				}(),[ & ](){
 
-						return _convert( "MB",1048576 ) ;
+					return QString::number( vfs.f_bfree ) ;
 
-					case 10: case 11 : case 12 :
+				}(),[ & ](){
 
-						return _convert( "GB",1073741824 ) ;
+					return _prettify( vfs.f_bsize * ( vfs.f_blocks - vfs.f_bavail ) ) ;
 
-					default:
-						return _convert( "TB",1024.0 * 1073741824 ) ;
-				}
-			}() ) ) ;
+				}(),[ & ](){
+
+					return _prettify( vfs.f_bsize * vfs.f_bavail ) ;
+				}() ) ;
+			}() ) ;
 		}else{
 			msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
 		}

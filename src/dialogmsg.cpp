@@ -182,7 +182,7 @@ void DialogMsg::ShowUIInfo( const QString& title,const QString& msg )
 	m_ui->pbNo->setHidden( true ) ;
 	m_ui->pbOk->setHidden( false ) ;
 
-	m_ui->label->setAlignment( Qt::AlignLeft|Qt::AlignVCenter ) ;
+	m_ui->label->setAlignment( Qt::AlignHCenter|Qt::AlignVCenter ) ;
 
 	this->setFixedSize( 562,338 ) ;
 
