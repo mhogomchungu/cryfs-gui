@@ -377,91 +377,96 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="621"/>
+        <location filename="../src/cryfs-gui.cpp" line="625"/>
         <source>INFORMATION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="618"/>
+        <location filename="../src/cryfs-gui.cpp" line="620"/>
         <source>Failed To Read Volume Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="658"/>
+        <location filename="../src/cryfs-gui.cpp" line="662"/>
         <source>Block Size: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="659"/>
+        <location filename="../src/cryfs-gui.cpp" line="663"/>
         <source>Used Blocks: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="660"/>
+        <location filename="../src/cryfs-gui.cpp" line="664"/>
         <source>Free Blocks: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="661"/>
+        <location filename="../src/cryfs-gui.cpp" line="665"/>
         <source>Used Space: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="662"/>
+        <location filename="../src/cryfs-gui.cpp" line="666"/>
         <source>Free Space: %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="703"/>
-        <source>Unmount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/cryfs-gui.cpp" line="705"/>
-        <source>Open Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/cryfs-gui.cpp" line="707"/>
-        <source>Properties</source>
+        <location filename="../src/cryfs-gui.cpp" line="667"/>
+        <source>Used %: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="723"/>
+        <source>Unmount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cryfs-gui.cpp" line="725"/>
+        <source>Open Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cryfs-gui.cpp" line="727"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cryfs-gui.cpp" line="743"/>
         <source>Close Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="775"/>
+        <location filename="../src/cryfs-gui.cpp" line="795"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="776"/>
+        <location filename="../src/cryfs-gui.cpp" line="796"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="618"/>
-        <location filename="../src/cryfs-gui.cpp" line="888"/>
-        <location filename="../src/cryfs-gui.cpp" line="989"/>
+        <location filename="../src/cryfs-gui.cpp" line="620"/>
+        <location filename="../src/cryfs-gui.cpp" line="908"/>
+        <location filename="../src/cryfs-gui.cpp" line="1009"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="889"/>
+        <location filename="../src/cryfs-gui.cpp" line="909"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="909"/>
+        <location filename="../src/cryfs-gui.cpp" line="929"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="989"/>
+        <location filename="../src/cryfs-gui.cpp" line="1009"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation type="unfinished"></translation>
     </message>

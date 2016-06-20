@@ -595,6 +595,8 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 void cryfsGUI::properties()
 {
+	this->disableAll() ;
+
 	auto mountPath = [ this ](){
 
 		auto table = m_ui->tableWidget ;
@@ -615,7 +617,9 @@ void cryfsGUI::properties()
 
 	if( statfs( mountPath.toLatin1().constData(),&vfs ) != 0 ){
 
-		return msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
+
+		return this->enableAll() ;
 	}
 
 	msg.ShowUIInfo( tr( "INFORMATION" ),[ & ](){
@@ -660,8 +664,9 @@ void cryfsGUI::properties()
 			auto c = tr( "Free Blocks: %3" ) ;
 			auto d = tr( "Used Space: %4" ) ;
 			auto e = tr( "Free Space: %5" ) ;
+			auto f = tr( "Used %: %6" ) ;
 
-			return a + "\n\n" + b + "\n\n" + c + "\n\n" + d + "\n\n" + e ;
+			return a + "\n\n" + b + "\n\n" + c + "\n\n" + d + "\n\n" + e + "\n\n" + f ;
 
 		}() ).arg( [ & ](){
 
@@ -682,8 +687,23 @@ void cryfsGUI::properties()
 		}(),[ & ](){
 
 			return _prettify( vfs.f_bsize * vfs.f_bavail ) ;
+
+		}(),[ & ]()->QString{
+
+			if( vfs.f_bfree == 0 ){
+
+				return "100%" ;
+			}else{
+				quint64 s = vfs.f_blocks - vfs.f_bavail ;
+
+				auto e = double( s ) / double( vfs.f_blocks ) ;
+
+				return QString::number( e * 100,'g',2 ) + "%" ;
+			}
 		}() ) ;
 	}() ) ;
+
+	this->enableAll() ;
 }
 
 void cryfsGUI::showContextMenu( QTableWidgetItem * item,bool itemClicked )
