@@ -630,6 +630,8 @@ void cryfsGUI::properties()
 
 				auto e = QString::number( double( s ) / q,'f',2 ) ;
 
+				e.remove( ".00" ) ;
+
 				return QString( "%1 %2" ).arg( e,p ) ;
 			} ;
 
@@ -715,7 +717,7 @@ void cryfsGUI::properties()
 
 				auto e = double( s ) / double( vfs.f_blocks ) ;
 
-				return QString::number( e * 100,'g',2 ) + "%" ;
+				return QString::number( e * 100,'f',2 ) + "%" ;
 			}
 		}() ) ;
 	}() ) ;

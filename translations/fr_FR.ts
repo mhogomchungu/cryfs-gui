@@ -419,64 +419,64 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/cryfs-gui.cpp" line="620"/>
         <source>Failed To Read Volume Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de la lecture des propriétés du volume</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="662"/>
         <source>Block Size: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille des blocs: %1</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="663"/>
         <source>Used Blocks: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocs utilisés: %2</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="664"/>
         <source>Free Blocks: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocs Libres: %3</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="740"/>
+        <location filename="../src/cryfs-gui.cpp" line="744"/>
         <source>Unmount</source>
         <translation>Démonter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="742"/>
+        <location filename="../src/cryfs-gui.cpp" line="746"/>
         <source>Open Folder</source>
         <translation>Ouvrir Répertoire</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="744"/>
+        <location filename="../src/cryfs-gui.cpp" line="748"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="760"/>
+        <location filename="../src/cryfs-gui.cpp" line="764"/>
         <source>Close Menu</source>
         <translation>Fermer le Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="812"/>
+        <location filename="../src/cryfs-gui.cpp" line="816"/>
         <source>WARNING</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="813"/>
+        <location filename="../src/cryfs-gui.cpp" line="817"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation>Impossible d&apos;ouvrir le point de montage parce que l&apos;outil &quot;%1&quot; ne semble pas fonctionner correctement.</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="620"/>
-        <location filename="../src/cryfs-gui.cpp" line="925"/>
-        <location filename="../src/cryfs-gui.cpp" line="1026"/>
+        <location filename="../src/cryfs-gui.cpp" line="929"/>
+        <location filename="../src/cryfs-gui.cpp" line="1030"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="665"/>
         <source>Total Blocks %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Total des Blocs %4</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="666"/>
@@ -486,20 +486,20 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/cryfs-gui.cpp" line="667"/>
         <source>Free Space: %6</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace Libre: %6</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="668"/>
         <source>Total Space: %7</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace Total: %7</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="669"/>
         <source>Used %: %8</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisé %: %8</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="926"/>
+        <location filename="../src/cryfs-gui.cpp" line="930"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
@@ -508,12 +508,12 @@ ou
 le volume n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="946"/>
+        <location filename="../src/cryfs-gui.cpp" line="950"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation>Sélectionner un répertoire de volume Encfs/Cryfs</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="1026"/>
+        <location filename="../src/cryfs-gui.cpp" line="1030"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation>Impossible de démonter le Volume %1</translation>
     </message>
@@ -690,7 +690,7 @@ le volume n&apos;est pas supporté</translation>
     <message>
         <location filename="../src/keydialog.cpp" line="197"/>
         <source>Set Cryfs Configuration File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le chemin du fichier de configuration Cryfs</translation>
     </message>
     <message>
         <location filename="../src/keydialog.cpp" line="205"/>
@@ -700,7 +700,7 @@ le volume n&apos;est pas supporté</translation>
     <message>
         <location filename="../src/keydialog.cpp" line="215"/>
         <source>Unlock A Cryfs Volume With Specified Configuration File.</source>
-        <translation type="unfinished"></translation>
+        <translation>Déverrouiller un volume Cryfs avec le fichier de configuration proposé.</translation>
     </message>
     <message>
         <location filename="../src/keydialog.cpp" line="264"/>
@@ -877,7 +877,7 @@ Une erreur inconnue est survenue.</translation>
     <message>
         <location filename="../src/options.cpp" line="65"/>
         <source>Select Cryfs Configuration File</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner un fichier de configuration Cryfs</translation>
     </message>
     <message>
         <location filename="../src/options.cpp" line="113"/>
