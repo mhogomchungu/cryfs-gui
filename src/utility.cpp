@@ -912,7 +912,7 @@ QString utility::mountPath( const QString& path )
 
 			_mountPath = f.readAll() ;
 
-			_mountPath.remove( "\n" ) ;
+			_mountPath.remove( '\n' ) ;
 
 			if( _mountPath.isEmpty() ){
 

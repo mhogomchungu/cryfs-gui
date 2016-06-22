@@ -659,7 +659,7 @@ void cryfsGUI::properties()
 			}
 		} ;
 
-		return QString( [](){
+		return QString( [ this ](){
 
 			auto l = { tr( "Block Size: %1" ),
 				   tr( "Used Blocks: %2" ),

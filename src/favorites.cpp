@@ -97,12 +97,7 @@ void favorites::devicePathTextChange( QString txt )
 
 void favorites::shortcutPressed()
 {
-	auto table = m_ui->tableWidget ;
-
-	if( table->rowCount() > 0 ){
-
-		this->itemClicked( m_ui->tableWidget->currentItem(),false ) ;
-	}
+	this->itemClicked( m_ui->tableWidget->currentItem(),false ) ;
 }
 
 void favorites::ShowUI()
@@ -150,20 +145,25 @@ void favorites::itemClicked( QTableWidgetItem * current )
 
 void favorites::itemClicked( QTableWidgetItem * current,bool clicked )
 {
-	QMenu m ;
-	m.setFont( this->font() ) ;
-	connect( m.addAction( tr( "Remove Selected Entry" ) ),SIGNAL( triggered() ),this,SLOT( removeEntryFromFavoriteList() ) ) ;
+	if( current ){
 
-	m.addSeparator() ;
-	m.addAction( tr( "Cancel" ) ) ;
+		QMenu m ;
 
-	if( clicked ){
+		m.setFont( this->font() ) ;
+		connect( m.addAction( tr( "Remove Selected Entry" ) ),
+			 SIGNAL( triggered() ),this,SLOT( removeEntryFromFavoriteList() ) ) ;
 
-		m.exec( QCursor::pos() ) ;
-	}else{
-		int x = m_ui->tableWidget->columnWidth( 0 ) ;
-		int y = m_ui->tableWidget->rowHeight( current->row() ) * current->row() + 20 ;
-		m.exec( m_ui->tableWidget->mapToGlobal( QPoint( x,y ) ) ) ;
+		m.addSeparator() ;
+		m.addAction( tr( "Cancel" ) ) ;
+
+		if( clicked ){
+
+			m.exec( QCursor::pos() ) ;
+		}else{
+			int x = m_ui->tableWidget->columnWidth( 0 ) ;
+			int y = m_ui->tableWidget->rowHeight( current->row() ) * current->row() + 20 ;
+			m.exec( m_ui->tableWidget->mapToGlobal( QPoint( x,y ) ) ) ;
+		}
 	}
 }
 
