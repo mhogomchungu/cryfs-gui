@@ -167,7 +167,9 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 	} ) ;
 }
 
-utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,const QString& keyID,const QString& pwd )
+utility::wallet utility::getKeyFromWallet( QWidget * widget,
+					   LxQt::Wallet::walletBackEnd storage,
+					   const QString& keyID,const QString& pwd )
 {
 	utility::wallet w{ false,false,"","" } ;
 
@@ -200,7 +202,9 @@ utility::wallet utility::getKeyFromWallet( LxQt::Wallet::walletBackEnd storage,c
 
 			storage_t e( _getBackEnd( storage ) ) ;
 
-			e->setImage( ":/cryfs-gui" ) ;
+			e->setImage( QIcon( ":/cryfs-gui" ) ) ;
+
+			e->setInterfaceObject( widget,false ) ;
 
 			w.opened = e->await_open( walletName,appName,pwd ) ;
 
