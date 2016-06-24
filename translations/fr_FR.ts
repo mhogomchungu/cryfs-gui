@@ -108,22 +108,22 @@ options:
 </translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="406"/>
+        <location filename="../src/utility.cpp" line="410"/>
         <source>Manage Favorites</source>
         <translation>Gérer les Favoris</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="407"/>
+        <location filename="../src/utility.cpp" line="411"/>
         <source>Mount All</source>
         <translation>Tout Monter</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="434"/>
+        <location filename="../src/utility.cpp" line="438"/>
         <source>about cryfs-gui</source>
         <translation>A propos de cryfs-gui</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="624"/>
+        <location filename="../src/utility.cpp" line="628"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -136,7 +136,7 @@ Ce plugin génère une clé en utilisant la formule ci-dessous:
 key = hmac(sha256,passphrase,keyfile contents)</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="629"/>
+        <location filename="../src/utility.cpp" line="633"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -150,7 +150,7 @@ key = passphrase + keyfile contents
 </translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="634"/>
+        <location filename="../src/utility.cpp" line="638"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
@@ -159,37 +159,37 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
 Ce plugin récupère une clé de verrouillage dans un fichier gpg avec une clé symétrique</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="44"/>
-        <location filename="../src/checkforupdates.cpp" line="86"/>
-        <location filename="../src/utility.cpp" line="652"/>
+        <location filename="../src/checkforupdates.cpp" line="46"/>
+        <location filename="../src/checkforupdates.cpp" line="88"/>
+        <location filename="../src/utility.cpp" line="656"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="31"/>
+        <location filename="../src/checkforupdates.cpp" line="33"/>
         <source>%1&quot;%2&quot; Installed Version Is : %3.
 Latest Version Is : %4.</source>
         <translation>%1&quot;%2&quot; version installée : %3.
 Dernière version disponible : %4.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="43"/>
-        <location filename="../src/checkforupdates.cpp" line="84"/>
+        <location filename="../src/checkforupdates.cpp" line="45"/>
+        <location filename="../src/checkforupdates.cpp" line="86"/>
         <source>Failed To Check For Updates.</source>
         <translation>Impossible de tester si la version est à jour.</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="70"/>
+        <location filename="../src/checkforupdates.cpp" line="72"/>
         <source>Update Available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="82"/>
+        <location filename="../src/checkforupdates.cpp" line="84"/>
         <source>Version Info</source>
         <translation>Infos de Version</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="652"/>
+        <location filename="../src/utility.cpp" line="656"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation>Ne trouve pas de &quot;gpg&quot; executable dans &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; ou &quot;/usr/sbin&quot;</translation>
     </message>
@@ -422,84 +422,84 @@ p, li { white-space: pre-wrap; }
         <translation>Echec de la lecture des propriétés du volume</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="662"/>
+        <location filename="../src/cryfs-gui.cpp" line="664"/>
         <source>Block Size: %1</source>
         <translation>Taille des blocs: %1</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="663"/>
+        <location filename="../src/cryfs-gui.cpp" line="665"/>
         <source>Used Blocks: %2</source>
         <translation>Blocs utilisés: %2</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="664"/>
+        <location filename="../src/cryfs-gui.cpp" line="666"/>
         <source>Free Blocks: %3</source>
         <translation>Blocs Libres: %3</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="744"/>
+        <location filename="../src/cryfs-gui.cpp" line="742"/>
         <source>Unmount</source>
         <translation>Démonter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="746"/>
+        <location filename="../src/cryfs-gui.cpp" line="744"/>
         <source>Open Folder</source>
         <translation>Ouvrir Répertoire</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="748"/>
+        <location filename="../src/cryfs-gui.cpp" line="746"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="764"/>
+        <location filename="../src/cryfs-gui.cpp" line="762"/>
         <source>Close Menu</source>
         <translation>Fermer le Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="816"/>
+        <location filename="../src/cryfs-gui.cpp" line="814"/>
         <source>WARNING</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="817"/>
+        <location filename="../src/cryfs-gui.cpp" line="815"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation>Impossible d&apos;ouvrir le point de montage parce que l&apos;outil &quot;%1&quot; ne semble pas fonctionner correctement.</translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="620"/>
-        <location filename="../src/cryfs-gui.cpp" line="929"/>
-        <location filename="../src/cryfs-gui.cpp" line="1030"/>
+        <location filename="../src/cryfs-gui.cpp" line="927"/>
+        <location filename="../src/cryfs-gui.cpp" line="1028"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="665"/>
+        <location filename="../src/cryfs-gui.cpp" line="667"/>
         <source>Total Blocks %4</source>
         <translation>Total des Blocs %4</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="666"/>
+        <location filename="../src/cryfs-gui.cpp" line="668"/>
         <source>Used Space: %5</source>
         <translation>Espace Utilisé: %5</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="667"/>
+        <location filename="../src/cryfs-gui.cpp" line="669"/>
         <source>Free Space: %6</source>
         <translation>Espace Libre: %6</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="668"/>
+        <location filename="../src/cryfs-gui.cpp" line="670"/>
         <source>Total Space: %7</source>
         <translation>Espace Total: %7</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="669"/>
+        <location filename="../src/cryfs-gui.cpp" line="671"/>
         <source>Used %: %8</source>
         <translation>Utilisé %: %8</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="930"/>
+        <location filename="../src/cryfs-gui.cpp" line="928"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
@@ -508,12 +508,12 @@ ou
 le volume n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="950"/>
+        <location filename="../src/cryfs-gui.cpp" line="948"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation>Sélectionner un répertoire de volume Encfs/Cryfs</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="1030"/>
+        <location filename="../src/cryfs-gui.cpp" line="1028"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation>Impossible de démonter le Volume %1</translation>
     </message>
@@ -561,12 +561,12 @@ le volume n&apos;est pas supporté</translation>
         <translation>&amp;Fini</translation>
     </message>
     <message>
-        <location filename="../src/favorites.cpp" line="155"/>
+        <location filename="../src/favorites.cpp" line="153"/>
         <source>Remove Selected Entry</source>
         <translation>Enlever l&apos;entrée sélectionnée</translation>
     </message>
     <message>
-        <location filename="../src/favorites.cpp" line="158"/>
+        <location filename="../src/favorites.cpp" line="157"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -912,8 +912,8 @@ Une erreur inconnue est survenue.</translation>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Wallet &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600;&quot;&gt;&apos;%1&apos;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; does not exist, do you want to create it?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Wallet &lt;span style=&quot; font-weight:600;&quot;&gt;&apos;%1&apos;&lt;/span&gt; does not exist, do you want to create it?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -925,8 +925,8 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;An application &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600;&quot;&gt;&apos;%1&apos;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; has requested to open a wallet&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600;&quot;&gt; &apos;%2&apos;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;. Enter the password below for this wallet to unlock it.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;An application &lt;span style=&quot; font-weight:600;&quot;&gt;&apos;%1&apos;&lt;/span&gt; has requested to open a wallet&lt;span style=&quot; font-weight:600;&quot;&gt; &apos;%2&apos;&lt;/span&gt;. Enter the password below for this wallet to unlock it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -934,7 +934,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;L&apos;application &lt;span style=&quot; font-weight:600;&quot;&gt;&apos;%1&apos;&lt;/span&gt; a demandé d&apos;ouvrir le trousseau&lt;span style=&quot; font-weight:600;&quot;&gt; &apos;%2&apos;&lt;/span&gt;.Saisissez le mot de passe du trousseau ci-après pour le déverrouiller.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/lxqt_wallet/frontend/password_dialog.ui" line="125"/>
+        <location filename="../src/lxqt_wallet/frontend/password_dialog.ui" line="124"/>
         <source>&amp;Unlock</source>
         <translation>&amp;Déverrouiller</translation>
     </message>

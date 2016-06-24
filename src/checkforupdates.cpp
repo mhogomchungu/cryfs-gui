@@ -26,6 +26,8 @@
 #include "cryfstask.h"
 #include "version.h"
 
+#include "3rdParty/json.hpp"
+
 static QString _tr( const QString& n,const QString& a,const QStringList& l )
 {
 	auto e = QObject::tr( "%1\"%2\" Installed Version Is : %3.\nLatest Version Is : %4." ) ;
@@ -114,71 +116,52 @@ static QNetworkRequest _request( bool e )
 	return request ;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
-
-checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
-	m_autocheck( autocheck ),m_widget( widget )
-{
-        m_networkAccessManager.get( _request( true ),[ this ]( NetworkAccessManager::NetworkReply e ){
-
-		_show( this,m_autocheck,m_widget,e->readAll() ) ;
-	} ) ;
-}
-
-void checkForUpdates::show( const QByteArray& e,const QByteArray& r )
-{
-	Q_UNUSED( e ) ;
-	Q_UNUSED( r ) ;
-}
-
-#else
-
-#include <QJsonDocument>
-
 void checkForUpdates::show( const QByteArray& cryfs,const QByteArray& cryfs_gui )
 {
 	auto f = [](){
 
-		setenv( "CRYFS_NO_UPDATE_CHECK","TRUE",1 ) ;
-		setenv( "CRYFS_FRONTEND","noninteractive",1 ) ;
-
 		auto exe = utility::executableFullPath( "cryfs" ) ;
 
-		if( !exe.isEmpty() ){
+		if( exe.isEmpty() ){
 
-			auto e = utility::Task::run( exe ).await().output().split( ' ' ) ;
+			return QByteArray() ;
+		}else{
+			return Task::await< QByteArray >( [ & ](){
 
-			if( e.size() >= 3 ){
+				auto e = utility::Task( exe,-1,[](){
 
-				return e.at( 2 ).split( '\n' ).first() ;
-			}
+					QProcessEnvironment env ;
+
+					env.insert( "CRYFS_NO_UPDATE_CHECK","TRUE" ) ;
+					env.insert( "CRYFS_FRONTEND","noninteractive" ) ;
+
+					return env ;
+
+				}() ).output().split( ' ' ) ;
+
+				if( e.size() >= 3 ){
+
+					return e.at( 2 ).split( '\n' ).first() ;
+				}else{
+					return QByteArray() ;
+				}
+			} ) ;
 		}
-
-		return QByteArray() ;
 	}() ;
 
 	auto d = [ & ](){
 
-		QJsonParseError error ;
+		try{
+			auto e = nlohmann::json::parse( cryfs.constData() ) ;
 
-		auto r = QJsonDocument::fromJson( cryfs,&error ) ;
+			auto r = e.find( "version_info" ).value().find( "current" ).value() ;
 
-		if( error.error == QJsonParseError::NoError ){
+			return QString::fromStdString( r ) ;
 
-			auto m = r.toVariant().toMap() ;
+		}catch( ... ){
 
-			if( !m.isEmpty() ){
-
-				m = m[ "version_info" ].toMap() ;
-
-				if( !m.isEmpty() ){
-
-					return m[ "current" ].toString() ;
-				}
-			}
+			return QString() ;
 		}
-
-		return QString() ;
 	}() ;
 
 	if( f.isEmpty() || d.isEmpty() ){
@@ -192,20 +175,20 @@ void checkForUpdates::show( const QByteArray& cryfs,const QByteArray& cryfs_gui 
 checkForUpdates::checkForUpdates( QWidget * widget,bool autocheck ) :
 	m_autocheck( autocheck ),m_widget( widget )
 {
-        m_networkAccessManager.get( _request( true ),[ this ]( NetworkAccessManager::NetworkReply r ){
+	using reply_t = NetworkAccessManager::NetworkReply ;
+
+	m_networkAccessManager.get( _request( true ),[ this ]( reply_t r ){
 
                 auto k = r.release() ;
 
-                m_networkAccessManager.get( _request( false ),[ this,k ]( NetworkAccessManager::NetworkReply e ){
+		m_networkAccessManager.get( _request( false ),[ this,k ]( reply_t e ){
 
-                        NetworkAccessManager::NetworkReply r = k ;
+			reply_t r = k ;
 
-                        this->show( e->readAll(),r->readAll() ) ;
+			this->show( e->readAll(),r->readAll() ) ;
 		} ) ;
 	} ) ;
 }
-
-#endif
 
 static QString _optionPath()
 {
