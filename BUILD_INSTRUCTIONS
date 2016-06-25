@@ -1,32 +1,15 @@
 
 This tool depends on the following packages installed to build, their precise name may differ in your distro.
 
-3. libqt4-devel
-   libqt4-network
-   libqtcore4
-   libqtgui4
+3. For Qt4 build(libqt4-devel,libqt4-network,libqtcore4,libqtgui4)
+   For Qt5 build(qt5-base-devel or a packages that provides Qt5Core-devel,Qt5Gui-devel,Qt5Network-devel)
 4. gcc
 5. gcc-c++
 7. cmake
 8.
-9. libgcrypt-devel
-10.libsecret-devel( optional dependency to store keys in gnome's libsecret )
+9. libgcrypt-devel libgcrypt11-dev
+10.libsecret-devel or libsecret-1-dev( optional dependency to store keys in gnome's libsecret )
 11.kde-devel( optional dependency to store keys in kde's kwallet )
-12.pkg-config
-
-The precise names of the above packages in debian are:
-
-3. libqt4-dev( optional dependency used when building GUI components )
-   libqt4-network
-   libqtcore4
-   libqtgui4
-4. gcc
-5. g++
-7. cmake
-8.
-9. libgcrypt11-dev
-10.libsecret-1-dev( optional dependency used to store and retrieve volume keys using gnome's libsecret )
-11.not sure of the package name( optional dependency used to store and retrieve volume keys using kde's kwallet )
 12.pkg-config
 
 To build cryfs-gui with default options,run these 5 commands from inside cryfs-gui source folder.
@@ -37,7 +20,7 @@ mkdir build
 
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=false -DNOSECRETSUPPORT=false -DNOKDESUPPORT=false -DQT5=false -DCMAKE_BUILD_TYPE=RELEASE . ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=true -DNOSECRETSUPPORT=false -DNOKDESUPPORT=false -DCMAKE_BUILD_TYPE=RELEASE . ..
 
 make
 
@@ -58,8 +41,8 @@ This option specifies the base directory where libraries should be installed. No
 -DCMAKE_BUILD_TYPE=RELEASE
 This option tells the build process to build the project in release mode.This mode is most suitable for non developers.
 
--DQT5=false
-This option tells the build process to build GUI components using Qt4.Set the option to "true" if you want to build using Qt5.
+-DQT5=true
+This option tells the build process to build GUI components using Qt5.Set the option to "false" if you want to build using Qt4.
 
 -DNOSECRETSUPPORT=false
 This option tells the build process to add gnome's libsecret secure storage of passwords.Set this option to "true" if
