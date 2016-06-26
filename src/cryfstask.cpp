@@ -87,8 +87,7 @@ Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 	} ) ;
 }
 
-static cs _cmd( const QString& app,const cryfsTask::options& opt,
-                const QString& configFilePath = QString() )
+static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& configFilePath )
 {
         auto _args = []( const QString& exe,const cryfsTask::options& opt,
                         const QString& type,const QString& configFilePath ){
@@ -238,7 +237,12 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
                                 }
                         }
                 }else{
-			return _mount( "cryfs",opt,opt.configFilePath ) ;
+			if( utility::pathExists( opt.configFilePath ) ){
+
+				return _mount( "cryfs",opt,opt.configFilePath ) ;
+			}else{
+				return cs::unknown ;
+			}
                 }
 	} ) ;
 }
@@ -251,7 +255,7 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 			if( _create_folder( opt.plainFolder ) ){
 
-                                auto e = _cmd( "cryfs",opt ) ;
+				auto e = _cmd( "cryfs",opt,opt.configFilePath ) ;
 
 				if( e == cs::success ){
 

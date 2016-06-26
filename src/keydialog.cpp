@@ -541,7 +541,7 @@ void keyDialog::encryptedFolderCreate()
 		return this->enableAll() ;
 	}
 
-        auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,"",false,m_success } ) ;
+	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,m_configFile,false,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 
