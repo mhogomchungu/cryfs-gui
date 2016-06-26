@@ -421,6 +421,7 @@ namespace utility
 			m_exitCode   = p.exitCode() ;
 			m_exitStatus = p.exitStatus() ;
 			m_data       = p.readAll() ;
+			m_stdError   = p.readAllStandardError() ;
 		}
 		QStringList splitOutput( char token ) const
 		{
@@ -433,6 +434,10 @@ namespace utility
 		const QByteArray& output() const
 		{
 			return m_data ;
+		}
+		const QByteArray& stdError() const
+		{
+			return m_stdError ;
 		}
 		int exitCode() const
 		{
@@ -460,6 +465,7 @@ namespace utility
 		}
 	private:
 		QByteArray m_data ;
+		QByteArray m_stdError ;
 		int m_exitCode ;
 		int m_exitStatus ;
 		bool m_finished ;

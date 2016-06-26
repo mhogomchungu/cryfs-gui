@@ -179,11 +179,18 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
 				return cs::success ;
 			}else{
-				if( app == "cryfs" ){
+				auto q = "Could not load config file. Did you enter the correct password?" ;
 
-					return cs::cryfs ;
+				if( e.stdError().contains( q ) ){
+
+					if( app == "cryfs" ){
+
+						return cs::cryfs ;
+					}else{
+						return cs::encfs ;
+					}
 				}else{
-					return cs::encfs ;
+					return cs::backendFail ;
 				}
 			}
 		}else{
@@ -231,12 +238,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
                                 }
                         }
                 }else{
-                        if( opt.configFilePath.endsWith( "cryfs.config" ) ){
-
-                                return _mount( "cryfs",opt,opt.configFilePath ) ;
-                        }else{
-                                return cs::unknown ;
-                        }
+			return _mount( "cryfs",opt,opt.configFilePath ) ;
                 }
 	} ) ;
 }

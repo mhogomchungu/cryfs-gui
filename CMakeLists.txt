@@ -35,7 +35,7 @@ file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
 
-set( PGR_VERSION "1.2.0" )
+set( PGR_VERSION "1.3.0" )
 
 file( WRITE ${PROJECT_BINARY_DIR}/version.h "
 #ifndef THIS_VERSION
@@ -47,12 +47,6 @@ file( WRITE ${PROJECT_BINARY_DIR}/version.h "
 #define VERSION_STRING \"Version  : ${PGR_VERSION}\\nCopyright: 2016 Francis Banyikwa,mhogomchungu@gmail.com\\nLicense  : GPLv2+\"
 #endif
 \n" )
-
-if( REUSEMOUNTPOINT )
-	file( WRITE  ${PROJECT_BINARY_DIR}/reuse_mount_point.h "\n#define REUSE_MOUNT_POINT 1\n" )
-else()
-	file( WRITE  ${PROJECT_BINARY_DIR}/reuse_mount_point.h "\n#define REUSE_MOUNT_POINT 0\n" )
-endif()
 
 ADD_SUBDIRECTORY( src/lxqt_wallet )
 
@@ -186,8 +180,4 @@ Path=
 StartupNotify=true
 Terminal=false
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 Categories=Security;Utility;Qt;X-MandrivaLinux-System-FileTools;\n")

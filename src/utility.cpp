@@ -69,8 +69,6 @@
 
 #include "lxqt_wallet/frontend/lxqt_wallet.h"
 
-#include "reuse_mount_point.h"
-
 #include "dialogmsg.h"
 #include "plugin.h"
 
