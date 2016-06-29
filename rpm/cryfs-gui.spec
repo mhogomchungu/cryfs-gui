@@ -31,17 +31,13 @@ BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: libsecret-devel
-#BuildRequires: qt5-qtbase-devel
 
 %if 0%{?fedora}
-BuildRequires: cryptsetup-luks-devel
 BuildRequires: qt5-qtbase-devel
 %else
-#Add package name here that provides libcryptsetup-devel
-#BuildRequires: libcryptsetup-devel
-
-#Add package names here that provides Qt5Core-devel,Qt5GUI-devel and Qt5Network-devel
-
+#This package maybe named differently in your distribution.
+#What is required here is a package or packages that provides development packages for Qt5Core,Qt5GUI and Qt5Network
+BuildRequires: libqt5-qtbase-devel
 %endif
 
 %description
@@ -67,6 +63,9 @@ rm -rf $RPM_BUILD_DIR/cryfs-gui
 %defattr(0755,root,root)
 %{_bindir}/cryfs_gui
 %{_datadir}/applications/cryfs-gui.desktop
+
+%dir %{_datadir}/cryfs-gui/translations
+%dir %{_datadir}/cryfs-gui
 
 %defattr(0644,root,root)
 %{_datadir}/icons/hicolor/48x48/apps/cryfs-gui.png
