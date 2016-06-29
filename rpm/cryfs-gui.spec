@@ -26,6 +26,7 @@ Source:         %{name}-%{version}.tar.xz
 Source100:      cryfs-gui-rpmlint
 URL:            https://github.com/mhogomchungu/cryfs-gui
 
+BuildRequires: cmake
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: libgcrypt-devel
