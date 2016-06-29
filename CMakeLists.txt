@@ -117,7 +117,7 @@ if( QT5 )
 
 	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} lxqtwallet )
 
-	set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 else()
 	find_package( Qt4 REQUIRED )
 
@@ -139,7 +139,7 @@ else()
 
 	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork lxqtwallet )
 
-	set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 endif()
 
 set_target_properties( cryfs PROPERTIES COMPILE_FLAGS "-Wextra -Wall -s -fPIC -pedantic" )
