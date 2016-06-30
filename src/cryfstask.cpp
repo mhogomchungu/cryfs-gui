@@ -172,6 +172,13 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 
 		}(),opt.key.toLatin1() ) ;
 
+		auto _printOutput = [ & ](){
+
+			qDebug() << e.output() ;
+			qDebug() << "-------------------------------------------------------";
+			qDebug() << e.stdError() ;
+		} ;
+
 		if( e.finished() ){
 
 			if( e.success() ){
@@ -182,19 +189,21 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 
 				if( e.stdError().contains( q ) ){
 
+					_printOutput() ;
+
 					if( app == "cryfs" ){
 
 						return cs::cryfs ;
 					}else{
 						return cs::encfs ;
 					}
-				}else{
-					return cs::backendFail ;
 				}
 			}
-		}else{
-			return cs::backendFail ;
 		}
+
+		_printOutput() ;
+
+		return cs::backendFail ;
 	}
 }
 
@@ -257,7 +266,8 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 				auto e = _cmd( "cryfs",opt,[ & ](){
 
-					if( opt.configFilePath.startsWith( "/" ) ){
+					if( opt.configFilePath.startsWith( "/" ) ||
+							opt.configFilePath.isEmpty() ){
 
 						return opt.configFilePath ;
 					}else{
