@@ -38,6 +38,8 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 {
 	DialogMsg msg( w ) ;
 
+	l.remove( '\n' ) ;
+
 	if( l.isEmpty() ){
 
 		if( !autocheck ){
@@ -46,8 +48,6 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 			msg.ShowUIOK( QObject::tr( "ERROR" ),e ) ;
 		}
 	}else{
-		l.replace( "\n","" ) ;
-
 		if( autocheck ){
 
 			auto _mismatch = [ & ]{
@@ -62,7 +62,7 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 
 			if( ( l != "Not Found" && l != THIS_VERSION ) || _mismatch() ){
 
-				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
+				l = _tr( "","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
@@ -74,7 +74,7 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 		}else{
 			if( l != "Not Found" ){
 
-				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
+				l = _tr( "","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
