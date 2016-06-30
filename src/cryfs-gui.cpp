@@ -669,7 +669,7 @@ void cryfsGUI::properties()
 				   tr( "Total Space: %7" ),
 				   tr( "Used %: %8" ) } ;
 
-			QString e = "\n\n\n" ;
+			QString e ;
 
 			for( const auto& it : l ){
 
