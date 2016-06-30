@@ -615,6 +615,13 @@ void keyDialog::openVolume()
 
 		m_key = f.readAll() ;
 
+		if( m_key.contains( '\n' ) ){
+
+			DialogMsg msg( this ) ;
+
+			msg.ShowUIOK( tr( "WARNING" ),tr( "KeyFile Contents Will Be Trancated On The First Encountered NewLine Character." ) ) ;
+		}
+
 	}else if( keyType == keyDialog::plugin ){
 
 		/*
