@@ -255,7 +255,15 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 			if( _create_folder( opt.plainFolder ) ){
 
-				auto e = _cmd( "cryfs",opt,opt.configFilePath ) ;
+				auto e = _cmd( "cryfs",opt,[ & ](){
+
+					if( opt.configFilePath.startsWith( "/" ) ){
+
+						return opt.configFilePath ;
+					}else{
+						return utility::homePath() + "/" + opt.configFilePath ;
+					}
+				}() ) ;
 
 				if( e == cs::success ){
 
