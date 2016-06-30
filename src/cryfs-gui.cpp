@@ -597,7 +597,7 @@ void cryfsGUI::properties()
 {
 	this->disableAll() ;
 
-	auto mountPath = [ this ](){
+	auto m = [ this ](){
 
 		auto table = m_ui->tableWidget ;
 
@@ -605,9 +605,9 @@ void cryfsGUI::properties()
 
 		if( row >= 0 ){
 
-			return table->item( row,1 )->text() ;
+			return table->item( row,1 )->text().toLatin1() ;
 		}else{
-			return QString() ;
+			return QByteArray() ;
 		}
 	}() ;
 
@@ -615,10 +615,9 @@ void cryfsGUI::properties()
 
 	struct statfs vfs ;
 
-	if( statfs( mountPath.toLatin1().constData(),&vfs ) != 0 ){
+	if( Task::await< int >( [ & ](){ return statfs( m.constData(),&vfs ) ; } ) ){
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Read Volume Properties" ) ) ;
-
 		return this->enableAll() ;
 	}
 
