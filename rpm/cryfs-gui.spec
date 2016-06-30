@@ -24,7 +24,7 @@ License:        GPL-2.0+
 Group:          Productivity/Security
 Source:         %{name}-%{version}.tar.xz
 Source100:      cryfs-gui-rpmlint
-URL:            https://github.com/mhogomchungu/cryfs-gui
+URL:            http://mhogomchungu.github.io/cryfs-gui
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

@@ -177,6 +177,7 @@ void walletconfig::ShowUI( LxQt::Wallet::walletBackEnd backEnd )
 
 	m_wallet = LxQt::Wallet::getWalletBackend( backEnd ) ;
 	m_wallet->setInterfaceObject( this ) ;
+	m_wallet->setImage( QIcon( ":/cryfs-gui" ) ) ;
 
 	if( backEnd == LxQt::Wallet::kwalletBackEnd ){
 
