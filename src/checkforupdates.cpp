@@ -62,26 +62,26 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 
 			if( ( l != "Not Found" && l != THIS_VERSION ) || _mismatch() ){
 
-				l = _tr( "","cryfs-gui",{ THIS_VERSION,l } ) ;
+				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
-					l += _tr( "\n\n","cryfs",e ) ;
+					l += _tr( "\n\n\n","cryfs",e ) ;
 				}
 
-				msg.ShowUIOK( QObject::tr( "Update Available" ),l + "\n" ) ;
+				msg.ShowUIInfo( QObject::tr( "Update Available" ),l + "\n" ) ;
 			}
 		}else{
 			if( l != "Not Found" ){
 
-				l = _tr( "","cryfs-gui",{ THIS_VERSION,l } ) ;
+				l = _tr( "\n","cryfs-gui",{ THIS_VERSION,l } ) ;
 
 				if( !e.isEmpty() ){
 
-					l += _tr( "\n\n","cryfs",e ) ;
+					l += _tr( "\n\n\n","cryfs",e ) ;
 				}
 
-				msg.ShowUIOK( QObject::tr( "Version Info" ),l + "\n" ) ;
+				msg.ShowUIInfo( QObject::tr( "Version Info" ),l + "\n" ) ;
 			}else{
 				auto e = QObject::tr( "Failed To Check For Updates." ) ;
 
