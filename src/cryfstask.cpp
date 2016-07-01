@@ -186,8 +186,9 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 				return cs::success ;
 			}else{
 				auto q = "Could not load config file. Did you enter the correct password?" ;
+				auto p = "Error decoding volume key, password incorrect" ;
 
-				if( e.stdError().contains( q ) ){
+				if( e.stdError().contains( q ) || e.output().contains( p ) ){
 
 					_printOutput() ;
 
