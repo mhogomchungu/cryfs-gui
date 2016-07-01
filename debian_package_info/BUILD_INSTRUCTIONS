@@ -34,7 +34,7 @@ HOW TO BUILD A CRYFS-GUI PACKAGE ON UBUNTU OR ANY OTHER DEBIAN BASED DISTRIBUTIO
 
    ******************************************************************************************************
 
-   tar cf - . | xz -zf - > ../cryfs-gui_1.3.0.orig.tar.xz
+   tar cf - . | xz -zf - > ../cryfs-gui-1.3.1.orig.tar.xz
 
    ******************************************************************************************************
 
@@ -65,7 +65,7 @@ HOW TO BUILD A CRYFS-GUI PACKAGE ON UBUNTU OR ANY OTHER DEBIAN BASED DISTRIBUTIO
 
 
 
-HOW TO BUILD A ZULUCRYPT PACKAGE ON DEBIAN OR ANY OTHER DEBIAN BASED DISTRIBUTION THAT USES "SU".
+HOW TO BUILD A CRYFS-GUI PACKAGE ON DEBIAN OR ANY OTHER DEBIAN BASED DISTRIBUTION THAT USES "SU".
 
 
 2. Install a package called "build-essential" by running the following command:
@@ -90,7 +90,7 @@ HOW TO BUILD A ZULUCRYPT PACKAGE ON DEBIAN OR ANY OTHER DEBIAN BASED DISTRIBUTIO
 
    ******************************************************************************************************
 
-   tar cf - . | xz -zf - > ../cryfs-gui-1.3.0.orig.tar.xz
+   tar cf - . | xz -zf - > ../cryfs-gui-1.3.1.orig.tar.xz
 
    ******************************************************************************************************
 

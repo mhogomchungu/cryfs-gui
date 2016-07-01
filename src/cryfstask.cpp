@@ -175,7 +175,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 		auto _printOutput = [ & ](){
 
 			qDebug() << e.output() ;
-			qDebug() << "-------------------------------------------------------";
+			qDebug() << "-------------------------------------------------------" ;
 			qDebug() << e.stdError() ;
 		} ;
 

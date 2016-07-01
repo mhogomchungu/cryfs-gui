@@ -74,7 +74,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/utility.cpp" line="83"/>
+        <location filename="../src/utility.cpp" line="81"/>
         <source>
 options:
 	-d   Path to where a volume to be auto unlocked/mounted is located.
@@ -94,22 +94,22 @@ options:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="410"/>
+        <location filename="../src/utility.cpp" line="408"/>
         <source>Manage Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="411"/>
+        <location filename="../src/utility.cpp" line="409"/>
         <source>Mount All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="438"/>
+        <location filename="../src/utility.cpp" line="436"/>
         <source>about cryfs-gui</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="628"/>
+        <location filename="../src/utility.cpp" line="626"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -118,7 +118,7 @@ key = hmac(sha256,passphrase,keyfile contents)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="633"/>
+        <location filename="../src/utility.cpp" line="631"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -127,16 +127,16 @@ key = passphrase + keyfile contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="638"/>
+        <location filename="../src/utility.cpp" line="636"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="46"/>
+        <location filename="../src/checkforupdates.cpp" line="48"/>
         <location filename="../src/checkforupdates.cpp" line="88"/>
-        <location filename="../src/utility.cpp" line="656"/>
+        <location filename="../src/utility.cpp" line="654"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -147,7 +147,7 @@ Latest Version Is : %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/checkforupdates.cpp" line="45"/>
+        <location filename="../src/checkforupdates.cpp" line="47"/>
         <location filename="../src/checkforupdates.cpp" line="86"/>
         <source>Failed To Check For Updates.</source>
         <translation type="unfinished"></translation>
@@ -163,7 +163,7 @@ Latest Version Is : %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="656"/>
+        <location filename="../src/utility.cpp" line="654"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -377,7 +377,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="625"/>
+        <location filename="../src/cryfs-gui.cpp" line="624"/>
         <source>INFORMATION</source>
         <translation type="unfinished"></translation>
     </message>
@@ -387,96 +387,96 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="664"/>
+        <location filename="../src/cryfs-gui.cpp" line="663"/>
         <source>Block Size: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="665"/>
+        <location filename="../src/cryfs-gui.cpp" line="664"/>
         <source>Used Blocks: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="666"/>
+        <location filename="../src/cryfs-gui.cpp" line="665"/>
         <source>Free Blocks: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="742"/>
+        <location filename="../src/cryfs-gui.cpp" line="741"/>
         <source>Unmount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="744"/>
+        <location filename="../src/cryfs-gui.cpp" line="743"/>
         <source>Open Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="746"/>
+        <location filename="../src/cryfs-gui.cpp" line="745"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="762"/>
+        <location filename="../src/cryfs-gui.cpp" line="761"/>
         <source>Close Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="814"/>
+        <location filename="../src/cryfs-gui.cpp" line="813"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="815"/>
+        <location filename="../src/cryfs-gui.cpp" line="814"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/cryfs-gui.cpp" line="620"/>
-        <location filename="../src/cryfs-gui.cpp" line="927"/>
-        <location filename="../src/cryfs-gui.cpp" line="1028"/>
+        <location filename="../src/cryfs-gui.cpp" line="926"/>
+        <location filename="../src/cryfs-gui.cpp" line="1027"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="667"/>
+        <location filename="../src/cryfs-gui.cpp" line="666"/>
         <source>Total Blocks %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="668"/>
+        <location filename="../src/cryfs-gui.cpp" line="667"/>
         <source>Used Space: %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="669"/>
+        <location filename="../src/cryfs-gui.cpp" line="668"/>
         <source>Free Space: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="670"/>
+        <location filename="../src/cryfs-gui.cpp" line="669"/>
         <source>Total Space: %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="671"/>
+        <location filename="../src/cryfs-gui.cpp" line="670"/>
         <source>Used %: %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="928"/>
+        <location filename="../src/cryfs-gui.cpp" line="927"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="948"/>
+        <location filename="../src/cryfs-gui.cpp" line="947"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="1028"/>
+        <location filename="../src/cryfs-gui.cpp" line="1027"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -580,7 +580,7 @@ The Volume Is Not Supported</source>
     <message>
         <location filename="../src/keydialog.ui" line="58"/>
         <location filename="../src/keydialog.cpp" line="174"/>
-        <location filename="../src/keydialog.cpp" line="673"/>
+        <location filename="../src/keydialog.cpp" line="680"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -790,12 +790,22 @@ An Unknown Error Has Occured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="663"/>
+        <location filename="../src/keydialog.cpp" line="622"/>
+        <source>WARNING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/keydialog.cpp" line="622"/>
+        <source>KeyFile Contents Will Be Trancated On The First Encountered NewLine Character.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/keydialog.cpp" line="670"/>
         <source>Plugin name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="683"/>
+        <location filename="../src/keydialog.cpp" line="690"/>
         <source>Keyfile path</source>
         <translation type="unfinished"></translation>
     </message>
