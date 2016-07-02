@@ -30,6 +30,6 @@
 
 #include "lxqt_wallet/frontend/task.h"
 
-namespace Task = LxQt::Wallet::Task ;
+namespace Task = LXQt::Wallet::Task ;
 
 

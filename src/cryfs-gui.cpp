@@ -243,18 +243,18 @@ void cryfsGUI::setUpAppMenu()
 				   SLOT( keyManagerClicked( QAction * ) ),
 				   SLOT( aboutToShowMenu() ) ) ;
 
-		auto _addOption = [ & ]( const QString& e,const char * z,LxQt::Wallet::walletBackEnd s ){
+		auto _addOption = [ & ]( const QString& e,const char * z,LXQt::Wallet::BackEnd s ){
 
 			auto ac = _addAction( false,false,e,z,nullptr ) ;
 
-			ac->setEnabled( LxQt::Wallet::backEndIsSupported( s ) ) ;
+			ac->setEnabled( LXQt::Wallet::backEndIsSupported( s ) ) ;
 
 			m->addAction( ac ) ;
 		} ;
 
-		_addOption( tr( "Internal Wallet" ),"Internal Wallet",LxQt::Wallet::internalBackEnd ) ;
-		_addOption( tr( "KDE Wallet" ),"KDE Wallet",LxQt::Wallet::kwalletBackEnd ) ;
-		_addOption( tr( "Gnome Wallet" ),"Gnome Wallet",LxQt::Wallet::secretServiceBackEnd ) ;
+		_addOption( tr( "Internal Wallet" ),"Internal Wallet",LXQt::Wallet::BackEnd::internal ) ;
+		_addOption( tr( "KDE Wallet" ),"KDE Wallet",LXQt::Wallet::BackEnd::kwallet ) ;
+		_addOption( tr( "Gnome Wallet" ),"Gnome Wallet",LXQt::Wallet::BackEnd::libsecret ) ;
 
 		return m ;
 	}() ;
@@ -307,7 +307,7 @@ void cryfsGUI::aboutToShowMenu()
 {
 	auto a = utility::walletName() ;
 	auto b = utility::applicationName() ;
-	auto c = LxQt::Wallet::walletExists( LxQt::Wallet::internalBackEnd,a,b ) ;
+	auto c = LXQt::Wallet::walletExists( LXQt::Wallet::BackEnd::internal,a,b ) ;
 	m_change_password_action->setEnabled( c ) ;
 }
 
@@ -323,15 +323,15 @@ void cryfsGUI::keyManagerClicked( QAction * ac )
 
 	if( e == tr( "Internal Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LxQt::Wallet::internalBackEnd ) ;
+		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::internal ) ;
 
 	}else if( e == tr( "KDE Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LxQt::Wallet::kwalletBackEnd ) ;
+		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::kwallet ) ;
 
 	}else if( e == tr( "Gnome Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LxQt::Wallet::secretServiceBackEnd ) ;
+		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::libsecret ) ;
 	}
 }
 
@@ -532,24 +532,24 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 	}else{
 		auto w = [ & ](){
 
-			namespace wxt = LxQt::Wallet ;
+			namespace wxt = LXQt::Wallet ;
 
-			auto _supported = [ & ]( wxt::walletBackEnd e,const char * s ){
+			auto _supported = [ & ]( wxt::BackEnd e,const char * s ){
 
 				return backEnd == s && wxt::backEndIsSupported( e ) ;
 			} ;
 
-			if( _supported( wxt::internalBackEnd,"internal" ) ){
+			if( _supported( wxt::BackEnd::internal,"internal" ) ){
 
-				return utility::getKeyFromWallet( this,wxt::internalBackEnd,volume ) ;
+				return utility::getKeyFromWallet( this,wxt::BackEnd::internal,volume ) ;
 
-			}else if( _supported( wxt::secretServiceBackEnd,"gnomewallet" ) ){
+			}else if( _supported( wxt::BackEnd::libsecret,"gnomewallet" ) ){
 
-				return utility::getKeyFromWallet( this, wxt::secretServiceBackEnd,volume ) ;
+				return utility::getKeyFromWallet( this, wxt::BackEnd::libsecret,volume ) ;
 
-			}else if( _supported( wxt::kwalletBackEnd,"kwallet" ) ){
+			}else if( _supported( wxt::BackEnd::kwallet,"kwallet" ) ){
 
-				return utility::getKeyFromWallet( this,wxt::kwalletBackEnd,volume ) ;
+				return utility::getKeyFromWallet( this,wxt::BackEnd::kwallet,volume ) ;
 			}else{
 				return utility::wallet{ false,true,"","" } ;
 			}

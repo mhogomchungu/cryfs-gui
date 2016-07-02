@@ -157,7 +157,7 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 	} ) ;
 }
 
-::Task::future<QString>& utility::getKeyFromWallet( LxQt::Wallet::Wallet * wallet,const QString& volumeID )
+::Task::future<QString>& utility::getKeyFromWallet( LXQt::Wallet::Wallet * wallet,const QString& volumeID )
 {
 	return ::Task::run<QString>( [ wallet,volumeID ](){
 
@@ -166,19 +166,19 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 }
 
 utility::wallet utility::getKeyFromWallet( QWidget * widget,
-					   LxQt::Wallet::walletBackEnd storage,
+					   LXQt::Wallet::BackEnd storage,
 					   const QString& keyID,const QString& pwd )
 {
 	utility::wallet w{ false,false,"","" } ;
 
-	auto _getBackEnd = []( LxQt::Wallet::walletBackEnd e ){
+	auto _getBackEnd = []( LXQt::Wallet::BackEnd e ){
 
-		return LxQt::Wallet::getWalletBackend( e ) ;
+		return LXQt::Wallet::getWalletBackend( e ) ;
 	} ;
 
-	using storage_t = std::unique_ptr< LxQt::Wallet::Wallet > ;
+	using storage_t = std::unique_ptr< LXQt::Wallet::Wallet > ;
 
-	if( storage == LxQt::Wallet::kwalletBackEnd ){
+	if( storage == LXQt::Wallet::BackEnd::kwallet ){
 
 		storage_t e( _getBackEnd( storage ) ) ;
 
@@ -191,20 +191,18 @@ utility::wallet utility::getKeyFromWallet( QWidget * widget,
 
 		return w ;
 
-	}else if( storage == LxQt::Wallet::internalBackEnd ){
+	}else if( storage == LXQt::Wallet::BackEnd::internal ){
 
 		auto walletName = utility::walletName() ;
 		auto appName    = utility::applicationName() ;
 
-		if( LxQt::Wallet::walletExists( storage,walletName,appName ) ){
+		if( LXQt::Wallet::walletExists( storage,walletName,appName ) ){
 
 			storage_t e( _getBackEnd( storage ) ) ;
 
 			e->setImage( QIcon( ":/cryfs-gui" ) ) ;
 
-			e->setInterfaceObject( widget,false ) ;
-
-			w.opened = e->await_open( walletName,appName,pwd ) ;
+			w.opened = e->await_open( walletName,appName,widget,pwd ) ;
 
 			if( w.opened ){
 
@@ -219,7 +217,7 @@ utility::wallet utility::getKeyFromWallet( QWidget * widget,
 			return w ;
 		}
 
-	}else if( storage == LxQt::Wallet::secretServiceBackEnd ){
+	}else if( storage == LXQt::Wallet::BackEnd::libsecret ){
 
 		storage_t e( _getBackEnd( storage ) ) ;
 
@@ -869,11 +867,11 @@ void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,c
 
 	l.append( a ) ;
 
-	if( LxQt::Wallet::backEndIsSupported( LxQt::Wallet::secretServiceBackEnd ) ){
+	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::libsecret ) ){
 
 		l.append( b ) ;
 	}
-	if( LxQt::Wallet::backEndIsSupported( LxQt::Wallet::kwalletBackEnd ) ){
+	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::kwallet ) ){
 
 		l.append( c ) ;
 	}

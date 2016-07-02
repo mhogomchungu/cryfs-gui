@@ -30,7 +30,7 @@
     </message>
 </context>
 <context>
-    <name>LxQt::Wallet::changePassWordDialog</name>
+    <name>LXQt::Wallet::changePassWordDialog</name>
     <message>
         <location filename="../src/lxqt_wallet/frontend/changepassworddialog.cpp" line="108"/>
         <source>Create a new wallet</source>
@@ -64,7 +64,7 @@
     </message>
 </context>
 <context>
-    <name>LxQt::Wallet::password_dialog</name>
+    <name>LXQt::Wallet::password_dialog</name>
     <message>
         <location filename="../src/lxqt_wallet/frontend/password_dialog.cpp" line="69"/>
         <source>Wallet could not be opened with the presented key</source>
@@ -94,22 +94,22 @@ options:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="408"/>
+        <location filename="../src/utility.cpp" line="406"/>
         <source>Manage Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="409"/>
+        <location filename="../src/utility.cpp" line="407"/>
         <source>Mount All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="436"/>
+        <location filename="../src/utility.cpp" line="434"/>
         <source>about cryfs-gui</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="626"/>
+        <location filename="../src/utility.cpp" line="624"/>
         <source>hmac plugin.
 
 This plugin generates a key using below formular:
@@ -118,7 +118,7 @@ key = hmac(sha256,passphrase,keyfile contents)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="631"/>
+        <location filename="../src/utility.cpp" line="629"/>
         <source>keykeyfile plugin.
 
 This plugin generates a key using below formular:
@@ -127,7 +127,7 @@ key = passphrase + keyfile contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="636"/>
+        <location filename="../src/utility.cpp" line="634"/>
         <source>gpg plugin.
 
 This plugin retrives a key locked in a gpg file with a symmetric key</source>
@@ -136,7 +136,7 @@ This plugin retrives a key locked in a gpg file with a symmetric key</source>
     <message>
         <location filename="../src/checkforupdates.cpp" line="48"/>
         <location filename="../src/checkforupdates.cpp" line="88"/>
-        <location filename="../src/utility.cpp" line="654"/>
+        <location filename="../src/utility.cpp" line="652"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -163,7 +163,7 @@ Latest Version Is : %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="654"/>
+        <location filename="../src/utility.cpp" line="652"/>
         <source>Could not find &quot;gpg&quot; executable in &quot;/usr/local/bin&quot;,&quot;/usr/bin&quot; and &quot;/usr/sbin&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -580,7 +580,7 @@ The Volume Is Not Supported</source>
     <message>
         <location filename="../src/keydialog.ui" line="58"/>
         <location filename="../src/keydialog.cpp" line="174"/>
-        <location filename="../src/keydialog.cpp" line="680"/>
+        <location filename="../src/keydialog.cpp" line="678"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -790,22 +790,22 @@ An Unknown Error Has Occured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="622"/>
+        <location filename="../src/keydialog.cpp" line="620"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="622"/>
+        <location filename="../src/keydialog.cpp" line="620"/>
         <source>KeyFile Contents Will Be Trancated On The First Encountered NewLine Character.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="670"/>
+        <location filename="../src/keydialog.cpp" line="668"/>
         <source>Plugin name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="690"/>
+        <location filename="../src/keydialog.cpp" line="688"/>
         <source>Keyfile path</source>
         <translation type="unfinished"></translation>
     </message>
