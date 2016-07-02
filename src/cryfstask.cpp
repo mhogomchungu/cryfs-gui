@@ -48,11 +48,9 @@ static bool _create_folder( const QString& m )
 	}
 }
 
-static QString _makePath( QString e )
+static QString _makePath( const QString& e )
 {
-	e.replace( "\"","\"\"\"" ) ;
-
-	return "\"" + e + "\"" ;
+	return utility::Task::makePath( e ) ;
 }
 
 Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
@@ -218,8 +216,10 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
                                 auto e = _cmd( app,opt,configFilePath ) ;
 
-				if( e != cs::success ) {
+				if( e == cs::success ){
 
+					opt.openFolder( opt.plainFolder ) ;
+				}else{
 					_delete_folder( opt.plainFolder ) ;
 				}
 

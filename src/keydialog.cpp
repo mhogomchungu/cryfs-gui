@@ -586,8 +586,6 @@ void keyDialog::encryptedFolderMount()
 
 	if( this->completed( e.await() ) ){
 
-		m_success( m ) ;
-
 		this->HideUI() ;
 	}else{
 		m_ui->cbKeyType->setCurrentIndex( keyDialog::Key ) ;

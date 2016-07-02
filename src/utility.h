@@ -381,51 +381,27 @@ namespace utility
 
 			l.exec() ;
 		}
+		static QString makePath( QString e )
+		{
+			e.replace( "\"","\"\"\"" ) ;
+
+			return "\"" + e + "\"" ;
+		}
 		Task()
 		{
 		}
-		Task( const QString& exe,
-		      int waitTime = -1,
-		      const QProcessEnvironment& env = QProcessEnvironment(),
-		      const QByteArray& password = QByteArray(),
-		      std::function< void() > f = [](){} )
+		Task( const QString& exe,int waitTime = -1,const QProcessEnvironment& env = QProcessEnvironment(),
+		      const QByteArray& password = QByteArray(),const std::function< void() >& f = [](){} )
 		{
-			class Process : public QProcess{
-			public:
-				Process( std::function< void() >&& f ) : m_function( std::move( f ) )
-				{
-				}
-			protected:
-				void setupChildProcess()
-				{
-					m_function() ;
-				}
-			private:
-				std::function< void() > m_function ;
-			} p( std::move( f ) ) ;
-
-			p.setProcessEnvironment( env ) ;
-
-			p.start( exe ) ;
-
-			if( !password.isEmpty() ){
-
-				p.waitForStarted() ;
-
-				p.write( password + '\n' ) ;
-
-				p.closeWriteChannel() ;
-			}
-
-			m_finished   = p.waitForFinished( waitTime ) ;
-			m_exitCode   = p.exitCode() ;
-			m_exitStatus = p.exitStatus() ;
-			m_data       = p.readAll() ;
-			m_stdError   = p.readAllStandardError() ;
+			this->execute( exe,waitTime,env,password,f ) ;
+		}
+		Task( const QString& exe,const QProcessEnvironment& env,const std::function< void() >& f )
+		{
+			this->execute( exe,-1,env,QByteArray(),f ) ;
 		}
 		QStringList splitOutput( char token ) const
 		{
-			return QString( m_data ).split( token,QString::SkipEmptyParts ) ;
+			return utility::split( m_data,token ) ;
 		}
 		void output( const QByteArray& r )
 		{
@@ -464,6 +440,43 @@ namespace utility
 			return this->splitOutput( '\n' ).size() > 12 ;
 		}
 	private:
+		void execute( const QString& exe,int waitTime,const QProcessEnvironment& env,
+			      const QByteArray& password,const std::function< void() >& f )
+		{
+			class Process : public QProcess{
+			public:
+				Process( const std::function< void() >& f ) : m_function( f )
+				{
+				}
+			protected:
+				void setupChildProcess()
+				{
+					m_function() ;
+				}
+			private:
+				std::function< void() > m_function ;
+			} p( f ) ;
+
+			p.setProcessEnvironment( env ) ;
+
+			p.start( exe ) ;
+
+			if( !password.isEmpty() ){
+
+				p.waitForStarted() ;
+
+				p.write( password + '\n' ) ;
+
+				p.closeWriteChannel() ;
+			}
+
+			m_finished   = p.waitForFinished( waitTime ) ;
+			m_exitCode   = p.exitCode() ;
+			m_exitStatus = p.exitStatus() ;
+			m_data       = p.readAll() ;
+			m_stdError   = p.readAllStandardError() ;
+		}
+
 		QByteArray m_data ;
 		QByteArray m_stdError ;
 		int m_exitCode ;
