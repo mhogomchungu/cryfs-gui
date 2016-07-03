@@ -178,7 +178,7 @@ void walletconfig::ShowUI( LXQt::Wallet::BackEnd backEnd )
 	m_wallet = LXQt::Wallet::getWalletBackend( backEnd ) ;
 
 	m_wallet->setParent( this ) ;
-	
+
 	m_wallet->open( [ & ]()->QString{
 
 		if( backEnd == LXQt::Wallet::BackEnd::kwallet ){
@@ -191,7 +191,6 @@ void walletconfig::ShowUI( LXQt::Wallet::BackEnd backEnd )
 	}(),utility::applicationName(),[ this ]( bool e ){
 
 		this->walletIsOpen( e ) ;
-
 	} ) ;
 }
 
