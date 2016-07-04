@@ -105,20 +105,6 @@ void tablewidget::selectRow( QTableWidgetItem * current,QTableWidgetItem * previ
 	}
 }
 
-int tablewidget::addRow( QTableWidget * table )
-{
-	count_t row = table->rowCount() ;
-
-	table->insertRow( row ) ;
-
-	_for_each_column( table,row,[ table ]( count_t row,count_t col ){
-
-		table->setItem( row,col,_set_item( new QTableWidgetItem ) ) ;
-	} ) ;
-
-	return row ;
-}
-
 int tablewidget::columnHasEntry( QTableWidget * table,const QString& entry,int column )
 {
 	if( column < 0 || column >= table->columnCount() ){
@@ -139,38 +125,93 @@ int tablewidget::columnHasEntry( QTableWidget * table,const QString& entry,int c
 	}
 }
 
-void tablewidget::addRow( QTableWidget * table,const QStringList& list,const QFont& font )
+using list_t = std::initializer_list< QString > ;
+
+template< typename T >
+const QString& _at( const T& e,count_t pos )
 {
-	count_t j = list.size() ;
+	return e.at( pos ) ;
+}
 
-	if( j != table->columnCount() ){
+template<>
+const QString& _at< list_t >( const list_t& e,count_t pos )
+{
+	return *( &*e.begin() + pos ) ;
+}
 
-		qDebug() << "ERROR: Table column count is NOT the same as QStringList size" ;
+template< typename T >
+static void _manage_row( QTableWidget * table,const T& l,std::function< void()> function )
+{
+	if( size_t( l.size() ) != size_t( table->columnCount() ) ){
+
+		qDebug() << "ERROR: Table column count is NOT the same as object size" ;
 	}else{
+		function() ;
+	}
+}
+
+template< typename T >
+static void _add_row( QTableWidget * table,const T& l,const QFont& font )
+{
+	_manage_row( table,l,[ & ](){
+
 		count_t row = table->rowCount() ;
 
 		table->insertRow( row ) ;
 
 		_for_each_column( table,row,[ & ]( count_t row,count_t col ){
 
-			table->setItem( row,col,_set_item( new QTableWidgetItem,list.at( col ),font ) ) ;
+			auto e = _set_item( new QTableWidgetItem,_at( l,col ),font ) ;
+
+			table->setItem( row,col,e ) ;
 		} ) ;
-	}
+	} ) ;
+}
+
+template< typename T >
+static void _update_row( QTableWidget * table,const T& list,int row,const QFont& font )
+{
+	_manage_row( table,list,[ & ](){
+
+		_for_each_column( table,row,[ & ]( count_t row,count_t col ){
+
+			_set_item( table->item( row,col ),_at( list,col ),font ) ;
+		} ) ;
+	} ) ;
+}
+
+void tablewidget::addRow( QTableWidget * table,const QStringList& l,const QFont& font )
+{
+	_add_row( table,l,font ) ;
+}
+
+void tablewidget::addRow( QTableWidget * table,const list_t& l,const QFont& font )
+{
+	_add_row( table,l,font ) ;
+}
+
+int tablewidget::addRow( QTableWidget * table )
+{
+	count_t row = table->rowCount() ;
+
+	table->insertRow( row ) ;
+
+	_for_each_column( table,row,[ table ]( count_t row,count_t col ){
+
+		table->setItem( row,col,_set_item( new QTableWidgetItem ) ) ;
+	} ) ;
+
+	return row ;
 }
 
 void tablewidget::updateRow( QTableWidget * table,const QStringList& list,int row,const QFont& font )
 {
-	count_t j = list.size() ;
+	_update_row( table,list,row,font ) ;
+}
 
-	if( j != table->columnCount() ){
-
-		qDebug() << "ERROR: table column count is NOT the same as QStringList size" ;
-	}else{
-		_for_each_column( table,row,[ & ]( count_t row,count_t col ){
-
-			_set_item( table->item( row,col ),list.at( col ),font ) ;
-		} ) ;
-	}
+void tablewidget::updateRow( QTableWidget * table,const list_t& list,int row,const QFont& font )
+{
+	_update_row( table,list,row,font ) ;
 }
 
 void tablewidget::setFont( QTableWidget * table ,int row,const QFont& font )
@@ -214,11 +255,6 @@ void tablewidget::selectRow( QTableWidget * table,const QString& e )
 void tablewidget::selectLastRow( QTableWidget * table )
 {
 	tablewidget::selectRow( table,table->rowCount() - 1 ) ;
-}
-
-void tablewidget::setText( QTableWidget * table,int row,int col,const QString& text )
-{
-	table->setItem( row,col,_set_item( new QTableWidgetItem,text,table->item( row,col )->font() ) ) ;
 }
 
 QStringList tablewidget::columnEntries( QTableWidget * table,int col )

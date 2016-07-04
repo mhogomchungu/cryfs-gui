@@ -29,8 +29,12 @@ class QTableWidgetItem ;
 
 namespace tablewidget
 {
+	void addRow( QTableWidget *,const std::initializer_list< QString >&,const QFont& = QFont() ) ;
 	void addRow( QTableWidget *,const QStringList&,const QFont& = QFont() ) ;
+	int  addRow( QTableWidget * ) ;
+
 	void updateRow( QTableWidget *,const QStringList&,int row,const QFont& = QFont() ) ;
+	void updateRow( QTableWidget *,const std::initializer_list< QString >&,int row,const QFont& ) ;
 
 	void setFont( QTableWidget *,int row,const QFont& ) ;
 
@@ -43,9 +47,6 @@ namespace tablewidget
 
 	void selectLastRow( QTableWidget * ) ;
 
-	void setText( QTableWidget *,int row,int col,const QString& text ) ;
-
-	int addRow( QTableWidget * ) ;
 	int columnHasEntry( QTableWidget *,const QString&,int = 0 ) ;
 
 	QStringList columnEntries( QTableWidget * table,int = 0 ) ;
