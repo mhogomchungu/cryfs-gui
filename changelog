@@ -40,3 +40,6 @@ version 1.3.0
 version 1.3.1
 
 -- Maintanance release.
+
+version 1.3.2
+-- Add support for measuring password strength when creating a new volume.

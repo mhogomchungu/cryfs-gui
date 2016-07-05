@@ -14,7 +14,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>unlock and mount a luks volume</string>
+   <string/>
   </property>
   <widget class="QPushButton" name="pbOpen">
    <property name="geometry">

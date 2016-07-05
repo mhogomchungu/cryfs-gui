@@ -35,9 +35,52 @@ class QTableWidget ;
 #include "volumeinfo.h"
 #include "utility.h"
 #include "cryfstask.h"
+#include "can_build_pwquality.h"
 
 #include <functional>
 #include <memory>
+
+#if BUILD_PWQUALITY
+class keystrength
+{
+public:
+	keystrength() : m_handle( pwquality_default_settings() )
+	{
+	}
+	~keystrength()
+	{
+		pwquality_free_settings( m_handle ) ;
+	}
+	int quality( const QString& e )
+	{
+		return pwquality_check( m_handle,e.toLatin1().constData(),
+					nullptr,nullptr,nullptr ) ;
+	}
+	bool canCheckQuality()
+	{
+		return true ;
+	}
+private:
+	pwquality_settings_t * m_handle ;
+};
+#else
+class keystrength
+{
+public:
+	keystrength() ;
+	~keystrength() ;
+	int quality( const QString& e )
+	{
+		Q_UNUSED( e ) ;
+		return 0 ;
+	}
+	bool canCheckQuality()
+	{
+		return false ;
+	}
+private:
+};
+#endif
 
 namespace Ui {
 class keyDialog;
@@ -70,6 +113,7 @@ private slots:
         void configFile( void ) ;
 	void mountOptions( void ) ;
 	void textChanged( QString ) ;
+	void passWordTextChanged( QString ) ;
 	void cbActicated( int ) ;
 	void pbkeyOption( void ) ;
 	void pbMountPointPath( void ) ;
@@ -106,7 +150,12 @@ private :
 	bool m_create ;
 	bool m_reUseMountPoint ;
 
-	enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } ;
+	keystrength m_keyStrength ;
+
+	typedef enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } keyType ;
+
+	keyType m_keyType ;
+
 	std::function< void() > m_cancel ;
 	std::function< void( const QString& ) > m_success ;
 };

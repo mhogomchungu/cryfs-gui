@@ -31,6 +31,27 @@ if( LIB_SUFFIX )
 	set( CMAKE_INSTALL_FULL_LIBDIR "${CMAKE_INSTALL_PREFIX}/${LIB_SUFFIX}" )
 endif()
 
+pkg_check_modules( PWQUALITY pwquality )
+
+if( PWQUALITY_FOUND )
+
+	find_file ( header_pwquality pwquality.h PATHS ${PWQUALITY_INCLUDE_DIRS} )
+	find_library ( library_pwquality libpwquality.so )
+
+	if( library_pwquality )
+		if( header_pwquality )
+			file( WRITE ${PROJECT_BINARY_DIR}/can_build_pwquality.h "#define BUILD_PWQUALITY 1\n" )
+			file( APPEND ${PROJECT_BINARY_DIR}/can_build_pwquality.h "extern \"C\"\n{\n#include <${header_pwquality}>\n}" )
+		else()
+			file( WRITE ${PROJECT_BINARY_DIR}/can_build_pwquality.h "#define BUILD_PWQUALITY 0\n" )
+		endif()
+	else( library_pwquality )
+		file( WRITE ${PROJECT_BINARY_DIR}/can_build_pwquality.h "#define BUILD_PWQUALITY 0\n" )
+	endif()
+else()
+	file( WRITE ${PROJECT_BINARY_DIR}/can_build_pwquality.h "#define BUILD_PWQUALITY 0\n" )
+endif()
+
 file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${CMAKE_INSTALL_FULL_DATADIR}/cryfs-gui/translations/\"\n")
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
@@ -115,7 +136,7 @@ if( QT5 )
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} lxqtwallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 else()
@@ -137,7 +158,7 @@ else()
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} lxqtwallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 endif()

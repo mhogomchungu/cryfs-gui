@@ -162,14 +162,22 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Password ) ;
 
-	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( pbCancel() ) ) ;
-	connect( m_ui->pbOpen,SIGNAL( clicked() ),this,SLOT( pbOpen() ) ) ;
-	connect( m_ui->pbkeyOption,SIGNAL( clicked() ),this,SLOT( pbkeyOption() ) ) ;
-	connect( m_ui->pbOpenFolderPath,SIGNAL( clicked() ),this,SLOT( pbFolderPath() ) ) ;
-	connect( m_ui->pbMountPoint,SIGNAL( clicked() ),this,SLOT( pbMountPointPath() ) ) ;
-	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
-	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),this,SLOT( cbActicated( int ) ) ) ;
-	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),this,SLOT( textChanged( QString ) ) ) ;
+	connect( m_ui->pbCancel,SIGNAL( clicked() ),
+		 this,SLOT( pbCancel() ) ) ;
+	connect( m_ui->pbOpen,SIGNAL( clicked() ),
+		 this,SLOT( pbOpen() ) ) ;
+	connect( m_ui->pbkeyOption,SIGNAL( clicked() ),
+		 this,SLOT( pbkeyOption() ) ) ;
+	connect( m_ui->pbOpenFolderPath,SIGNAL( clicked() ),
+		 this,SLOT( pbFolderPath() ) ) ;
+	connect( m_ui->pbMountPoint,SIGNAL( clicked() ),
+		 this,SLOT( pbMountPointPath() ) ) ;
+	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),
+		 this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
+	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),
+		 this,SLOT( cbActicated( int ) ) ) ;
+	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),
+		 this,SLOT( textChanged( QString ) ) ) ;
 
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
@@ -179,6 +187,12 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
 
 	if( m_create ){
+
+		if( m_keyStrength.canCheckQuality() ){
+
+			connect( m_ui->lineEditKey,SIGNAL( textChanged( QString ) ),
+				 this,SLOT( passWordTextChanged( QString ) ) ) ;
+		}
 
 		m_ui->lineEditMountPoint->setFocus() ;
 	}else{
@@ -198,6 +212,32 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
                          SIGNAL( triggered() ),this,SLOT( configFile() ) ) ;
 		return m ;
 	}() ) ;
+}
+
+void keyDialog::passWordTextChanged( QString e )
+{
+	if( m_keyType == keyDialog::Key ){
+
+		int r = m_keyStrength.quality( e ) ;
+
+		if( r < 0 ){
+
+			this->setWindowTitle( tr( "Passphrase Quality: 0%" ) ) ;
+		}else{
+			this->setWindowTitle( tr( "Passphrase Quality: %1%" ).arg( QString::number( r ) ) ) ;
+		}
+
+	}else if( m_keyType == keyDialog::keyKeyFile ){
+
+		this->setWindowTitle( tr( "Passphrase Quality: 100%" ) ) ;
+	}else{
+		auto f = tr( "Create A New Cryfs Volume" ) ;
+
+		if( this->windowTitle() != f ){
+
+			this->setWindowTitle( f ) ;
+		}
+	}
 }
 
 void keyDialog::mountOptions()
@@ -656,6 +696,8 @@ void keyDialog::keyAndKeyFile()
 	}else{
 		this->key() ;
 
+		m_keyType = keyDialog::keyKeyFile ;
+
 		m_ui->lineEditKey->setEnabled( false ) ;
 		m_ui->lineEditKey->setText( key ) ;
 	}
@@ -663,6 +705,8 @@ void keyDialog::keyAndKeyFile()
 
 void keyDialog::plugIn()
 {
+	m_keyType = keyDialog::plugin ;
+
 	m_ui->pbkeyOption->setIcon( QIcon( ":/module.png" ) ) ;
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
 	m_ui->label->setText( tr( "Plugin name" ) ) ;
@@ -673,6 +717,8 @@ void keyDialog::plugIn()
 
 void keyDialog::key()
 {
+	m_keyType = keyDialog::Key ;
+
 	m_ui->pbkeyOption->setIcon( QIcon( ":/passphrase.png" ) ) ;
 	m_ui->pbkeyOption->setEnabled( false ) ;
 	m_ui->label->setText( tr( "Key" ) ) ;
@@ -683,6 +729,8 @@ void keyDialog::key()
 
 void keyDialog::keyFile()
 {
+	m_keyType = keyDialog::keyfile ;
+
 	m_ui->pbkeyOption->setIcon( QIcon( ":/keyfile.png" ) ) ;
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
 	m_ui->label->setText( tr( "Keyfile path" ) ) ;
