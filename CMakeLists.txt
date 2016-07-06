@@ -35,8 +35,8 @@ pkg_check_modules( PWQUALITY pwquality )
 
 if( PWQUALITY_FOUND )
 
-	find_file ( header_pwquality pwquality.h PATHS ${PWQUALITY_INCLUDE_DIRS} )
-	find_library ( library_pwquality libpwquality.so )
+	find_file( header_pwquality pwquality.h PATHS ${PWQUALITY_INCLUDE_DIRS} )
+	find_library( library_pwquality libpwquality.so )
 
 	if( library_pwquality )
 		if( header_pwquality )

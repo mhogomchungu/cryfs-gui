@@ -575,7 +575,7 @@ The Volume Is Not Supported</source>
     <message>
         <location filename="../src/keydialog.ui" line="58"/>
         <location filename="../src/keydialog.cpp" line="182"/>
-        <location filename="../src/keydialog.cpp" line="725"/>
+        <location filename="../src/keydialog.cpp" line="742"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -612,7 +612,7 @@ The Volume Is Not Supported</source>
     </message>
     <message>
         <location filename="../src/keydialog.cpp" line="85"/>
-        <location filename="../src/keydialog.cpp" line="235"/>
+        <location filename="../src/keydialog.cpp" line="234"/>
         <source>Create A New Cryfs Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -667,156 +667,164 @@ The Volume Is Not Supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="246"/>
+        <location filename="../src/keydialog.cpp" line="245"/>
         <source>Automatically Unmount After Specified Minutes of Inactivity Is Reached.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="256"/>
+        <location filename="../src/keydialog.cpp" line="255"/>
         <source>Unlock A Cryfs Volume With Specified Configuration File.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="305"/>
-        <location filename="../src/keydialog.cpp" line="318"/>
+        <location filename="../src/keydialog.cpp" line="304"/>
+        <location filename="../src/keydialog.cpp" line="317"/>
         <source>Select A Folder To Create A Mount Point In.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="374"/>
+        <location filename="../src/keydialog.cpp" line="373"/>
         <source>Select A File To Be Used As A Keyfile.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="406"/>
-        <location filename="../src/keydialog.cpp" line="417"/>
+        <location filename="../src/keydialog.cpp" line="405"/>
+        <location filename="../src/keydialog.cpp" line="416"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="437"/>
-        <location filename="../src/keydialog.cpp" line="444"/>
-        <location filename="../src/keydialog.cpp" line="486"/>
-        <location filename="../src/keydialog.cpp" line="519"/>
-        <location filename="../src/keydialog.cpp" line="524"/>
-        <location filename="../src/keydialog.cpp" line="529"/>
-        <location filename="../src/keydialog.cpp" line="534"/>
-        <location filename="../src/keydialog.cpp" line="539"/>
-        <location filename="../src/keydialog.cpp" line="544"/>
-        <location filename="../src/keydialog.cpp" line="549"/>
-        <location filename="../src/keydialog.cpp" line="552"/>
-        <location filename="../src/keydialog.cpp" line="569"/>
-        <location filename="../src/keydialog.cpp" line="580"/>
-        <location filename="../src/keydialog.cpp" line="612"/>
-        <location filename="../src/keydialog.cpp" line="621"/>
+        <location filename="../src/keydialog.cpp" line="436"/>
+        <location filename="../src/keydialog.cpp" line="443"/>
+        <location filename="../src/keydialog.cpp" line="485"/>
+        <location filename="../src/keydialog.cpp" line="518"/>
+        <location filename="../src/keydialog.cpp" line="523"/>
+        <location filename="../src/keydialog.cpp" line="528"/>
+        <location filename="../src/keydialog.cpp" line="533"/>
+        <location filename="../src/keydialog.cpp" line="538"/>
+        <location filename="../src/keydialog.cpp" line="543"/>
+        <location filename="../src/keydialog.cpp" line="548"/>
+        <location filename="../src/keydialog.cpp" line="551"/>
+        <location filename="../src/keydialog.cpp" line="568"/>
+        <location filename="../src/keydialog.cpp" line="579"/>
+        <location filename="../src/keydialog.cpp" line="588"/>
+        <location filename="../src/keydialog.cpp" line="620"/>
+        <location filename="../src/keydialog.cpp" line="629"/>
+        <location filename="../src/keydialog.cpp" line="638"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="437"/>
+        <location filename="../src/keydialog.cpp" line="436"/>
         <source>Volume Name Field Is Empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="444"/>
+        <location filename="../src/keydialog.cpp" line="443"/>
         <source>Key Field Is Empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="467"/>
+        <location filename="../src/keydialog.cpp" line="466"/>
         <source>ERROR!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="467"/>
+        <location filename="../src/keydialog.cpp" line="466"/>
         <source>Internal Wallet Is Not Configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="486"/>
+        <location filename="../src/keydialog.cpp" line="485"/>
         <source>The Volume Does Not Appear To Have An Entry In The Wallet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="519"/>
+        <location filename="../src/keydialog.cpp" line="518"/>
         <source>Failed To Unlock A Cryfs Volume.
 Wrong Password Entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="524"/>
+        <location filename="../src/keydialog.cpp" line="523"/>
         <source>Failed To Unlock An Encfs Volume.
 Wrong Password Entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="529"/>
+        <location filename="../src/keydialog.cpp" line="528"/>
         <source>Failed To Complete The Request.
 Cryfs Executable Could Not Be Found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="534"/>
+        <location filename="../src/keydialog.cpp" line="533"/>
         <source>Failed To Complete The Request.
 Encfs Executable Could Not Be Found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="539"/>
+        <location filename="../src/keydialog.cpp" line="538"/>
         <source>Failed To Create Mount Point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="544"/>
+        <location filename="../src/keydialog.cpp" line="543"/>
         <source>Failed To Unlock The Volume.
 Not Supported Volume Encountered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="549"/>
+        <location filename="../src/keydialog.cpp" line="548"/>
         <source>Failed To Complete The Task.
 Backend Not Responding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="552"/>
+        <location filename="../src/keydialog.cpp" line="551"/>
         <source>Failed To Complete The Task.
 An Unknown Error Has Occured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="569"/>
+        <location filename="../src/keydialog.cpp" line="568"/>
         <source>Encrypted Folder Path Is Already Taken.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="580"/>
-        <location filename="../src/keydialog.cpp" line="612"/>
+        <location filename="../src/keydialog.cpp" line="579"/>
+        <location filename="../src/keydialog.cpp" line="620"/>
         <source>Mount Point Path Already Taken.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="621"/>
+        <location filename="../src/keydialog.cpp" line="588"/>
+        <location filename="../src/keydialog.cpp" line="638"/>
+        <source>Atleast One Required Field Is Empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/keydialog.cpp" line="629"/>
         <source>Encrypted Folder Appear To Not Be Present.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="661"/>
+        <location filename="../src/keydialog.cpp" line="678"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="661"/>
+        <location filename="../src/keydialog.cpp" line="678"/>
         <source>KeyFile Contents Will Be Trancated On The First Encountered NewLine Character.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="713"/>
+        <location filename="../src/keydialog.cpp" line="730"/>
         <source>Plugin name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/keydialog.cpp" line="737"/>
+        <location filename="../src/keydialog.cpp" line="754"/>
         <source>Keyfile path</source>
         <translation type="unfinished"></translation>
     </message>

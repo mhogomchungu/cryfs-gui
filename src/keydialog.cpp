@@ -581,6 +581,15 @@ void keyDialog::encryptedFolderCreate()
 		return this->enableAll() ;
 	}
 
+	if( m_key.isEmpty() ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Atleast One Required Field Is Empty." ) ) ;
+
+		return this->enableAll() ;
+	}
+
 	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,m_configFile,false,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
@@ -618,6 +627,15 @@ void keyDialog::encryptedFolderMount()
 		DialogMsg msg( this ) ;
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Encrypted Folder Appear To Not Be Present." ) ) ;
+
+		return this->enableAll() ;
+	}
+
+	if( m_key.isEmpty() ){
+
+		DialogMsg msg( this ) ;
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Atleast One Required Field Is Empty." ) ) ;
 
 		return this->enableAll() ;
 	}
