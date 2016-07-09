@@ -96,7 +96,7 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/walletconfiginput.h
 		src/utility.h
 		src/options.h
-		src/networkAccessManager.h
+		src/networkAccessManager.hpp
  )
 
 set( SRC 	src/main.cpp
