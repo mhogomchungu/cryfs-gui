@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>DialogMsg</name>
     <message>
@@ -1093,22 +1093,27 @@ Un volume créé avec une clé générée ici devra être ouvert avec le plugin 
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../src/walletconfig.cpp" line="81"/>
+        <location filename="../src/walletconfig.cpp" line="77"/>
+        <source>Delete Entry</source>
+        <translation>Supprimer l&apos;entrée</translation>
+    </message>
+    <message>
+        <location filename="../src/walletconfig.cpp" line="92"/>
         <source>WARNING!</source>
         <translation>ATTENTION!</translation>
     </message>
     <message>
-        <location filename="../src/walletconfig.cpp" line="81"/>
+        <location filename="../src/walletconfig.cpp" line="92"/>
         <source>Are you sure you want to delete a volume with an id of &quot;%1&quot;?</source>
         <translation>Êtes vous sûr d&apos;effacer un volume avec un ID de &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../src/walletconfig.cpp" line="160"/>
+        <location filename="../src/walletconfig.cpp" line="176"/>
         <source>ERROR!</source>
         <translation>ERREUR!</translation>
     </message>
     <message>
-        <location filename="../src/walletconfig.cpp" line="160"/>
+        <location filename="../src/walletconfig.cpp" line="176"/>
         <source>Failed To Add the Key In The Wallet.</source>
         <translation>Echec de l&apos;ajout de la clé dans le trousseau.</translation>
     </message>
