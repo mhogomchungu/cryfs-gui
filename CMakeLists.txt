@@ -69,7 +69,53 @@ file( WRITE ${PROJECT_BINARY_DIR}/version.h "
 #endif
 \n" )
 
-ADD_SUBDIRECTORY( src/lxqt_wallet )
+if( NOT DEFINED INTERNAL_LXQT_WALLET )
+	set( INTERNAL_LXQT_WALLET "false" )
+endif()
+
+if( INTERNAL_LXQT_WALLET )
+
+		message ( STATUS "---------------------------------------------------------------------------" )
+		message ( STATUS "lxqt wallet support will be provided by an internal library" )
+		message ( STATUS "---------------------------------------------------------------------------" )
+
+		ADD_SUBDIRECTORY( src/lxqt_wallet )
+		add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+else()
+	pkg_check_modules( LXQT_WALLET lxqtwallet )
+
+	if( NOT LXQT_WALLET_FOUND )
+
+		message ( STATUS "ERROR: could not find lxqt_wallet package" )
+		message ( STATUS "---------------------------------------------------------------------------" )
+		message ( STATUS "lxqt wallet support will be provided by an internal library" )
+		message ( STATUS "---------------------------------------------------------------------------" )
+
+		ADD_SUBDIRECTORY( src/lxqt_wallet )
+		add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+	else()
+		if( LXQT_WALLET_VERSION VERSION_GREATER "2.0.0" )
+
+			include_directories( ${LXQT_WALLET_INCLUDEDIR} )
+			link_directories( ${LXQT_WALLET_LIBDIR} )
+
+			set( lxqt_wallet "-llxqtwallet" )
+
+			message ( STATUS "---------------------------------------------------------------------------" )
+			message ( STATUS "lxqt wallet support will be provided by an external libary" )
+			message ( STATUS "---------------------------------------------------------------------------" )
+		else()
+			message ( STATUS "---------------------------------------------------------------------------" )
+			message ( STATUS "lxqt wallet support will be provided by an internal library" )
+			message ( STATUS "because external library is too old(<= 2.0.0)" )
+
+			message ( STATUS "---------------------------------------------------------------------------" )
+
+			ADD_SUBDIRECTORY( src/lxqt_wallet )
+			add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+		endif()
+	endif()
+endif()
 
 add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -std=c++11 -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
 
@@ -136,7 +182,7 @@ if( QT5 )
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} -lgcrypt lxqtwallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 else()
@@ -158,7 +204,7 @@ else()
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} -lgcrypt lxqtwallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 endif()
