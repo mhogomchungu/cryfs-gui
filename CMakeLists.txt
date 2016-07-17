@@ -73,6 +73,10 @@ if( NOT DEFINED INTERNAL_LXQT_WALLET )
 	set( INTERNAL_LXQT_WALLET "false" )
 endif()
 
+if( NOT DEFINED QT5 )
+	set( QT5 "true" )
+endif()
+
 if( INTERNAL_LXQT_WALLET )
 
 		message ( STATUS "---------------------------------------------------------------------------" )
@@ -82,7 +86,7 @@ if( INTERNAL_LXQT_WALLET )
 		ADD_SUBDIRECTORY( src/lxqt_wallet )
 		add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
 else()
-	pkg_check_modules( LXQT_WALLET lxqtwallet )
+	pkg_check_modules( LXQT_WALLET lxqt-wallet )
 
 	if( NOT LXQT_WALLET_FOUND )
 
@@ -98,8 +102,6 @@ else()
 
 			include_directories( ${LXQT_WALLET_INCLUDEDIR} )
 			link_directories( ${LXQT_WALLET_LIBDIR} )
-
-			set( lxqt_wallet "-llxqtwallet" )
 
 			message ( STATUS "---------------------------------------------------------------------------" )
 			message ( STATUS "lxqt wallet support will be provided by an external libary" )
@@ -182,7 +184,7 @@ if( QT5 )
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} -lgcrypt lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} -lgcrypt lxqt-wallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 else()
@@ -204,7 +206,7 @@ else()
 
 	add_executable( cryfs ${MOC} ${UI} ${SRC} ${TRAY_RC_SRCS} )
 
-	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} -lgcrypt lxqtwallet )
+	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} -lgcrypt lxqt-wallet )
 
 	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
 endif()
