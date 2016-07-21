@@ -676,6 +676,8 @@ void cryfsGUI::properties()
 				e += it + "\n\n" ;
 			}
 
+			e.truncate( e.size() - 2 ) ;
+
 			return e ;
 
 		}() ).arg( [ & ](){
