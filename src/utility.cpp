@@ -175,7 +175,7 @@ utility::wallet utility::getKeyFromWallet( QWidget * widget,
 	{
 	public:
 		Wallet( LXQt::Wallet::BackEnd storage ) :
-				m_wallet( LXQt::Wallet::getWalletBackend( storage ) )
+			m_wallet( LXQt::Wallet::getWalletBackend( storage ) )
 		{
 		}
 		LXQt::Wallet::Wallet * operator->()
