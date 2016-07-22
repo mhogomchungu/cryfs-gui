@@ -59,11 +59,11 @@ public:
 		   const QString& password = QString(),
 		   const QString& displayApplicationName = QString() ) ;
 
-	bool await_open( const QString& walletName,
-			 const QString& applicationName,
-			 QWidget * = nullptr,
-			 const QString& password = QString(),
-			 const QString& displayApplicationName = QString() ) ;
+	bool open( const QString& walletName,
+		   const QString& applicationName,
+		   QWidget * = nullptr,
+		   const QString& password = QString(),
+		   const QString& displayApplicationName = QString() ) ;
 
 	bool addKey( const QString& key,const QByteArray& value ) ;
 	bool walletIsOpened( void ) ;
@@ -81,7 +81,6 @@ public:
 
 	void deleteKey( const QString& key ) ;
 	void closeWallet( bool ) ;
-	void setInterfaceObject( QWidget * parent,std::function< void( bool ) > ) ;
 	void changeWalletPassWord( const QString& walletName,
 				   const QString& applicationName = QString(),
 				   std::function< void( bool ) > = []( bool e ){ Q_UNUSED( e ) ; } ) ;
