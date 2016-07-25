@@ -67,7 +67,7 @@
 
 #include <gcrypt.h>
 
-#include "lxqt_wallet/frontend/lxqt_wallet.h"
+#include "lxqt_wallet.h"
 
 #include "dialogmsg.h"
 #include "plugin.h"

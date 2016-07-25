@@ -6,8 +6,9 @@ set_property( GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON )
 
 project( cryfs-gui )
 
-add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
-include_directories( ${PROJECT_BINARY_DIR}/cryfs-gui/ )
+add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic )
+
+include_directories( ${PROJECT_BINARY_DIR} )
 
 INCLUDE( GNUInstallDirs )
 
@@ -79,47 +80,47 @@ endif()
 
 if( INTERNAL_LXQT_WALLET )
 
-		message ( STATUS "---------------------------------------------------------------------------" )
-		message ( STATUS "lxqt wallet support will be provided by an internal library" )
-		message ( STATUS "---------------------------------------------------------------------------" )
+	message( STATUS "---------------------------------------------------------------------------" )
+	message( STATUS "lxqt wallet support will be provided by an internal library" )
+	message( STATUS "---------------------------------------------------------------------------" )
 
-		ADD_SUBDIRECTORY( src/lxqt_wallet )
-		add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+	ADD_SUBDIRECTORY( src/lxqt_wallet )
+	include_directories( ${PROJECT_SOURCE_DIR}/src/lxqt_wallet/frontend )
 else()
 	pkg_check_modules( LXQT_WALLET lxqt-wallet )
 
 	if( NOT LXQT_WALLET_FOUND )
 
-		message ( STATUS "ERROR: could not find lxqt_wallet package" )
-		message ( STATUS "---------------------------------------------------------------------------" )
-		message ( STATUS "lxqt wallet support will be provided by an internal library" )
-		message ( STATUS "---------------------------------------------------------------------------" )
+		message( STATUS "ERROR: could not find lxqt_wallet package" )
+		message( STATUS "---------------------------------------------------------------------------" )
+		message( STATUS "lxqt wallet support will be provided by an internal library" )
+		message( STATUS "---------------------------------------------------------------------------" )
 
 		ADD_SUBDIRECTORY( src/lxqt_wallet )
-		add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+		include_directories( ${PROJECT_SOURCE_DIR}/src/lxqt_wallet/frontend )
 	else()
 		if( LXQT_WALLET_VERSION VERSION_GREATER "2.0.0" )
 
 			include_directories( ${LXQT_WALLET_INCLUDEDIR} )
 			link_directories( ${LXQT_WALLET_LIBDIR} )
 
-			message ( STATUS "---------------------------------------------------------------------------" )
-			message ( STATUS "lxqt wallet support will be provided by an external libary" )
-			message ( STATUS "---------------------------------------------------------------------------" )
+			message( STATUS "---------------------------------------------------------------------------" )
+			message( STATUS "lxqt wallet support will be provided by an external libary" )
+			message( STATUS "---------------------------------------------------------------------------" )
 		else()
-			message ( STATUS "---------------------------------------------------------------------------" )
-			message ( STATUS "lxqt wallet support will be provided by an internal library" )
-			message ( STATUS "because external library is too old(<= 2.0.0)" )
+			message( STATUS "---------------------------------------------------------------------------" )
+			message( STATUS "lxqt wallet support will be provided by an internal library" )
+			message( STATUS "because external library is too old(<= 2.0.0)" )
 
-			message ( STATUS "---------------------------------------------------------------------------" )
+			message( STATUS "---------------------------------------------------------------------------" )
 
 			ADD_SUBDIRECTORY( src/lxqt_wallet )
-			add_definitions( -I${PROJECT_BINARY_DIR}/src/lxqt_wallet/frontend )
+			include_directories( ${PROJECT_SOURCE_DIR}/src/lxqt_wallet/frontend )
 		endif()
 	endif()
 endif()
 
-add_definitions( -D_FILE_OFFSET_BITS=64 -Wextra -Wall -pedantic -std=c++11 -I${PROJECT_BINARY_DIR}/cryfs-gui/ -I${PROJECT_BINARY_DIR})
+add_definitions( -std=c++11 )
 
 set( UI_FILES 	src/cryfs-gui.ui
 		src/keydialog.ui
@@ -145,6 +146,7 @@ set( MOC_FILES 	src/cryfs-gui.h
 		src/utility.h
 		src/options.h
 		src/networkAccessManager.hpp
+		src/task.h
  )
 
 set( SRC 	src/main.cpp
@@ -217,7 +219,7 @@ set_target_properties( cryfs PROPERTIES OUTPUT_NAME cryfs_gui )
 
 install( TARGETS cryfs RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 
-install ( FILES ${PROJECT_BINARY_DIR}/cryfs-gui.desktop
+install( FILES ${PROJECT_BINARY_DIR}/cryfs-gui.desktop
 DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
 
 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
@@ -226,10 +228,10 @@ PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_
 install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps/ )
 install( FILES src/cryfs-gui.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps )
 
-install ( FILES translations/en_US.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
-install ( FILES translations/fr_FR.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
+install( FILES translations/en_US.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
+install( FILES translations/fr_FR.qm DESTINATION ${CMAKE_INSTALL_DATADIR}/cryfs-gui/translations )
 
-#install ( FILES cryfs-gui.png DESTINATION share/icons/hicolor/32x32/apps )
+#install( FILES cryfs-gui.png DESTINATION share/icons/hicolor/32x32/apps )
 
 # desktop file section
 file( WRITE ${PROJECT_BINARY_DIR}/cryfs-gui.desktop
@@ -241,11 +243,9 @@ Exec=${CMAKE_INSTALL_FULL_BINDIR}/cryfs_gui -d %U
 GenericName[en_US]=Encrypted Folder Manager
 GenericName=Encrypted Folder Manager
 Icon=cryfs-gui.png
-MimeType=
 Name[en_US]=cryfs-gui
 Name=cryfs-gui
 NoDisplay=false
-Path=
 StartupNotify=true
 Terminal=false
 Type=Application

@@ -49,7 +49,7 @@
 #include <unistd.h>
 
 #include "task.h"
-#include "lxqt_wallet/frontend/lxqt_wallet.h"
+#include "lxqt_wallet.h"
 
 #include <QObject>
 #include <QLabel>

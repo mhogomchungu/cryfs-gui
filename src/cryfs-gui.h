@@ -30,7 +30,7 @@
 #include "volumeinfo.h"
 #include "utility.h"
 
-#include "lxqt_wallet/frontend/lxqt_wallet.h"
+#include "lxqt_wallet.h"
 
 class QCloseEvent ;
 class QAction ;

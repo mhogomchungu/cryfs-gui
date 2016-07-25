@@ -31,7 +31,7 @@
 #include "dialogmsg.h"
 #include "task.h"
 #include "utility.h"
-#include "lxqt_wallet/frontend/lxqt_wallet.h"
+#include "lxqt_wallet.h"
 
 #define KWALLET         "kde wallet"
 #define INTERNAL_WALLET "internal wallet"
