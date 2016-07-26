@@ -26,17 +26,6 @@
 
 using cs = cryfsTask::status ;
 
-static bool _delete_folder( const QString& m )
-{
-	if( !utility::reUseMountPoint() ){
-
-		QDir e ;
-		e.rmdir( m ) ;
-	}
-
-	return true ;
-}
-
 static bool _create_folder( const QString& m )
 {
 	if( utility::pathExists( m ) ){
@@ -53,27 +42,28 @@ static QString _makePath( const QString& e )
 	return utility::Task::makePath( e ) ;
 }
 
+bool cryfsTask::deleteMountFolder( const QString& m )
+{
+	if( utility::reUseMountPoint() ){
+
+		return false ;
+	}else{
+		QDir e ;
+		return e.rmdir( m ) ;
+	}
+}
+
 Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 {
 	return Task::run< bool >( [ m ](){
 
 		auto cmd = "fusermount -u " + _makePath( m ) ;
 
-		auto _umount = [ & ](){
-
-			if( utility::Task( cmd,10000 ).success() ){
-
-				return _delete_folder( m ) ;
-			}else{
-				return false ;
-			}
-		} ;
-
 		utility::Task::waitForOneSecond() ;
 
 		for( int i = 0 ; i < 5 ; i++ ){
 
-			if( _umount() ){
+			if( utility::Task( cmd,10000 ).success() ){
 
 				return true ;
 			}else{
@@ -220,7 +210,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
 					opt.openFolder( opt.plainFolder ) ;
 				}else{
-					_delete_folder( opt.plainFolder ) ;
+					cryfsTask::deleteMountFolder( opt.plainFolder ) ;
 				}
 
 				return e ;
@@ -280,13 +270,13 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 					opt.openFolder( opt.plainFolder ) ;
 				}else{
-					_delete_folder( opt.plainFolder ) ;
-					_delete_folder( opt.cipherFolder ) ;
+					cryfsTask::deleteMountFolder( opt.plainFolder ) ;
+					cryfsTask::deleteMountFolder( opt.cipherFolder ) ;
 				}
 
 				return e ;
 			}else{
-				_delete_folder( opt.cipherFolder ) ;
+				cryfsTask::deleteMountFolder( opt.cipherFolder ) ;
 
 				return cs::failedToCreateMountPoint ;
 			}

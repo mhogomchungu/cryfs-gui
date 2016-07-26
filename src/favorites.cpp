@@ -224,9 +224,21 @@ void favorites::add()
 	m_ui->tableWidget->setEnabled( true ) ;
 }
 
+QString favorites::getExistingDirectory( const QString& r )
+{
+	auto e = QFileDialog::getExistingDirectory( this,r,QDir::homePath(),0 ) ;
+
+	if( e.endsWith( '/' ) ){
+
+		e.truncate( e.length() - 1 ) ;
+	}
+
+	return e ;
+}
+
 void favorites::folderPath()
 {
-	auto e = QFileDialog::getExistingDirectory( this,tr( "Path To An Encrypted Folder" ),QDir::homePath(),0 ) ;
+	auto e = this->getExistingDirectory( tr( "Path To An Encrypted Folder" ) ) ;
 
 	if( !e.isEmpty() ){
 
@@ -236,7 +248,7 @@ void favorites::folderPath()
 
 void favorites::mountPointPath()
 {
-	auto e = QFileDialog::getExistingDirectory( this,tr( "Path To Mount Folder" ),QDir::homePath(),0 ) ;
+	auto e = this->getExistingDirectory( tr( "Path To Mount Folder" ) ) ;
 
 	if( !e.isEmpty() ){
 

@@ -46,6 +46,7 @@ namespace cryfsTask
 		success,cryfs,cryfsNotFound,encfs,encfsNotFound,unknown,failedToCreateMountPoint,backendFail
 	};
 
+	bool deleteMountFolder( const QString& ) ;
 	Task::future< QVector< volumeInfo > >& updateVolumeList( void ) ;
 	Task::future< bool >& encryptedFolderUnMount( const QString& mountPoint ) ;
 	Task::future< cryfsTask::status >& encryptedFolderMount( const options& ) ;

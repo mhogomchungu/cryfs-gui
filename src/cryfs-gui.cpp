@@ -1056,6 +1056,8 @@ void cryfsGUI::unMountAll()
 
 				tablewidget::deleteRow( table,e,1 ) ;
 
+				cryfsTask::deleteMountFolder( e ) ;
+
 				utility::Task::suspendForOneSecond() ;
 			}
 
@@ -1073,19 +1075,28 @@ void cryfsGUI::pbUpdate()
 {
 	this->disableAll() ;
 
-	tablewidget::clearTable( m_ui->tableWidget ) ;
-
 	this->updateVolumeList( cryfsTask::updateVolumeList().await() ) ;
 }
 
 void cryfsGUI::updateVolumeList( const QVector< volumeInfo >& r )
 {
+	auto l = tablewidget::columnEntries( m_ui->tableWidget,1 ) ;
+
+	tablewidget::clearTable( m_ui->tableWidget ) ;
+
 	for( const auto& it : r ){
 
 		if( it.entryisValid() ){
 
 			this->updateList( it ) ;
 		}
+
+		l.removeOne( it.mountPoint() ) ;
+	}
+
+	for( const auto& it : l ){
+
+		cryfsTask::deleteMountFolder( it ) ;
 	}
 
 	this->enableAll() ;

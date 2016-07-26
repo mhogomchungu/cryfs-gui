@@ -60,6 +60,7 @@ private slots:
 	void shortcutPressed( void ) ;
 	void devicePathTextChange( QString ) ;
 private:
+	QString getExistingDirectory( const QString& ) ;
 	void closeEvent( QCloseEvent * ) ;
 	bool eventFilter( QObject * watched,QEvent * event ) ;
 	void addEntries( const QStringList& ) ;
