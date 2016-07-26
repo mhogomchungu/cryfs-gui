@@ -29,7 +29,7 @@ DialogMsg::DialogMsg( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::Dialo
 {
 	m_ui->setupUi( this ) ;
 
-	if( parent  ){
+	if( parent ){
 
 		this->setFont( parent->font() ) ;
 	}

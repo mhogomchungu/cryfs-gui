@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QFileDialog>
 #include <QFile>
 #include <QDir>
@@ -40,24 +41,20 @@ class options : public QDialog
 {
 	Q_OBJECT
 public:
-        static void instance( QWidget * parent,bool n,const QString& e,
-                              std::function< void( const QString& ) >&& function )
+	static void instance( QWidget * parent,std::function< void( const QStringList& ) >&& e )
 	{
-                new options( parent,n,e,std::move( function ) ) ;
+		new options( parent,std::move( e ) ) ;
 	}
 
-        options( QWidget * parent,bool,const QString&,std::function< void( const QString& ) >&& ) ;
-	~options();
+	options( QWidget * parent,std::function< void( const QStringList& ) >&& ) ;
+	~options() ;
 private slots:
         void pushButton( void ) ;
-	void defaultButton( void ) ;
-	void pbSet( void ) ;
-	void pbCancel( void ) ;
+	void pbOK( void ) ;
 private:
 	void closeEvent( QCloseEvent * ) ;
-	void SetFocus( void );
 	Ui::options * m_ui ;
-	std::function< void( const QString& ) > m_function ;
+	std::function< void( const QStringList& ) > m_setOptions ;
 };
 
 #endif // OPTIONS_H

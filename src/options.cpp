@@ -25,37 +25,25 @@
 
 #include <QFileDialog>
 
-options::options( QWidget * parent,bool n,const QString& e,
-                  std::function< void( const QString& ) >&& function ) :
-        QDialog( parent ),m_ui( new Ui::options ),m_function( function )
+options::options( QWidget * parent,
+		  std::function< void( const QStringList& ) >&& e ) :
+	QDialog( parent ),
+	m_ui( new Ui::options ),
+	m_setOptions( std::move( e ) )
 {
 	m_ui->setupUi( this ) ;
 
 	this->setFixedSize( this->size() ) ;
 
-        m_ui->label_2->setText( e ) ;
-
-        m_ui->pushButton->setEnabled( n ) ;
-
         m_ui->pushButton->setIcon( QIcon( ":/file.png" ) ) ;
 
 	this->setWindowIcon( QIcon( ":/cryfs-gui.png" ) ) ;
 
-	this->addAction( [ this ](){
-
-                auto ac = new QAction( this ) ;
-
-		connect( ac,SIGNAL( triggered() ),this,SLOT( defaultButton() ) ) ;
-
-		return ac ;
-
-	}() ) ;
-
-	connect( m_ui->pbCancel,SIGNAL( clicked() ),this,SLOT( pbCancel() ) ) ;
-	connect( m_ui->pbSet,SIGNAL( clicked() ),this,SLOT( pbSet() ) ) ;
         connect( m_ui->pushButton,SIGNAL( clicked() ),this,SLOT( pushButton() ) ) ;
 
-        this->SetFocus() ;
+	connect( m_ui->pbOK,SIGNAL( clicked() ),this,SLOT( pbOK() ) ) ;
+
+	m_ui->lineEditIdleTime->setFocus() ;
 
 	this->show() ;
 }
@@ -67,56 +55,40 @@ void options::pushButton()
 
         if( !e.isEmpty() ){
 
-                m_ui->lineEditKey->setText( e ) ;
+		m_ui->lineConfigFilePath->setText( e ) ;
         }
-}
-
-void options::defaultButton()
-{
-	if( m_ui->pbCancel->hasFocus() ){
-
-		this->pbCancel() ;
-	}else{
-		this->pbSet() ;
-	}
-}
-
-void options::SetFocus()
-{
-	if( m_ui->lineEditKey->text().isEmpty() ){
-
-		m_ui->lineEditKey->setFocus() ;
-	}else{
-		m_ui->pbSet->setFocus() ;
-	}
 }
 
 void options::closeEvent( QCloseEvent * e )
 {
 	e->ignore() ;
-	this->pbCancel() ;
+	this->pbOK() ;
 }
 
-void options::pbCancel()
+void options::pbOK()
 {
-	this->hide() ;
-	this->deleteLater() ;
-}
+	auto e = m_ui->lineEditIdleTime->text() ;
 
-void options::pbSet()
-{
-	auto e = m_ui->lineEditKey->text() ;
+	bool ok = true ;
 
-	if( e.isEmpty() ){
+	if( !e.isEmpty() ){
+
+		e.toInt( &ok ) ;
+	}
+
+	if( !ok ){
 
 		DialogMsg msg( this ) ;
-		msg.ShowUIOK( tr( "ERROR" ),tr( "Option Field Is Empty." ) ) ;
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Idle Time Field Requires Digits Only If Not Empty." ) ) ;
 	}else{
-		m_function( e ) ;
-		this->pbCancel() ;
+		m_setOptions( { e,m_ui->lineConfigFilePath->text() } ) ;
+
+		this->hide() ;
+		this->deleteLater() ;
 	}
 }
 
 options::~options()
-{	
+{
+	delete m_ui ;
 }

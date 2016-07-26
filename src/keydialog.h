@@ -114,11 +114,10 @@ signals:
 	void mounted( QString ) ;
 	void cryptoOpen( QString ) ;
 private slots:
-        void configFile( void ) ;
-	void mountOptions( void ) ;
 	void textChanged( QString ) ;
 	void passWordTextChanged( QString ) ;
 	void cbActicated( int ) ;
+	void pbOptions( void ) ;
 	void pbkeyOption( void ) ;
 	void pbMountPointPath( void ) ;
 	void pbFolderPath( void ) ;
@@ -159,6 +158,8 @@ private :
 	typedef enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } keyType ;
 
 	keyType m_keyType ;
+
+	QWidget * m_parentWidget ;
 
 	std::function< void() > m_cancel ;
 	std::function< void( const QString& ) > m_success ;

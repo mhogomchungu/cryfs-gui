@@ -188,7 +188,9 @@ if( QT5 )
 
 	TARGET_LINK_LIBRARIES( cryfs ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${library_pwquality} -lgcrypt lxqt-wallet )
 
-	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	message( STATUS "---------------------------------------------------------------------------" )
+	message( STATUS "Building GUI components using Qt5" )
+	message( STATUS "---------------------------------------------------------------------------\n\n" )
 else()
 	find_package( Qt4 REQUIRED )
 
@@ -210,7 +212,9 @@ else()
 
 	TARGET_LINK_LIBRARIES( cryfs -lQtCore -lQtGui -lQtNetwork ${library_pwquality} -lgcrypt lxqt-wallet )
 
-	#set_target_properties( cryfs PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}" )
+	message( STATUS "---------------------------------------------------------------------------" )
+	message( STATUS "Building GUI components using Qt4" )
+	message( STATUS "---------------------------------------------------------------------------\n\n" )
 endif()
 
 set_target_properties( cryfs PROPERTIES COMPILE_FLAGS "-Wextra -Wall -s -fPIC -pedantic" )

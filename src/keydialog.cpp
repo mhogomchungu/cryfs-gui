@@ -47,6 +47,8 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 {
 	m_ui->setupUi( this ) ;
 
+	m_parentWidget = parent ;
+
 	m_ui->checkBoxShareMountPoint->setVisible( false ) ;
 
 	m_table = table ;
@@ -201,17 +203,24 @@ keyDialog::keyDialog( QWidget * parent,QTableWidget * table,const volumeInfo& e,
 
 	this->installEventFilter( this ) ;
 
-	m_ui->pbOptions->setMenu( [ this ](){
+	connect( m_ui->pbOptions,SIGNAL( clicked() ),this,SLOT( pbOptions() ) ) ;
+}
 
-		auto m = new QMenu( this ) ;
+void keyDialog::pbOptions()
+{
+	options::instance( m_parentWidget,[ this ]( const QStringList& e ){
 
-		connect( m->addAction( tr( "Set Idle Timeout" ) ),
-			 SIGNAL( triggered() ),this,SLOT( mountOptions() ) ) ;
+		m_options = e.at( 0 ) ;
 
-                connect( m->addAction( tr( "Set Cryfs Configuration File Path" ) ),
-                         SIGNAL( triggered() ),this,SLOT( configFile() ) ) ;
-		return m ;
-	}() ) ;
+		m_configFile = e.at( 1 ) ;
+
+		if( m_ui->lineEditKey->text().isEmpty() ){
+
+			m_ui->lineEditKey->setFocus() ;
+		}else{
+			m_ui->pbOpen->setFocus() ;
+		}
+	} ) ;
 }
 
 void keyDialog::passWordTextChanged( QString e )
@@ -238,26 +247,6 @@ void keyDialog::passWordTextChanged( QString e )
 			this->setWindowTitle( f ) ;
 		}
 	}
-}
-
-void keyDialog::mountOptions()
-{
-        auto e = tr( "Automatically Unmount After Specified Minutes of Inactivity Is Reached." ) ;
-
-        options::instance( this,false,e,[ this ]( const QString& e ){
-
-		m_options = e ;
-	} ) ;
-}
-
-void keyDialog::configFile()
-{
-        auto e = tr( "Unlock A Cryfs Volume With Specified Configuration File." ) ;
-
-        options::instance( this,true,e,[ this ]( const QString& e ){
-
-                m_configFile = e ;
-        } ) ;
 }
 
 bool keyDialog::eventFilter( QObject * watched,QEvent * event )
