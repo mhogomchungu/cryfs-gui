@@ -228,9 +228,14 @@ QString favorites::getExistingDirectory( const QString& r )
 {
 	auto e = QFileDialog::getExistingDirectory( this,r,QDir::homePath(),0 ) ;
 
-	if( e.endsWith( '/' ) ){
+	while( true ){
 
-		e.truncate( e.length() - 1 ) ;
+		if( e.endsWith( '/' ) ){
+
+			e.truncate( e.length() - 1 ) ;
+		}else{
+			break ;
+		}
 	}
 
 	return e ;
