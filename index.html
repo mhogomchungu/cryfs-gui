@@ -19,20 +19,22 @@
     </section>
 
     <section class="main-content">
-      <h3>
-<a id="cryfs-gui" class="anchor" href="#cryfs-gui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cryfs-gui</h3>
+      <h2>
+<a id="cryfs-gui" class="anchor" href="#cryfs-gui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cryfs-gui</h2>
 
 <p>cryfs-gui is a Qt/C++ GUI applications that manages encrypted folders through <a href="https://www.cryfs.org/">cryfs</a> and <a href="http://www.arg0.net/#!encfs/c1awt">encfs</a> backends.</p>
 
-<p>Encrypted container folders have an advantage over encrypted container files like the ones that are created by <a href="http://mhogomchungu.github.io/zuluCrypt/">zuluCrypt</a>,TrueCrypt,VeraCrypt among other projects. Sizes of encrypted container files are set when they are created and can not grow or shrink to reflect container space usage.</p>
+<p>Encrypted container <code>folders</code> have an advantage over encrypted container <code>files</code> like the ones that are created by <a href="http://mhogomchungu.github.io/zuluCrypt/">zuluCrypt</a>,TrueCrypt,VeraCrypt among other projects that use file based encrypted containers. </p>
 
-<p>Advantages are:</p>
+<h4>
+<a id="advantages-are" class="anchor" href="#advantages-are" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advantages are:</h4>
 
-<p>The encrypted container folder can freely grow and shrink as files are added,removed,grow or shrink.</p>
+<p>The encrypted container folder can freely grow and shrink as files are added,removed,grow or shrink. File based encrypted containers are limited to the size of the container.The container size set when the container is created and usually can not be expanded to accommodate more data.</p>
 
-<p>Disadvantages are:</p>
+<h4>
+<a id="disadvantages-are" class="anchor" href="#disadvantages-are" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disadvantages are:</h4>
 
-<p>The encrypted container folder does not hide the space usage of its contents and an adversary can derive meaning from space usage of the encrypted container folder.</p>
+<p>The encrypted container folder does not hide the space usage of its contents and an adversary can derive meaning from space usage of the encrypted container folder. File based container hides the space utilization of the volume and the only thing an attacker can see is the fixed size of the container.</p>
 
 <p>More advantages/disadvantages are discussed <a href="https://www.cryfs.org/comparison">here.</a></p>
 
@@ -141,7 +143,7 @@ i/gJN6mX3AIU7HHEHnP5ty8mwbb8ROc=
 -----END PGP PUBLIC KEY BLOCK-----
 </code></pre>
 
-<p>last update: Fri Jul  1 13:15:39 EAT 2016</p>
+<p>last update: Wed Jul 27 11:26:54 EAT 2016</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/mhogomchungu/cryfs-gui">cryfs-gui</a> is maintained by <a href="https://github.com/mhogomchungu">mhogomchungu</a>.</span>
