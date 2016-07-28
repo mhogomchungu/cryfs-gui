@@ -35,7 +35,7 @@ public:
 		wallet( LXQt::Wallet::Wallet * ) ;
 		wallet() ;
 
-		~wallet();
+		~wallet() ;
 
 		wallet( wallet&& ) ;
 

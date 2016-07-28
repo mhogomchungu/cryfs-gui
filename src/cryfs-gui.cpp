@@ -277,9 +277,12 @@ void cryfsGUI::setUpAppMenu()
 
 	m_ui->pbmenu->setMenu( m ) ;
 
-	m_trayIcon.setContextMenu( [ this,ac ](){
+	m_trayIcon.setContextMenu( [ this,ac,&_addAction ](){
 
 		auto m = new QMenu( this ) ;
+
+		m->addAction( _addAction( false,false,tr( "Show/Hide" ),
+					  "Show/Hide",SLOT( showTrayGUI() ) ) ) ;
 
 		m->addAction( ac ) ;
 
@@ -288,6 +291,11 @@ void cryfsGUI::setUpAppMenu()
 
 	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
 		 this,SLOT( slotTrayClicked( QSystemTrayIcon::ActivationReason ) ) ) ;
+}
+
+void cryfsGUI::showTrayGUI()
+{
+	this->slotTrayClicked( QSystemTrayIcon::Trigger ) ;
 }
 
 void cryfsGUI::startAutoMonitor()
