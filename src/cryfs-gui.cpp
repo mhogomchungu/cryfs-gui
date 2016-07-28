@@ -329,21 +329,21 @@ void cryfsGUI::changeInternalWalletPassWord()
 
 void cryfsGUI::keyManagerClicked( QAction * ac )
 {
-	auto e = ac->text() ;
-	e.remove( "&" ) ;
+	walletconfig::instance( this ).ShowUI( m_secrets.walletBk( [ ac ](){
 
-	if( e == tr( "Internal Wallet" ) ){
+		auto e = ac->text().remove( '&' ) ;
 
-		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::internal ) ;
+		if( e == tr( "KDE Wallet" ) ){
 
-	}else if( e == tr( "KDE Wallet" ) ){
+			return LXQt::Wallet::BackEnd::kwallet ;
 
-		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::kwallet ) ;
+		}else if( e == tr( "Gnome Wallet" ) ){
 
-	}else if( e == tr( "Gnome Wallet" ) ){
-
-		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::libsecret ) ;
-	}
+			return LXQt::Wallet::BackEnd::libsecret ;
+		}else{
+			return LXQt::Wallet::BackEnd::internal ;
+		}
+	}() ) ) ;
 }
 
 void cryfsGUI::licenseInfo()

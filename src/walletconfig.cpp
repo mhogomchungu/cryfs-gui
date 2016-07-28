@@ -36,8 +36,8 @@
 
 #define COMMENT "-zuluCrypt_Comment_ID"
 
-walletconfig::walletconfig( QWidget * parent,secrets& s ) :
-	QDialog( parent ),m_ui( new Ui::walletconfig ),m_secrets( s )
+walletconfig::walletconfig( QWidget * parent ) :
+	QDialog( parent ),m_ui( new Ui::walletconfig )
 {
 	m_ui->setupUi( this ) ;
 
@@ -140,9 +140,9 @@ void walletconfig::pbAdd()
 
 			auto _add = [ this ](){
 
-				if( m_wallet->addKey( m_volumeID,m_key.toLatin1() ) ){
+				if( m_wallet->addKey( m_volumeID,m_key ) ){
 
-					if( m_wallet->addKey( m_volumeID + COMMENT,m_comment.toLatin1() ) ){
+					if( m_wallet->addKey( m_volumeID + COMMENT,m_comment ) ){
 
 						return true ;
 					}else{
@@ -187,40 +187,40 @@ void walletconfig::pbAdd()
 	} ) ;
 }
 
-void walletconfig::ShowUI( LXQt::Wallet::BackEnd backEnd )
+void walletconfig::ShowUI( secrets::wallet&& wallet )
 {
 	this->disableAll() ;
 
-	m_wallet = m_secrets.walletBk( backEnd ) ;
+	m_wallet = std::move( wallet ) ;
 
 	if( m_wallet->opened() ){
 
-		this->walletIsOpen( true ) ;
+		this->accessWallet() ;
 	}else{
 		m_wallet->open( [ & ]()->QString{
 
-			if( backEnd == LXQt::Wallet::BackEnd::kwallet ){
+			if( m_wallet->backEnd() == LXQt::Wallet::BackEnd::kwallet ){
 
 				return "default" ;
 			}else{
 				return utility::walletName() ;
 			}
 
-		}(),utility::applicationName(),[ this ]( bool e ){
+		}(),utility::applicationName(),[ this ]( bool opened ){
 
-			this->walletIsOpen( e ) ;
+			if( opened ){
+
+				this->accessWallet() ;
+			}else{
+				this->HideUI() ;
+			}
 		} ) ;
 	}
 }
 
-void walletconfig::walletIsOpen( bool opened )
+void walletconfig::accessWallet()
 {
 	using walletKeys = decltype( m_wallet->readAllKeyValues() ) ;
-
-	if( !opened ){
-
-		return this->HideUI() ;
-	}
 
 	this->show() ;
 
