@@ -34,7 +34,7 @@ HOW TO BUILD A CRYFS-GUI PACKAGE ON UBUNTU OR ANY OTHER DEBIAN BASED DISTRIBUTIO
 
    ******************************************************************************************************
 
-   tar cf - . | xz -zf - > ../cryfs-gui-1.3.1.orig.tar.xz
+   tar cf - . | xz -zf - > ../cryfs-gui-1.3.2.orig.tar.xz
 
    ******************************************************************************************************
 
@@ -90,7 +90,7 @@ HOW TO BUILD A CRYFS-GUI PACKAGE ON DEBIAN OR ANY OTHER DEBIAN BASED DISTRIBUTIO
 
    ******************************************************************************************************
 
-   tar cf - . | xz -zf - > ../cryfs-gui-1.3.1.orig.tar.xz
+   tar cf - . | xz -zf - > ../cryfs-gui-1.3.2.orig.tar.xz
 
    ******************************************************************************************************
 

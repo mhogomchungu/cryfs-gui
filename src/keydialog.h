@@ -36,6 +36,7 @@ class QTableWidget ;
 #include "utility.h"
 #include "cryfstask.h"
 #include "can_build_pwquality.h"
+#include "secrets.h"
 
 #include <functional>
 #include <memory>
@@ -95,15 +96,17 @@ class keyDialog : public QDialog
 	Q_OBJECT
 public:
 	static keyDialog& instance( QWidget * parent,
-				     QTableWidget * table,
-				     const volumeInfo& v,
-				     std::function< void() > cancel,
-				     std::function< void( const QString& ) > success )
+				    QTableWidget * table,
+				    secrets& s,
+				    const volumeInfo& v,
+				    std::function< void() > cancel,
+				    std::function< void( const QString& ) > success )
 	{
-		return *( new keyDialog( parent,table,v,std::move( cancel ),std::move( success ) ) ) ;
+		return *( new keyDialog( parent,table,s,v,std::move( cancel ),std::move( success ) ) ) ;
 	}
 	keyDialog( QWidget * parent,
 		   QTableWidget *,
+		   secrets&,
 		   const volumeInfo&,
 		   std::function< void() >,
 		   std::function< void( const QString& ) > ) ;
@@ -152,6 +155,8 @@ private :
 	bool m_working ;
 	bool m_create ;
 	bool m_reUseMountPoint ;
+
+	secrets& m_secrets ;
 
 	keystrength m_keyStrength ;
 

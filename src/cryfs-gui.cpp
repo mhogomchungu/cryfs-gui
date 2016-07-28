@@ -313,7 +313,10 @@ void cryfsGUI::aboutToShowMenu()
 
 void cryfsGUI::changeInternalWalletPassWord()
 {
-	changeWalletPassWord::instance( this ) ;
+	auto a = utility::walletName() ;
+	auto b = utility::applicationName() ;
+
+	m_secrets.changeInternalWalletPassword( a,b ) ;
 }
 
 void cryfsGUI::keyManagerClicked( QAction * ac )
@@ -323,15 +326,15 @@ void cryfsGUI::keyManagerClicked( QAction * ac )
 
 	if( e == tr( "Internal Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::internal ) ;
+		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::internal ) ;
 
 	}else if( e == tr( "KDE Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::kwallet ) ;
+		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::kwallet ) ;
 
 	}else if( e == tr( "Gnome Wallet" ) ){
 
-		walletconfig::instance( this ).ShowUI( LXQt::Wallet::BackEnd::libsecret ) ;
+		walletconfig::instance( this,m_secrets ).ShowUI( LXQt::Wallet::BackEnd::libsecret ) ;
 	}
 }
 
@@ -488,6 +491,8 @@ void cryfsGUI::raiseWindow( QString volume )
 
 void cryfsGUI::Show()
 {
+	m_secrets.setParent( this ) ;
+
 	auto l = QCoreApplication::arguments() ;
 
 	m_startHidden  = l.contains( "-e" ) ;
@@ -541,17 +546,23 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 			if( _supported( wxt::BackEnd::internal,"internal" ) ){
 
-				return utility::getKeyFromWallet( this,wxt::BackEnd::internal,volume ) ;
+				auto s = m_secrets.walletBk( wxt::BackEnd::internal ) ;
+
+				return utility::getKey( s.bk(),volume ) ;
 
 			}else if( _supported( wxt::BackEnd::libsecret,"gnomewallet" ) ){
 
-				return utility::getKeyFromWallet( this, wxt::BackEnd::libsecret,volume ) ;
+				auto s = m_secrets.walletBk( wxt::BackEnd::libsecret ) ;
+
+				return utility::getKey( s.bk(),volume ) ;
 
 			}else if( _supported( wxt::BackEnd::kwallet,"kwallet" ) ){
 
-				return utility::getKeyFromWallet( this,wxt::BackEnd::kwallet,volume ) ;
+				auto s = m_secrets.walletBk( wxt::BackEnd::kwallet ) ;
+
+				return utility::getKey( s.bk(),volume ) ;
 			}else{
-				return utility::wallet{ false,true,"","" } ;
+				return utility::wallet{ false,true,"" } ;
 			}
 		}() ;
 
@@ -891,7 +902,7 @@ void cryfsGUI::mount( const volumeInfo& entry )
 {
 	this->disableAll() ;
 
-	keyDialog::instance( this,m_ui->tableWidget,entry,[ this ](){
+	keyDialog::instance( this,m_ui->tableWidget,m_secrets,entry,[ this ](){
 
 		this->enableAll() ;
 

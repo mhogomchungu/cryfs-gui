@@ -29,6 +29,7 @@
 
 #include "volumeinfo.h"
 #include "utility.h"
+#include "secrets.h"
 
 #include "lxqt_wallet.h"
 
@@ -36,48 +37,6 @@ class QCloseEvent ;
 class QAction ;
 class QTableWidgetItem ;
 class monitor_mountinfo ;
-
-class changeWalletPassWord : public QWidget
-{
-	Q_OBJECT
-public:
-	static void instance( QWidget * parent )
-	{
-		new changeWalletPassWord( parent ) ;
-	}
-	changeWalletPassWord( QWidget * parent )
-	{
-		m_wallet = LXQt::Wallet::getWalletBackend( LXQt::Wallet::BackEnd::internal ) ;
-
-		m_wallet->setParent( parent ) ;
-
-		auto a = utility::walletName() ;
-		auto b = utility::applicationName() ;
-
-		m_wallet->changeWalletPassWord( a,b,[ this ]( bool e ){
-
-			Q_UNUSED( e ) ;
-
-			this->deleteLater() ;
-		} ) ;
-	}
-	~changeWalletPassWord()
-	{
-		m_wallet->deleteLater() ;
-	}
-private slots:
-	void walletpassWordChanged( bool e )
-	{
-		Q_UNUSED( e ) ;
-		this->deleteLater() ;
-	}
-	void walletIsOpen( bool e )
-	{
-		Q_UNUSED( e ) ;
-	}
-private:
-	LXQt::Wallet::Wallet * m_wallet ;
-};
 
 namespace Ui {
 class cryfsGUI ;
@@ -153,6 +112,8 @@ private:
 	void setUpFont( void ) ;
 	void setUpShortCuts( void ) ;
 	void setUpApp( const QString& ) ;
+
+	secrets m_secrets ;
 
 	QMenu * m_favorite_menu = nullptr ;
 	QMenu * m_hidden_volume_menu = nullptr ;

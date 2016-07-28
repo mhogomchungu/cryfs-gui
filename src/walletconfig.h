@@ -26,6 +26,7 @@
 
 #include "lxqt_wallet.h"
 #include "utility.h"
+#include "secrets.h"
 
 class QCloseEvent ;
 class QWidget ;
@@ -40,17 +41,14 @@ class walletconfig : public QDialog
 {
 	Q_OBJECT
 public:
-	static walletconfig& instance( QWidget * parent )
+	static walletconfig& instance( QWidget * parent,secrets& s )
 	{
-		return *( new walletconfig( parent ) ) ;
+		return *( new walletconfig( parent,s ) ) ;
 	}
-	explicit walletconfig( QWidget * parent = 0 ) ;
+	explicit walletconfig( QWidget * parent,secrets& ) ;
 	~walletconfig() ;
 	void ShowUI( LXQt::Wallet::BackEnd ) ;
 	void HideUI( void ) ;
-signals:
-	void HideUISignal( void ) ;
-	void couldNotOpenWallet( void ) ;
 private slots:
 	void currentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous ) ;
 	void itemClicked( QTableWidgetItem * item ) ;
@@ -66,7 +64,8 @@ private:
 	void closeEvent( QCloseEvent * ) ;
 	bool eventFilter( QObject * watched,QEvent * event ) ;
 
-	LXQt::Wallet::Wallet * m_wallet ;
+	secrets& m_secrets ;
+	secrets::wallet m_wallet ;
 	int m_row ;
 	QString m_volumeID ;
 	QString m_comment ;

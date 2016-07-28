@@ -279,7 +279,7 @@ void favorites::closeEvent( QCloseEvent * e )
 	this->HideUI() ;
 }
 
-void favorites::currentItemChanged( QTableWidgetItem * current, QTableWidgetItem * previous )
+void favorites::currentItemChanged( QTableWidgetItem * current,QTableWidgetItem * previous )
 {
 	tablewidget::selectRow( current,previous ) ;
 }

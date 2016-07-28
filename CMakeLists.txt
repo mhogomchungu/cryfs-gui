@@ -165,6 +165,7 @@ set( SRC 	src/main.cpp
 		src/walletconfig.cpp
 		src/walletconfiginput.cpp
 		src/options.cpp
+		src/secrets.cpp
 )
 
 if( QT5 )

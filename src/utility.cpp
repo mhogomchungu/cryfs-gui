@@ -157,89 +157,61 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 	} ) ;
 }
 
-::Task::future<QString>& utility::getKeyFromWallet( LXQt::Wallet::Wallet * wallet,const QString& volumeID )
+utility::wallet utility::getKey( LXQt::Wallet::Wallet& wallet,const QString& keyID )
 {
-	return ::Task::run<QString>( [ wallet,volumeID ](){
+	auto _getKey = []( LXQt::Wallet::Wallet& wallet,const QString& volumeID ){
 
-		return wallet->readValue( volumeID ) ;
-	} ) ;
-}
+		return ::Task::await<QString>( [ & ](){
 
-utility::wallet utility::getKeyFromWallet( QWidget * widget,
-					   LXQt::Wallet::BackEnd storage,
-					   const QString& keyID,const QString& pwd )
-{
-	utility::wallet w{ false,false,"","" } ;
+			return wallet.readValue( volumeID ) ;
+		} ) ;
+	} ;
 
-	class Wallet
-	{
-	public:
-		Wallet( LXQt::Wallet::BackEnd storage ) :
-			m_wallet( LXQt::Wallet::getWalletBackend( storage ) )
-		{
-		}
-		LXQt::Wallet::Wallet * operator->()
-		{
-			return m_wallet ;
-		}
-		LXQt::Wallet::Wallet * operator*()
-		{
-			return this->operator->() ;
-		}
-		~Wallet()
-		{
-			m_wallet->deleteLater() ;
-		}
-	private:
-		LXQt::Wallet::Wallet * m_wallet ;
-	} wallet( storage ) ;
+	utility::wallet w{ false,false,"" } ;
 
-	if( storage == LXQt::Wallet::BackEnd::kwallet || storage == LXQt::Wallet::BackEnd::libsecret ){
+	auto s = wallet.backEnd() ;
 
-		if( storage == LXQt::Wallet::BackEnd::kwallet ){
+	if( s == LXQt::Wallet::BackEnd::kwallet || s == LXQt::Wallet::BackEnd::libsecret ){
 
-			w.opened = wallet->open( "default",utility::applicationName() ) ;
+		if( s == LXQt::Wallet::BackEnd::kwallet ){
+
+			w.opened = wallet.open( "default",utility::applicationName() ) ;
 		}else{
-			w.opened = wallet->open( utility::walletName(),utility::applicationName() ) ;
+			w.opened = wallet.open( utility::walletName(),utility::applicationName() ) ;
 		}
 
 		if( w.opened ){
 
-			w.key = utility::getKeyFromWallet( *wallet,keyID ).await() ;
+			w.key = _getKey( wallet,keyID ) ;
 		}
 
-		return w ;
-
-	}else if( storage == LXQt::Wallet::BackEnd::internal ){
+	}else if( s == LXQt::Wallet::BackEnd::internal ){
 
 		auto walletName = utility::walletName() ;
 		auto appName    = utility::applicationName() ;
 
-		if( LXQt::Wallet::walletExists( storage,walletName,appName ) ){
+		if( LXQt::Wallet::walletExists( s,walletName,appName ) ){
 
-			wallet->setImage( QIcon( ":/cryfs-gui" ) ) ;
+			wallet.setImage( QIcon( ":/cryfs-gui" ) ) ;
 
-			w.opened = wallet->open( walletName,appName,widget,pwd ) ;
+			if( wallet.opened() ){
+
+				w.opened = true ;
+			}else{
+				w.opened = wallet.open( walletName,appName ) ;
+			}
 
 			if( w.opened ){
 
-				w.key = utility::getKeyFromWallet( *wallet,keyID ).await() ;
-				w.password = wallet->qObject()->objectName() ;
+				w.key = _getKey( wallet,keyID ) ;
 				w.notConfigured = false ;
 			}
-
-			return w ;
 		}else{
 			w.notConfigured = true ;
-			return w ;
 		}
-
-	}else{
-		/*
-		 * shouldnt get here
-		 */
-		return w ;
 	}
+
+	return w ;
 }
 
 bool utility::eventFilter( QObject * gui,QObject * watched,QEvent * event,std::function< void() > function )

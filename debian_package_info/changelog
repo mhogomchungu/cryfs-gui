@@ -1,3 +1,10 @@
+cryfs-gui (1.3.2-1) UNRELEASED; urgency=low
+  [Mhogo Mchungu]
+  * New Features
+     -- Show password strength when creating a new volume.
+
+ -- Mhogo Mchungu <mhogomchungu@gmail.com>  Mon, 1 Aug 2016 16:38:48 +0000
+
 cryfs-gui (1.3.1-1) UNRELEASED; urgency=low
   [Mhogo Mchungu]
   * New Features
