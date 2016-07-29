@@ -33,9 +33,20 @@
 #include "utility.h"
 #include "lxqt_wallet.h"
 
-#define KWALLET         "kde wallet"
-#define INTERNAL_WALLET "internal wallet"
-#define GNOME_WALLET    "gnome wallet"
+static QString _kwallet()
+{
+	return QObject::tr( "Kde Wallet" ) ;
+}
+
+static QString _internalWallet()
+{
+	return QObject::tr( "Internal Wallet" ) ;
+}
+
+static QString _gnomeWallet()
+{
+	return QObject::tr( "Gnome Wallet" ) ;
+}
 
 keyDialog::keyDialog( QWidget * parent,
 		      QTableWidget * table,
@@ -185,16 +196,16 @@ keyDialog::keyDialog( QWidget * parent,
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Key+KeyFile" ) ) ;
 
-	m_ui->cbKeyType->addItem( tr( INTERNAL_WALLET ) ) ;
+	m_ui->cbKeyType->addItem( _internalWallet() ) ;
 
 	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::libsecret ) ){
 
-		m_ui->cbKeyType->addItem( tr( GNOME_WALLET ) ) ;
+		m_ui->cbKeyType->addItem( _gnomeWallet() ) ;
 	}
 
 	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::kwallet ) ){
 
-		m_ui->cbKeyType->addItem( tr( KWALLET ) ) ;
+		m_ui->cbKeyType->addItem( _kwallet() ) ;
 	}
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
@@ -423,9 +434,9 @@ void keyDialog::pbOpen()
 
 		auto wallet = m_ui->lineEditKey->text() ;
 
-		auto kde      = wallet == tr( KWALLET ) ;
-		auto gnome    = wallet == tr( GNOME_WALLET ) ;
-		auto internal = wallet == tr( INTERNAL_WALLET ) ;
+		auto kde      = wallet == _kwallet() ;
+		auto gnome    = wallet == _gnomeWallet() ;
+		auto internal = wallet == _internalWallet() ;
 
 		if( kde || gnome ){
 
@@ -638,9 +649,16 @@ void keyDialog::openVolume()
 {
 	auto keyType = m_ui->cbKeyType->currentIndex() ;
 
-	if( keyType == keyDialog::Key || keyType == keyDialog::keyKeyFile ){
+	if( keyType == keyDialog::Key ){
 
 		m_key = m_ui->lineEditKey->text() ;
+
+	}if( keyType == keyDialog::keyKeyFile ){
+
+		if( utility::pluginKey( m_secrets.parent(),&m_key,"hmac" ) ){
+
+			return this->enableAll() ;
+		}
 
 	}else if( keyType == keyDialog::keyfile ){
 
@@ -690,36 +708,31 @@ void keyDialog::cbActicated( QString e )
 	}else{
 		this->plugIn() ;
 
-		if( e == tr( KWALLET ) ){
+		if( e == _kwallet() ){
 
-			m_ui->lineEditKey->setText( tr( KWALLET ) ) ;
+			m_ui->lineEditKey->setText( _kwallet() ) ;
 
-		}else if( e == tr( GNOME_WALLET ) ){
+		}else if( e == _gnomeWallet() ){
 
-			m_ui->lineEditKey->setText( tr( GNOME_WALLET ) ) ;
+			m_ui->lineEditKey->setText( _gnomeWallet() ) ;
 
-		}else if( e == tr( INTERNAL_WALLET ) ){
+		}else if( e == _internalWallet() ){
 
-			m_ui->lineEditKey->setText( tr( INTERNAL_WALLET ) ) ;
+			m_ui->lineEditKey->setText( _internalWallet() ) ;
 		}
 	}
 }
 
 void keyDialog::keyAndKeyFile()
 {
-	QString key ;
+	m_keyType = keyDialog::keyKeyFile ;
 
-	if( utility::pluginKey( m_secrets.parent(),&key,"hmac" ) ){
-
-		m_ui->cbKeyType->setCurrentIndex( 0 ) ;
-	}else{
-		this->key() ;
-
-		m_keyType = keyDialog::keyKeyFile ;
-
-		m_ui->lineEditKey->setEnabled( false ) ;
-		m_ui->lineEditKey->setText( key ) ;
-	}
+	m_ui->pbkeyOption->setIcon( QIcon( ":/module.png" ) ) ;
+	m_ui->pbkeyOption->setEnabled( false ) ;
+	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
+	m_ui->label->setText( tr( "Plugin name" ) ) ;
+	m_ui->lineEditKey->setEnabled( false ) ;
+	m_ui->lineEditKey->setText( tr( "Key+KeyFile" ) ) ;
 }
 
 void keyDialog::plugIn()
@@ -731,7 +744,7 @@ void keyDialog::plugIn()
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
 	m_ui->label->setText( tr( "Plugin name" ) ) ;
 	m_ui->lineEditKey->setEnabled( false ) ;
-	m_ui->lineEditKey->setText( INTERNAL_WALLET ) ;
+	m_ui->lineEditKey->setText( _internalWallet() ) ;
 }
 
 void keyDialog::key()

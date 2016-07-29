@@ -24,6 +24,8 @@
 #include <QDebug>
 #include <QFile>
 
+#include <iostream>
+
 using cs = cryfsTask::status ;
 
 static bool _create_folder( const QString& m )
@@ -162,9 +164,9 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 
 		auto _printOutput = [ & ](){
 
-			qDebug() << e.output() ;
-			qDebug() << "-------------------------------------------------------" ;
-			qDebug() << e.stdError() ;
+			std::cout << e.output().constData() ;
+			std::cout << "-------------------------------------------------------\n" ;
+			std::cout << e.stdError().constData() << std::endl ;
 		} ;
 
 		if( e.finished() ){
