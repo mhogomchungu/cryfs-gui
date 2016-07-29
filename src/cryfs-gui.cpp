@@ -556,19 +556,19 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 				auto s = m_secrets.walletBk( wxt::BackEnd::internal ) ;
 
-				return utility::getKey( s.bk(),volume ) ;
+				return utility::getKey( volume,s.bk() ) ;
 
 			}else if( _supported( wxt::BackEnd::libsecret,"gnomewallet" ) ){
 
 				auto s = m_secrets.walletBk( wxt::BackEnd::libsecret ) ;
 
-				return utility::getKey( s.bk(),volume ) ;
+				return utility::getKey( volume,s.bk() ) ;
 
 			}else if( _supported( wxt::BackEnd::kwallet,"kwallet" ) ){
 
 				auto s = m_secrets.walletBk( wxt::BackEnd::kwallet ) ;
 
-				return utility::getKey( s.bk(),volume ) ;
+				return utility::getKey( volume,s.bk() ) ;
 			}else{
 				return utility::wallet{ false,true,"" } ;
 			}

@@ -119,18 +119,16 @@ signals:
 private slots:
 	void textChanged( QString ) ;
 	void passWordTextChanged( QString ) ;
-	void cbActicated( int ) ;
+	void cbActicated( QString ) ;
 	void pbOptions( void ) ;
 	void pbkeyOption( void ) ;
 	void pbMountPointPath( void ) ;
 	void pbFolderPath( void ) ;
-	void pbPluginEntryClicked( QAction * ) ;
 	void plugIn( void ) ;
 	void key( void ) ;
 	void keyFile( void ) ;
 	void pbOpen( void ) ;
 	void pbCancel( void ) ;
-	void Plugin( void ) ;
 	void KeyFile( void ) ;
 	void cbMountReadOnlyStateChanged( int ) ;
 	void encryptedFolderMount( void ) ;
@@ -150,7 +148,6 @@ private :
 	QString m_deviceOffSet ;
 	QString m_options ;
         QString m_configFile ;
-	QMenu * m_menu ;
 	QTableWidget * m_table ;
 	bool m_working ;
 	bool m_create ;

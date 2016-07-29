@@ -157,7 +157,7 @@ void utility::openPath( const QString& path,const QString& opener,const QString&
 	} ) ;
 }
 
-utility::wallet utility::getKey( LXQt::Wallet::Wallet& wallet,const QString& keyID )
+utility::wallet utility::getKey( const QString& keyID,LXQt::Wallet::Wallet& wallet )
 {
 	auto _getKey = []( LXQt::Wallet::Wallet& wallet,const QString& volumeID ){
 
@@ -204,7 +204,6 @@ utility::wallet utility::getKey( LXQt::Wallet::Wallet& wallet,const QString& key
 			if( w.opened ){
 
 				w.key = _getKey( wallet,keyID ) ;
-				w.notConfigured = false ;
 			}
 		}else{
 			w.notConfigured = true ;
@@ -835,36 +834,6 @@ bool utility::pathExists( const QString& path )
 QStringList utility::split( const QString& e,char token )
 {
 	return e.split( token,QString::SkipEmptyParts ) ;
-}
-
-void utility::createPlugInMenu( QMenu * menu,const QString& a,const QString& b,const QString& c )
-{
-	QStringList l ;
-	QStringList e ;
-
-	l.append( a ) ;
-
-	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::libsecret ) ){
-
-		l.append( b ) ;
-	}
-	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::kwallet ) ){
-
-		l.append( c ) ;
-	}
-
-	menu->clear() ;
-
-	auto _add_actions = [ menu ]( const QStringList& r ){
-
-		for( const auto& it : r ){
-
-			menu->addAction( it ) ;
-		}
-	} ;
-
-	_add_actions( l ) ;
-	_add_actions( e ) ;
 }
 
 QString utility::walletName()

@@ -116,7 +116,7 @@ namespace utility
 
 	int startApplication( const char * appName,std::function<int()> ) ;
 
-	wallet getKey( LXQt::Wallet::Wallet&,const QString& keyID ) ;
+	wallet getKey( const QString& keyID,LXQt::Wallet::Wallet& ) ;
 
 	QString cmdArgumentValue( const QStringList&,const QString& arg,const QString& defaulT = QString() ) ;
 
@@ -165,8 +165,6 @@ namespace utility
 
 	utility::array_t getWindowDimensions() ;
 	void setWindowDimensions( const std::initializer_list<int>& ) ;
-
-	void createPlugInMenu( QMenu *,const QString&,const QString&,const QString& ) ;
 
 	int pluginKey( QDialog *,QString *,const QString& ) ;
 

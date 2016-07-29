@@ -156,10 +156,6 @@ keyDialog::keyDialog( QWidget * parent,
 
 	m_ui->pbOpenFolderPath->setIcon( QIcon( ":/folder.png" ) ) ;
 
-	m_menu = new QMenu( this ) ;
-
-	connect( m_menu,SIGNAL( triggered( QAction * ) ),this,SLOT( pbPluginEntryClicked( QAction * ) ) ) ;
-
 	this->setFixedSize( this->size() ) ;
 	this->setWindowFlags( Qt::Window | Qt::Dialog ) ;
 	this->setFont( parent->font() ) ;
@@ -180,15 +176,26 @@ keyDialog::keyDialog( QWidget * parent,
 		 this,SLOT( pbMountPointPath() ) ) ;
 	connect( m_ui->checkBoxOpenReadOnly,SIGNAL( stateChanged( int ) ),
 		 this,SLOT( cbMountReadOnlyStateChanged( int ) ) ) ;
-	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( int ) ),
-		 this,SLOT( cbActicated( int ) ) ) ;
+	connect( m_ui->cbKeyType,SIGNAL( currentIndexChanged( QString ) ),
+		 this,SLOT( cbActicated( QString ) ) ) ;
 	connect( m_ui->lineEditMountPoint,SIGNAL( textChanged( QString ) ),
 		 this,SLOT( textChanged( QString ) ) ) ;
 
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Key+KeyFile" ) ) ;
-	m_ui->cbKeyType->addItem( tr( "Plugin" ) ) ;
+
+	m_ui->cbKeyType->addItem( tr( INTERNAL_WALLET ) ) ;
+
+	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::libsecret ) ){
+
+		m_ui->cbKeyType->addItem( tr( GNOME_WALLET ) ) ;
+	}
+
+	if( LXQt::Wallet::backEndIsSupported( LXQt::Wallet::BackEnd::kwallet ) ){
+
+		m_ui->cbKeyType->addItem( tr( KWALLET ) ) ;
+	}
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
 
@@ -330,9 +337,14 @@ void keyDialog::enableAll()
 	m_ui->label->setEnabled( true ) ;
 	m_ui->cbKeyType->setEnabled( true ) ;
 
-	m_ui->lineEditKey->setEnabled( m_ui->cbKeyType->currentIndex() == keyDialog::Key ) ;
+	auto index = m_ui->cbKeyType->currentIndex() ;
 
-	m_ui->pbkeyOption->setEnabled( true ) ;
+	m_ui->lineEditKey->setEnabled( index == keyDialog::Key ) ;
+
+	auto enable = index == keyDialog::keyfile || index == keyDialog::keyKeyFile ;
+
+	m_ui->pbkeyOption->setEnabled( enable ) ;
+
 	m_ui->checkBoxOpenReadOnly->setEnabled( true ) ;
 
 	m_ui->checkBoxShareMountPoint->setEnabled( false ) ;
@@ -375,41 +387,7 @@ void keyDialog::KeyFile()
 
 void keyDialog::pbkeyOption()
 {
-	auto keyType = m_ui->cbKeyType->currentIndex() ;
-
-	if( keyType == keyDialog::plugin ){
-
-		this->Plugin() ;
-
-	}else if( keyType == keyDialog::keyfile ){
-
-		this->KeyFile() ;
-	}
-}
-
-void keyDialog::Plugin()
-{
-	utility::createPlugInMenu( m_menu,tr( INTERNAL_WALLET ),tr( GNOME_WALLET ),tr( KWALLET ) ) ;
-
-	m_menu->setFont( this->font() ) ;
-
-	m_menu->addSeparator() ;
-
-	m_menu->addAction( tr( "Cancel" ) ) ;
-
-	m_menu->exec( QCursor::pos() ) ;
-}
-
-void keyDialog::pbPluginEntryClicked( QAction * ac )
-{
-	auto e = ac->text() ;
-
-	e.remove( "&" ) ;
-
-	if( e != tr( "Cancel" ) ){
-
-		m_ui->lineEditKey->setText( e ) ;
-	}
+	this->KeyFile() ;
 }
 
 void keyDialog::closeEvent( QCloseEvent * e )
@@ -439,7 +417,7 @@ void keyDialog::pbOpen()
 
 	this->disableAll() ;
 
-	if( m_ui->cbKeyType->currentIndex() == keyDialog::plugin ){
+	if( m_ui->cbKeyType->currentIndex() > keyDialog::keyKeyFile ){
 
 		utility::wallet w ;
 
@@ -451,7 +429,7 @@ void keyDialog::pbOpen()
 
 		if( kde || gnome ){
 
-			auto s = m_secrets.walletBk( [ & ](){
+			w = utility::getKey( m_path,m_secrets.walletBk( [ & ](){
 
 				if( kde ){
 
@@ -459,15 +437,14 @@ void keyDialog::pbOpen()
 				}else{
 					return LXQt::Wallet::BackEnd::libsecret ;
 				}
-			}() ) ;
 
-			w = utility::getKey( s.bk(),m_path ) ;
+			}() ).bk() ) ;
 
 		}else if( internal ){
 
-			auto s = m_secrets.walletBk( LXQt::Wallet::BackEnd::internal ) ;
+			using bk = LXQt::Wallet::BackEnd ;
 
-			w = utility::getKey( s.bk(),m_path ) ;
+			w = utility::getKey( m_path,m_secrets.walletBk( bk::internal ).bk() ) ;
 
 			if( w.notConfigured ){
 
@@ -695,14 +672,36 @@ void keyDialog::openVolume()
 	}
 }
 
-void keyDialog::cbActicated( int e )
+void keyDialog::cbActicated( QString e )
 {
-	switch( e ){
+	e.remove( '&' ) ;
 
-		case keyDialog::Key        : return this->key() ;
-		case keyDialog::keyfile    : return this->keyFile() ;
-		case keyDialog::keyKeyFile : return this->keyAndKeyFile() ;
-		case keyDialog::plugin     : return this->plugIn() ;
+	if( e == tr( "Key" ) ){
+
+		this->key() ;
+
+	}else if( e == tr( "KeyFile" ) ){
+
+		this->keyFile() ;
+
+	}else if( e == tr( "Key+KeyFile" ) ){
+
+		this->keyAndKeyFile() ;
+	}else{
+		this->plugIn() ;
+
+		if( e == tr( KWALLET ) ){
+
+			m_ui->lineEditKey->setText( tr( KWALLET ) ) ;
+
+		}else if( e == tr( GNOME_WALLET ) ){
+
+			m_ui->lineEditKey->setText( tr( GNOME_WALLET ) ) ;
+
+		}else if( e == tr( INTERNAL_WALLET ) ){
+
+			m_ui->lineEditKey->setText( tr( INTERNAL_WALLET ) ) ;
+		}
 	}
 }
 
@@ -728,9 +727,9 @@ void keyDialog::plugIn()
 	m_keyType = keyDialog::plugin ;
 
 	m_ui->pbkeyOption->setIcon( QIcon( ":/module.png" ) ) ;
+	m_ui->pbkeyOption->setEnabled( false ) ;
 	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
 	m_ui->label->setText( tr( "Plugin name" ) ) ;
-	m_ui->pbkeyOption->setEnabled( true ) ;
 	m_ui->lineEditKey->setEnabled( false ) ;
 	m_ui->lineEditKey->setText( INTERNAL_WALLET ) ;
 }
@@ -781,6 +780,5 @@ void keyDialog::HideUI()
 
 keyDialog::~keyDialog()
 {
-	m_menu->deleteLater() ;
 	delete m_ui ;
 }
