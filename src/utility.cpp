@@ -588,7 +588,7 @@ void utility::saveFont( const QFont& Font )
 	}
 }
 
-int utility::pluginKey( QDialog * w,QString * key,const QString& p )
+int utility::pluginKey( QWidget * w,QString * key,const QString& p )
 {
 	plugins::plugin pluginType ;
 	QString pluginString ;

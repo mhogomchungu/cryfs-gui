@@ -31,6 +31,7 @@
 class QCloseEvent ;
 class QEvent ;
 
+#include <QWidget>
 #include "plugins.h"
 
 namespace Ui {
@@ -41,7 +42,7 @@ class plugin : public QDialog
 {
 	Q_OBJECT
 public:
-	static plugin& instance( QDialog * parent,
+	static plugin& instance( QWidget * parent,
 				  plugins::plugin t,
 				  std::function< void( const QString& ) > e,
 				  const QString& f = QString(),
@@ -49,7 +50,7 @@ public:
 	{
 		return *( new plugin( parent,t,e,f,g ) ) ;
 	}
-	plugin( QDialog * parent,
+	plugin( QWidget * parent,
 	      plugins::plugin,
 	      std::function< void( const QString& ) >,
 	      const QString& = QString(),const QVector<QString>& = QVector<QString>() ) ;

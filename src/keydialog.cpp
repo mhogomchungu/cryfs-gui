@@ -709,7 +709,7 @@ void keyDialog::keyAndKeyFile()
 {
 	QString key ;
 
-	if( utility::pluginKey( this,&key,"hmac" ) ){
+	if( utility::pluginKey( m_secrets.parent(),&key,"hmac" ) ){
 
 		m_ui->cbKeyType->setCurrentIndex( 0 ) ;
 	}else{
