@@ -53,9 +53,11 @@ keyDialog::keyDialog( QWidget * parent,
 		      secrets& s,
 		      const volumeInfo& e,
 		      std::function< void() > p,
-		      std::function< void( const QString& ) > q ) :
+		      std::function< void( const QString& ) > q,
+		      const QString& exe ) :
 	QDialog( parent ),
 	m_ui( new Ui::keyDialog ),
+	m_exe( exe ),
 	m_secrets( s ),
 	m_cancel( std::move( p ) ),
 	m_success( std::move( q ) )
@@ -69,8 +71,6 @@ keyDialog::keyDialog( QWidget * parent,
 	m_table = table ;
 	m_path = e.volumeName() ;
 	m_working = false ;
-
-	decltype( tr( "" ) ) msg ;
 
 	m_create = e.volumeName().isEmpty() ;
 
@@ -99,9 +99,9 @@ keyDialog::keyDialog( QWidget * parent,
 
 		m_ui->lineEditMountPoint->setText( m_path ) ;
 
-		msg = tr( "Create A New Cryfs Volume" ) ;
+		this->windowSetTitle() ;
 	}else{
-		msg = tr( "Unlocking \"%1\"" ).arg( m_path ) ;
+		this->windowSetTitle( tr( "Unlocking \"%1\"" ).arg( m_path ) ) ;
 
 		m_ui->lineEditMountPoint->setEnabled( true ) ;
 
@@ -163,7 +163,6 @@ keyDialog::keyDialog( QWidget * parent,
 		}() ) ;
 	}
 
-	this->setWindowTitle( msg ) ;
 
 	m_ui->pbOpenFolderPath->setIcon( QIcon( ":/folder.png" ) ) ;
 
@@ -228,6 +227,21 @@ keyDialog::keyDialog( QWidget * parent,
 	connect( m_ui->pbOptions,SIGNAL( clicked() ),this,SLOT( pbOptions() ) ) ;
 }
 
+void keyDialog::windowSetTitle( const QString& s )
+{
+	if( s.isEmpty() ){
+
+		auto f = tr( "Create A New \"%1\" Volume" ).arg( m_exe ) ;
+
+		if( this->windowTitle() != f ){
+
+			this->setWindowTitle( f ) ;
+		}
+	}else{
+		this->setWindowTitle( s ) ;
+	}
+}
+
 void keyDialog::pbOptions()
 {
 	options::instance( m_parentWidget,[ this ]( const QStringList& e ){
@@ -262,12 +276,7 @@ void keyDialog::passWordTextChanged( QString e )
 
 		this->setWindowTitle( tr( "Passphrase Quality: 100%" ) ) ;
 	}else{
-		auto f = tr( "Create A New Cryfs Volume" ) ;
-
-		if( this->windowTitle() != f ){
-
-			this->setWindowTitle( f ) ;
-		}
+		this->windowSetTitle() ;
 	}
 }
 
@@ -477,10 +486,7 @@ void keyDialog::pbOpen()
 
 				this->enableAll() ;
 
-				if( m_ui->cbKeyType->currentIndex() != keyDialog::Key ){
-
-					m_ui->lineEditKey->setEnabled( false ) ;
-				}
+				m_ui->lineEditKey->setEnabled( false ) ;
 			}else{
 				m_key = w.key ;
 				this->openVolume() ;
@@ -580,7 +586,8 @@ void keyDialog::encryptedFolderCreate()
 		return this->enableAll() ;
 	}
 
-	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,m_configFile,false,m_success } ) ;
+	auto& e = cryfsTask::encryptedFolderCreate( { path,m,m_key,m_options,m_configFile,
+						      m_exe.toLower(),false,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 
@@ -630,7 +637,8 @@ void keyDialog::encryptedFolderMount()
 		return this->enableAll() ;
 	}
 
-        auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_options,m_configFile,ro,m_success } ) ;
+	auto& e = cryfsTask::encryptedFolderMount( { m_path,m,m_key,m_options,
+						     m_configFile,m_exe,ro,m_success } ) ;
 
 	if( this->completed( e.await() ) ){
 

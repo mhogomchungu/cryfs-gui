@@ -77,10 +77,11 @@ Task::future< bool >& cryfsTask::encryptedFolderUnMount( const QString& m )
 	} ) ;
 }
 
-static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& configFilePath )
+static cs _cmd( const QString& app,const cryfsTask::options& opt,
+		const QString& password,const QString& configFilePath )
 {
         auto _args = []( const QString& exe,const cryfsTask::options& opt,
-                        const QString& type,const QString& configFilePath ){
+			 const QString& type,const QString& configFilePath ){
 
 		auto cipherFolder = _makePath( opt.cipherFolder ) ;
 
@@ -160,7 +161,7 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,const QString& 
 
 			return env ;
 
-		}(),opt.key.toLatin1() ) ;
+		}(),password.toLatin1() ) ;
 
 		auto _printOutput = [ & ](){
 
@@ -206,7 +207,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
 			if( _create_folder( opt.plainFolder ) ){
 
-                                auto e = _cmd( app,opt,configFilePath ) ;
+				auto e = _cmd( app,opt,opt.key,configFilePath ) ;
 
 				if( e == cs::success ){
 
@@ -225,7 +226,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
                         if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
 
-                                return _mount( "cryfs",opt,"" ) ;
+				return _mount( "cryfs",opt,QString() ) ;
                         }else{
                                 auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
                                 auto encfs5 = opt.cipherFolder + "/.encfs5" ;
@@ -233,7 +234,7 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
 
                                 if( utility::atLeastOnePathExists( encfs6,encfs5,encfs4 ) ){
 
-                                        return _mount( "encfs",opt,"" ) ;
+					return _mount( "encfs",opt,QString() ) ;
                                 }else{
                                         return cs::unknown ;
                                 }
@@ -257,7 +258,16 @@ Task::future< cs >& cryfsTask::encryptedFolderCreate( const options& opt )
 
 			if( _create_folder( opt.plainFolder ) ){
 
-				auto e = _cmd( "cryfs",opt,[ & ](){
+				auto e = _cmd( opt.exe,opt,[ & ]()->QString{
+
+					if( opt.exe == "cryfs" ){
+
+						return opt.key ;
+					}else{
+						return "p\n" + opt.key ;
+					}
+
+				}(),[ & ](){
 
 					if( opt.configFilePath.startsWith( "/" ) ||
 							opt.configFilePath.isEmpty() ){

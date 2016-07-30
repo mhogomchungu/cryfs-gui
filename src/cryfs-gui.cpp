@@ -56,7 +56,7 @@
 #include "checkforupdates.h"
 #include "favorites.h"
 #include "walletconfig.h"
-
+#include "encfs_create.h"
 #include <memory>
 
 cryfsGUI::cryfsGUI( QWidget * parent ) :
@@ -116,8 +116,23 @@ void cryfsGUI::setUpApp( const QString& volume )
 	connect( m_ui->pbunlockcryptfs,SIGNAL( clicked() ),
 		 this,SLOT( unlockCryptFs() ) ) ;
 
-	connect( m_ui->pbcreate,SIGNAL( clicked() ),this,SLOT( pbCreate() ) ) ;
+#if WITH_CREATE_ENCFS
+	m_ui->pbcreate->setMenu( [ this ](){
 
+		auto m = new QMenu( this ) ;
+
+		connect( m,SIGNAL( triggered( QAction * ) ),
+			 this,SLOT( createVolume( QAction * ) ) ) ;
+
+		m->addAction( "Cryfs" ) ;
+
+		m->addAction( "Encfs" ) ;
+
+		return m ;
+	}() ) ;
+#else
+	connect( m_ui->pbcreate,SIGNAL( clicked() ),this,SLOT( createVolume() ) ) ;
+#endif
 	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
 
 	this->setUpShortCuts() ;
@@ -595,7 +610,7 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
-                                auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,cPath,mode,o } ).await() ;
+				auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,cPath,"",mode,o } ).await() ;
 
 				if( e == cryfsTask::status::success ){
 
@@ -860,7 +875,7 @@ void cryfsGUI::setUpShortCuts()
 
 	this->addAction( _addAction( { Qt::Key_Enter,Qt::Key_Return },SLOT( defaultButton() ) ) ) ;
 
-	this->addAction( _addAction( { Qt::Key_M },SLOT( pbCreate() ) ) ) ;
+	this->addAction( _addAction( { Qt::Key_M },SLOT( createVolume() ) ) ) ;
 
 	this->addAction( _addAction( { Qt::Key_U },SLOT( pbUmount() ) ) ) ;
 
@@ -906,7 +921,7 @@ void cryfsGUI::dropEvent( QDropEvent * e )
 	}
 }
 
-void cryfsGUI::mount( const volumeInfo& entry )
+void cryfsGUI::mount( const volumeInfo& entry,const QString& exe )
 {
 	this->disableAll() ;
 
@@ -918,12 +933,17 @@ void cryfsGUI::mount( const volumeInfo& entry )
 
 		this->openMountPointPath( e ) ;
 
-	} ).ShowUI() ;
+	},exe ).ShowUI() ;
 }
 
-void cryfsGUI::pbCreate()
+void cryfsGUI::createVolume( QAction * ac )
 {
-	this->mount( volumeInfo() ) ;
+	if( ac ){
+
+		this->mount( volumeInfo(),ac->text().remove( '&' ) ) ;
+	}else{
+		this->mount( volumeInfo(),"Cryfs" ) ;
+	}
 }
 
 void cryfsGUI::slotMount()

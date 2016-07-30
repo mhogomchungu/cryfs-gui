@@ -65,11 +65,11 @@ private slots:
 	void startGUI( void ) ;
 	void showMoungDialog( const volumeInfo& ) ;
 	void showMoungDialog( const QString&,const QString& = QString() ) ;
-	void mount( const volumeInfo& ) ;
+	void mount( const volumeInfo&,const QString& = QString() ) ;
 	void defaultButton( void ) ;
 	void itemClicked( QTableWidgetItem * ) ;
 	void pbUpdate( void ) ;
-	void pbCreate( void ) ;
+	void createVolume( QAction * = nullptr ) ;
 	void slotMount( void ) ;
 	void unMountAll( void ) ;
 	void pbUmount( void ) ;
@@ -93,26 +93,29 @@ private slots:
 	void languageMenu( QAction * ac ) ;
 private:
 	QString resolveFavoriteMountPoint( const QString& ) ;
+
+	QFont getSystemVolumeFont( void ) ;
+
+	bool autoOpenFolderOnMount( void ) ;
+
 	void autoUpdateCheck( void ) ;
 	void updateVolumeList( const QVector< volumeInfo >& ) ;
 	void openMountPoint( const QString& ) ;
-	QFont getSystemVolumeFont( void ) ;
 	void setLocalizationLanguage( bool ) ;
-	bool autoOpenFolderOnMount( void ) ;
+
 	void dragEnterEvent( QDragEnterEvent * ) ;
 	void dropEvent( QDropEvent * ) ;
 	void showContextMenu( QTableWidgetItem *,bool ) ;
 	void startAutoMonitor( void ) ;
 	void updateList( const volumeInfo& ) ;
-
 	void setUpAppMenu( void ) ;
-	Ui::cryfsGUI * m_ui = nullptr ;
-	QString m_folderOpener ;
 	void disableAll( void ) ;
 	void closeEvent( QCloseEvent * e ) ;
 	void setUpFont( void ) ;
 	void setUpShortCuts( void ) ;
 	void setUpApp( const QString& ) ;
+
+	Ui::cryfsGUI * m_ui = nullptr ;
 
 	secrets m_secrets ;
 
@@ -129,10 +132,12 @@ private:
 	QAction * m_change_password_action = nullptr ;
 
 	bool m_startHidden ;
-	QString m_sharedFolderPath ;
 	bool m_autoOpenFolderOnMount ;
 	bool m_removeAllVolumes = false ;
+
 	QString m_env ;
+	QString m_sharedFolderPath ;
+	QString m_folderOpener ;
 
 	QSystemTrayIcon m_trayIcon ;
 

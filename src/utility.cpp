@@ -814,6 +814,29 @@ QString utility::homeConfigPath( const QString& e )
 	return utility::homePath() + "/.cryfs-gui/" + e ;
 }
 
+QString utility::createVolumeExecutable()
+{
+	QFile file( utility::homeConfigPath( "creatorOption" ) ) ;
+
+	if( !file.exists() ){
+
+		file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+
+		file.write( "cryfs" ) ;
+
+		file.close() ;
+	}
+
+	file.open( QIODevice::ReadOnly ) ;
+
+	auto e = file.readAll() ;
+
+	e.replace( "\n","" ) ;
+	e.replace( '\n',"" ) ;
+
+	return e ;
+}
+
 QString utility::homePath()
 {
 	return QDir::homePath() ;

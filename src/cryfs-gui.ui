@@ -92,7 +92,7 @@
         <item>
          <widget class="QPushButton" name="pbcreate">
           <property name="text">
-           <string>&amp;Create Cryfs Volume</string>
+           <string>&amp;Create Volume</string>
           </property>
           <property name="autoDefault">
            <bool>false</bool>

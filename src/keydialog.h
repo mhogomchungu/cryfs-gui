@@ -100,16 +100,18 @@ public:
 				    secrets& s,
 				    const volumeInfo& v,
 				    std::function< void() > cancel,
-				    std::function< void( const QString& ) > success )
+				    std::function< void( const QString& ) > success,
+				    const QString& exe = QString() )
 	{
-		return *( new keyDialog( parent,table,s,v,std::move( cancel ),std::move( success ) ) ) ;
+		return *( new keyDialog( parent,table,s,v,std::move( cancel ),std::move( success ),exe ) ) ;
 	}
 	keyDialog( QWidget * parent,
 		   QTableWidget *,
 		   secrets&,
 		   const volumeInfo&,
 		   std::function< void() >,
-		   std::function< void( const QString& ) > ) ;
+		   std::function< void( const QString& ) >,
+		   const QString&) ;
 	~keyDialog() ;
 	void ShowUI( void ) ;
 	void HideUI( void ) ;
@@ -134,21 +136,28 @@ private slots:
 	void encryptedFolderMount( void ) ;
 	void encryptedFolderCreate( void ) ;
 private :
-	bool completed( cryfsTask::status ) ;
 	void keyAndKeyFile( void ) ;
 	void openVolume( void ) ;
 	void enableAll( void ) ;
 	void disableAll( void ) ;
+	void windowSetTitle( const QString& = QString() ) ;
 	void closeEvent( QCloseEvent * ) ;
+	bool completed( cryfsTask::status ) ;
 	bool eventFilter( QObject * watched,QEvent * event ) ;
+
 	Ui::keyDialog * m_ui ;
+
 	QString m_path ;
 	QString m_key ;
-	QStringList m_keyFiles ;
 	QString m_deviceOffSet ;
 	QString m_options ;
-        QString m_configFile ;
+	QString m_configFile ;
+	QString m_exe ;
+
+	QStringList m_keyFiles ;
+
 	QTableWidget * m_table ;
+
 	bool m_working ;
 	bool m_create ;
 	bool m_reUseMountPoint ;

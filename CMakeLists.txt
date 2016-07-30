@@ -57,6 +57,16 @@ file( WRITE ${PROJECT_BINARY_DIR}/locale_path.h "\n#define TRANSLATION_PATH \"${
 
 file( WRITE  ${PROJECT_BINARY_DIR}/install_prefix.h "\n#define INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}/\"\n" )
 
+if( NOT DEFINED WITH_CREATE_ENCFS )
+	set( WITH_CREATE_ENCFS "false" )
+endif()
+
+if( WITH_CREATE_ENCFS )
+	file( WRITE  ${PROJECT_BINARY_DIR}/encfs_create.h "\n#define WITH_CREATE_ENCFS 1\n" )
+else()
+	file( WRITE  ${PROJECT_BINARY_DIR}/encfs_create.h "\n#define WITH_CREATE_ENCFS 0\n" )
+endif()
+
 set( PGR_VERSION "1.3.1" )
 
 file( WRITE ${PROJECT_BINARY_DIR}/version.h "
