@@ -116,7 +116,6 @@ void cryfsGUI::setUpApp( const QString& volume )
 	connect( m_ui->pbunlockcryptfs,SIGNAL( clicked() ),
 		 this,SLOT( unlockCryptFs() ) ) ;
 
-#if WITH_CREATE_ENCFS
 	m_ui->pbcreate->setMenu( [ this ](){
 
 		auto m = new QMenu( this ) ;
@@ -125,14 +124,12 @@ void cryfsGUI::setUpApp( const QString& volume )
 			 this,SLOT( createVolume( QAction * ) ) ) ;
 
 		m->addAction( "Cryfs" ) ;
-
+		m->addAction( "Gocryptfs" ) ;
 		m->addAction( "Encfs" ) ;
 
 		return m ;
 	}() ) ;
-#else
-	connect( m_ui->pbcreate,SIGNAL( clicked() ),this,SLOT( createVolume() ) ) ;
-#endif
+
 	m_autoOpenFolderOnMount = this->autoOpenFolderOnMount() ;
 
 	this->setUpShortCuts() ;

@@ -59,7 +59,7 @@ namespace cryfsTask
 	bool deleteMountFolder( const QString& ) ;
 	Task::future< QVector< volumeInfo > >& updateVolumeList( void ) ;
 	Task::future< bool >& encryptedFolderUnMount( const QString& mountPoint ) ;
-	Task::future< cryfsTask::status >& encryptedFolderMount( const options& ) ;
+	Task::future< cryfsTask::status >& encryptedFolderMount( const options&,bool = false ) ;
 	Task::future< cryfsTask::status >& encryptedFolderCreate( const options& ) ;
 }
 

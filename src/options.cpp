@@ -50,7 +50,7 @@ options::options( QWidget * parent,
 
 void options::pushButton()
 {
-        auto e = QFileDialog::getOpenFileName( this,tr( "Select Cryfs Configuration File" ),
+	auto e = QFileDialog::getOpenFileName( this,tr( "Select Cryfs/Gocryptfs Configuration File" ),
                                                utility::homePath() ) ;
 
         if( !e.isEmpty() ){

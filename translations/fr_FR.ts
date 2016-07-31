@@ -323,202 +323,202 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="232"/>
+        <location filename="../src/cryfs-gui.cpp" line="229"/>
         <source>Auto Open Mount Point</source>
         <translation>Ouverture automatique du point de montage</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="235"/>
+        <location filename="../src/cryfs-gui.cpp" line="232"/>
         <source>Reuse Mount Point</source>
         <translation>Réutiliser le Point de Montage</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="241"/>
+        <location filename="../src/cryfs-gui.cpp" line="238"/>
         <source>Unmount All</source>
         <translation>Démonter tout</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="245"/>
-        <location filename="../src/cryfs-gui.cpp" line="270"/>
+        <location filename="../src/cryfs-gui.cpp" line="242"/>
+        <location filename="../src/cryfs-gui.cpp" line="267"/>
         <source>Internal Wallet</source>
         <translation>Trousseau interne</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="247"/>
+        <location filename="../src/cryfs-gui.cpp" line="244"/>
         <source>Change Password</source>
         <translation>Changer le mot de passe</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="257"/>
+        <location filename="../src/cryfs-gui.cpp" line="254"/>
         <source>Key Storage</source>
         <translation>Clé de stockage</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="271"/>
-        <location filename="../src/cryfs-gui.cpp" line="351"/>
+        <location filename="../src/cryfs-gui.cpp" line="268"/>
+        <location filename="../src/cryfs-gui.cpp" line="348"/>
         <source>KDE Wallet</source>
         <translation>Trousseau KDE</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="272"/>
-        <location filename="../src/cryfs-gui.cpp" line="355"/>
+        <location filename="../src/cryfs-gui.cpp" line="269"/>
+        <location filename="../src/cryfs-gui.cpp" line="352"/>
         <source>Gnome Wallet</source>
         <translation>Trousseau Gnome</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="277"/>
+        <location filename="../src/cryfs-gui.cpp" line="274"/>
         <source>Favorites</source>
         <translation>Favoris</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="281"/>
+        <location filename="../src/cryfs-gui.cpp" line="278"/>
         <source>Select Language</source>
         <translation>Sélectionner la langue</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="238"/>
+        <location filename="../src/cryfs-gui.cpp" line="235"/>
         <source>Autocheck For Updates</source>
         <translation>Mise à jour automatique du logiciel</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="284"/>
+        <location filename="../src/cryfs-gui.cpp" line="281"/>
         <source>Check For Updates</source>
         <translation>Tester si la version du logiciel est à jour</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="287"/>
+        <location filename="../src/cryfs-gui.cpp" line="284"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="289"/>
+        <location filename="../src/cryfs-gui.cpp" line="286"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="299"/>
+        <location filename="../src/cryfs-gui.cpp" line="296"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="409"/>
+        <location filename="../src/cryfs-gui.cpp" line="406"/>
         <source>Manage Favorites</source>
         <translation>Gérer les favoris</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="413"/>
+        <location filename="../src/cryfs-gui.cpp" line="410"/>
         <source>Mount All</source>
         <translation>Monter tout</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="558"/>
+        <location filename="../src/cryfs-gui.cpp" line="555"/>
         <source>ERROR: Volume Path Not Given.</source>
         <translation>ERREUR: Chemin du volume non fourni.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="596"/>
+        <location filename="../src/cryfs-gui.cpp" line="593"/>
         <source>ERROR: Key Not Found In The Backend.</source>
         <translation>ERREUR: Clé non trouvée dans le Gestionnaire.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="619"/>
+        <location filename="../src/cryfs-gui.cpp" line="616"/>
         <source>ERROR: Failed To Unlock Requested Volume.</source>
         <translation>ERREUR: Echec du déverrouillage du volume choisi.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="624"/>
+        <location filename="../src/cryfs-gui.cpp" line="621"/>
         <source>ERROR: Failed To Unlock Requested Backend.</source>
         <translation>ERREUR: Echec du déverrouillage du Gestionnaire sélectionné.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="658"/>
+        <location filename="../src/cryfs-gui.cpp" line="655"/>
         <source>INFORMATION</source>
         <translation>INFORMATION</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="654"/>
+        <location filename="../src/cryfs-gui.cpp" line="651"/>
         <source>Failed To Read Volume Properties</source>
         <translation>Echec de la lecture des propriétés du volume</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="697"/>
+        <location filename="../src/cryfs-gui.cpp" line="694"/>
         <source>Block Size: %1</source>
         <translation>Taille des blocs: %1</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="698"/>
+        <location filename="../src/cryfs-gui.cpp" line="695"/>
         <source>Used Blocks: %2</source>
         <translation>Blocs utilisés: %2</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="699"/>
+        <location filename="../src/cryfs-gui.cpp" line="696"/>
         <source>Free Blocks: %3</source>
         <translation>Blocs Libres: %3</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="777"/>
+        <location filename="../src/cryfs-gui.cpp" line="774"/>
         <source>Unmount</source>
         <translation>Démonter</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="779"/>
+        <location filename="../src/cryfs-gui.cpp" line="776"/>
         <source>Open Folder</source>
         <translation>Ouvrir Répertoire</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="781"/>
+        <location filename="../src/cryfs-gui.cpp" line="778"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="797"/>
+        <location filename="../src/cryfs-gui.cpp" line="794"/>
         <source>Close Menu</source>
         <translation>Fermer le Menu</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="849"/>
+        <location filename="../src/cryfs-gui.cpp" line="846"/>
         <source>WARNING</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="850"/>
+        <location filename="../src/cryfs-gui.cpp" line="847"/>
         <source>Could Not Open Mount Point Because &quot;%1&quot; Tool Does Not Appear To Be Working Correctly.</source>
         <translation>Impossible d&apos;ouvrir le point de montage parce que l&apos;outil &quot;%1&quot; ne semble pas fonctionner correctement.</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="654"/>
-        <location filename="../src/cryfs-gui.cpp" line="967"/>
-        <location filename="../src/cryfs-gui.cpp" line="1068"/>
+        <location filename="../src/cryfs-gui.cpp" line="651"/>
+        <location filename="../src/cryfs-gui.cpp" line="964"/>
+        <location filename="../src/cryfs-gui.cpp" line="1065"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="700"/>
+        <location filename="../src/cryfs-gui.cpp" line="697"/>
         <source>Total Blocks %4</source>
         <translation>Total des Blocs %4</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="701"/>
+        <location filename="../src/cryfs-gui.cpp" line="698"/>
         <source>Used Space: %5</source>
         <translation>Espace Utilisé: %5</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="702"/>
+        <location filename="../src/cryfs-gui.cpp" line="699"/>
         <source>Free Space: %6</source>
         <translation>Espace Libre: %6</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="703"/>
+        <location filename="../src/cryfs-gui.cpp" line="700"/>
         <source>Total Space: %7</source>
         <translation>Espace Total: %7</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="704"/>
+        <location filename="../src/cryfs-gui.cpp" line="701"/>
         <source>Used %: %8</source>
         <translation>Utilisé %: %8</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="968"/>
+        <location filename="../src/cryfs-gui.cpp" line="965"/>
         <source>Permission To Access The Volume Was Denied
 Or
 The Volume Is Not Supported</source>
@@ -527,12 +527,12 @@ ou
 le volume n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="988"/>
+        <location filename="../src/cryfs-gui.cpp" line="985"/>
         <source>Select An Encfs/Cryfs Volume Directory</source>
         <translation>Sélectionner un répertoire de volume Encfs/Cryfs</translation>
     </message>
     <message>
-        <location filename="../src/cryfs-gui.cpp" line="1068"/>
+        <location filename="../src/cryfs-gui.cpp" line="1065"/>
         <source>Failed To Unmount %1 Volume</source>
         <translation>Impossible de démonter le Volume %1</translation>
     </message>
@@ -918,8 +918,8 @@ Une erreur inconnue est survenue.</translation>
     </message>
     <message>
         <location filename="../src/options.cpp" line="53"/>
-        <source>Select Cryfs Configuration File</source>
-        <translation>Sélectionner un fichier de configuration Cryfs</translation>
+        <source>Select Cryfs/Gocryptfs Configuration File</source>
+        <translation>Sélectionner un fichier de configuration Cryfs/Gocryptfs</translation>
     </message>
     <message>
         <location filename="../src/options.cpp" line="82"/>

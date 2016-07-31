@@ -59,10 +59,6 @@ This project depends on lxqt_wallet project and it ships with an internal copy o
 if you want zuluCrypt to unconditionally use the internal copy of the project or to "false" to make the build process
 use a system installed version if found.
 
--DWITH_CREATE_ENCFS=false
-This option is set to off by default to discourage creation of new encfs volumes since the tool has known security issues.
-Set this option to true if you want cryfs-gui to show a GUI option to create encfs volumes.
-
 Build errors/test fails/feature requests/recommendations can be reported at: https://github.com/mhogomchungu/cryfs-gui/issues
 or using my private email address at: mhogomchungu@gmail.com
 
