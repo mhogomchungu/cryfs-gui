@@ -120,7 +120,8 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
                 auto configPath = [ & ](){
 
-                        if( type == "cryfs" && !configFilePath.isEmpty() ){
+			if( ( type == "cryfs" || type == "gocryptfs" )
+					&& !configFilePath.isEmpty() ){
 
 				return "--config " + _makePath( configFilePath ) ;
                         }else{
@@ -128,16 +129,33 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
                         }
                 }() ;
 
-		QString e = "%1 %2 %3 %4 %5 %6 -o fsname=%7@%8 -o subtype=%9" ;
+		if( type == "gocryptfs" ){
 
-		auto opts = e.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
-				   separator,type,cipherFolder,type ) ;
+			auto mode = [ & ](){
 
-		if( opt.ro ){
+				if( opt.ro ){
 
-			return opts + " -o ro" ;
+					return "-ro" ;
+				}else{
+					return "" ;
+				}
+			}() ;
+
+			auto e = "%1 %2 %3 %4 %5" ;
+
+			return QString( e ).arg( exe,mode,configPath,cipherFolder,mountPoint ) ;
 		}else{
-			return opts + " -o rw" ;
+			QString e = "%1 %2 %3 %4 %5 %6 -o fsname=%7@%8 -o subtype=%9" ;
+
+			auto opts = e.arg( exe,cipherFolder,mountPoint,mountOptions,configPath,
+					   separator,type,cipherFolder,type ) ;
+
+			if( opt.ro ){
+
+				return opts + " -o ro" ;
+			}else{
+				return opts + " -o rw" ;
+			}
 		}
 	} ;
 
@@ -148,8 +166,12 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 		if( app == "cryfs" ){
 
 			return cs::cryfsNotFound ;
-		}else{
+
+		}else if( app == "encfs" ){
+
 			return cs::encfsNotFound ;
+		}else{
+			return cs::gocryptfsNotFound ;
 		}
 	}else{
 		auto e = utility::Task( _args( exe,opt,app,configFilePath ),20000,[](){
@@ -163,11 +185,9 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
 		}(),password.toLatin1() ) ;
 
-		auto _printOutput = [ & ](){
+		auto _taskOutput = [ & ](){
 
-			std::cout << e.output().constData() ;
-			std::cout << "-------------------------------------------------------\n" ;
-			std::cout << e.stdError().constData() << std::endl ;
+			return e.output() + "\n-----\n" + e.stdError() ;
 		} ;
 
 		if( e.finished() ){
@@ -176,24 +196,29 @@ static cs _cmd( const QString& app,const cryfsTask::options& opt,
 
 				return cs::success ;
 			}else{
-				auto q = "Could not load config file. Did you enter the correct password?" ;
-				auto p = "Error decoding volume key, password incorrect" ;
+				auto q = "Did you enter the correct password?" ;
+				auto p = "password incorrect" ;
+				auto z = "Password incorrect" ;
 
-				if( e.stdError().contains( q ) || e.output().contains( p ) ){
+				if( utility::containsAtleastOne( _taskOutput(),q,p,z ) ){
 
-					_printOutput() ;
+					std::cout << _taskOutput().constData() << std::endl ;
 
 					if( app == "cryfs" ){
 
 						return cs::cryfs ;
+
+					}else if( app == "encfs" ){
+
+						return cs::encfs ;						
 					}else{
-						return cs::encfs ;
+						return cs::gocryptfs ;
 					}
 				}
 			}
 		}
 
-		_printOutput() ;
+		std::cout << _taskOutput().constData() << std::endl ;
 
 		return cs::backendFail ;
 	}
@@ -227,7 +252,11 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
                         if( utility::pathExists( opt.cipherFolder + "/cryfs.config" ) ){
 
 				return _mount( "cryfs",opt,QString() ) ;
-                        }else{
+
+			}else if( utility::pathExists( opt.cipherFolder + "/gocryptfs.conf" ) ){
+
+				return _mount( "gocryptfs",opt,QString() ) ;
+			}else{
                                 auto encfs6 = opt.cipherFolder + "/.encfs6.xml" ;
                                 auto encfs5 = opt.cipherFolder + "/.encfs5" ;
                                 auto encfs4 = opt.cipherFolder + "/.encfs4" ;
@@ -242,7 +271,12 @@ Task::future< cs >& cryfsTask::encryptedFolderMount( const options& opt )
                 }else{
 			if( utility::pathExists( opt.configFilePath ) ){
 
-				return _mount( "cryfs",opt,opt.configFilePath ) ;
+				if( opt.configFilePath.endsWith( "/gocryptfs.conf" ) ){
+
+					return _mount( "gocryptfs",opt,opt.configFilePath ) ;
+				}else{
+					return _mount( "cryfs",opt,opt.configFilePath ) ;
+				}
 			}else{
 				return cs::unknown ;
 			}
@@ -360,7 +394,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 			const auto& e = l.at( 5 ) ;
 
-			if( utility::containsAtleastOne( e,"ro,",",ro",",ro," ) ){
+			if( e.startsWith( "ro," ) ){
 
 				return "ro" ;
 			}else{
@@ -372,7 +406,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
 
-			if( utility::containsAtleastOne( it," fuse.cryfs "," fuse.encfs " ) ){
+			if( utility::containsAtleastOne( it," fuse.cryfs "," fuse.encfs "," fuse.gocryptfs " ) ){
 
 				const auto& k = utility::split( it,' ' ) ;
 
@@ -387,6 +421,10 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 				if( utility::startsWithAtLeastOne( cf,"encfs@","cryfs@" ) ){
 
 					e.append( { _dcd( cf,true ),_dcd( m,false ),_fs( fs ),_ro( k ) } ) ;
+
+				}else if( fs == "fuse.gocryptfs" ){
+
+					e.append( { _dcd( cf,false ),_dcd( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}else{
 					e.append( { _hash( m ),_dcd( m,false ),_fs( fs ),_ro( k ) } ) ;
 				}

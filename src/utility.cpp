@@ -192,12 +192,12 @@ utility::wallet utility::getKey( const QString& keyID,LXQt::Wallet::Wallet& wall
 
 		if( LXQt::Wallet::walletExists( s,walletName,appName ) ){
 
-			wallet.setImage( QIcon( ":/cryfs-gui" ) ) ;
-
 			if( wallet.opened() ){
 
 				w.opened = true ;
 			}else{
+				wallet.setImage( QIcon( ":/cryfs-gui" ) ) ;
+
 				w.opened = wallet.open( walletName,appName ) ;
 			}
 

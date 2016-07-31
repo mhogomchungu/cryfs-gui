@@ -44,7 +44,16 @@ namespace cryfsTask
 
 	enum class status
 	{
-		success,cryfs,cryfsNotFound,encfs,encfsNotFound,unknown,failedToCreateMountPoint,backendFail
+		success,
+		cryfs,
+		encfs,
+		gocryptfs,
+		gocryptfsNotFound,
+		cryfsNotFound,
+		encfsNotFound,
+		unknown,
+		failedToCreateMountPoint,
+		backendFail
 	};
 
 	bool deleteMountFolder( const QString& ) ;

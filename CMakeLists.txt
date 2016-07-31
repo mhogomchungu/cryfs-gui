@@ -115,7 +115,7 @@ else()
 			link_directories( ${LXQT_WALLET_LIBDIR} )
 
 			message( STATUS "---------------------------------------------------------------------------" )
-			message( STATUS "lxqt wallet support will be provided by an external libary" )
+			message( STATUS "lxqt wallet support will be provided by an external library" )
 			message( STATUS "---------------------------------------------------------------------------" )
 		else()
 			message( STATUS "---------------------------------------------------------------------------" )

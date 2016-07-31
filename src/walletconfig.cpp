@@ -197,6 +197,8 @@ void walletconfig::ShowUI( secrets::wallet&& wallet )
 
 		this->accessWallet() ;
 	}else{
+		m_wallet->setImage( QIcon( ":/cryfs-gui" ) ) ;
+
 		m_wallet->open( [ & ]()->QString{
 
 			if( m_wallet->backEnd() == LXQt::Wallet::BackEnd::kwallet ){
