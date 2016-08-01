@@ -46,7 +46,10 @@ version 1.3.2
 -- Add support for measuring password strength when creating a new volume.
    The support is added using libpwquality project: https://fedorahosted.org/libpwquality/
 
--- Add support for unlocking gocryptfs volumes.
+-- Add support for creating and unlocking gocryptfs volumes.
    Homepage for this project is at: https://nuetzlich.net/gocryptfs.
 
+version 1.3.3
 
+-- Add support for creating and unlocking securefs volumes.
+   Homepage for this project is at: https://github.com/netheril96/securefs.
