@@ -56,7 +56,6 @@
 #include "checkforupdates.h"
 #include "favorites.h"
 #include "walletconfig.h"
-#include "encfs_create.h"
 #include <memory>
 
 cryfsGUI::cryfsGUI( QWidget * parent ) :
