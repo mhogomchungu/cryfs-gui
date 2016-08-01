@@ -524,6 +524,11 @@ bool keyDialog::completed( cryfsTask::status s )
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unlock A Gocryptfs Volume.\nWrong Password Entered." ) ) ;
 		break;
 
+	case cryfsTask::status::securefs :
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Unlock A Securefs Volume.\nWrong Password Entered." ) ) ;
+		break;
+
 	case cryfsTask::status::cryfsNotFound :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Request.\nCryfs Executable Could Not Be Found." ) ) ;
@@ -537,6 +542,11 @@ bool keyDialog::completed( cryfsTask::status s )
 	case cryfsTask::status::gocryptfsNotFound :
 
 		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Request.\nGocryptfs Executable Could Not Be Found." ) ) ;
+		break;
+
+	case cryfsTask::status::securefsNotFound :
+
+		msg.ShowUIOK( tr( "ERROR" ),tr( "Failed To Complete The Request.\nSecurefs Executable Could Not Be Found." ) ) ;
 		break;
 
 	case cryfsTask::status::failedToCreateMountPoint :

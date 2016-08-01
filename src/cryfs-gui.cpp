@@ -124,6 +124,7 @@ void cryfsGUI::setUpApp( const QString& volume )
 
 		m->addAction( "Cryfs" ) ;
 		m->addAction( "Gocryptfs" ) ;
+		m->addAction( "Securefs" ) ;
 		m->addAction( "Encfs" ) ;
 
 		return m ;

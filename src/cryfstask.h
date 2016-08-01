@@ -48,9 +48,11 @@ namespace cryfsTask
 		cryfs,
 		encfs,
 		gocryptfs,
+		securefs,
 		gocryptfsNotFound,
 		cryfsNotFound,
 		encfsNotFound,
+		securefsNotFound,
 		unknown,
 		failedToCreateMountPoint,
 		backendFail
