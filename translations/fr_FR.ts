@@ -924,8 +924,8 @@ Une erreur inconnue est survenue.</translation>
     </message>
     <message>
         <location filename="../src/options.ui" line="93"/>
-        <source>Unlock A Cryfs/Gocryptfs Volume With Specified Configuration File.</source>
-        <translation>Déverrouiller un volume Cryfs/Gocryptfs avec le fichier de configuration proposé.</translation>
+        <source>Unlock A Cryfs/Gocryptfs/Securefs Volume With Specified Configuration File.</source>
+        <translation>Déverrouiller un volume Cryfs/Gocryptfs/Securefs avec le fichier de configuration proposé.</translation>
     </message>
     <message>
         <location filename="../src/options.ui" line="122"/>

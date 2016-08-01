@@ -129,23 +129,23 @@ static QString _args( const QString& exe,const cryfsTask::options& opt,
 
 	if( utility::equalsAtleastOne( type,"gocryptfs","securefs" ) ){
 
+		auto mode = [ & ](){
+
+			if( opt.ro ){
+
+				return "-o ro" ;
+			}else{
+				return "-o rw" ;
+			}
+		}() ;
+
 		if( type == "gocryptfs" ){
 
 			if( create ){
 
-				auto e = QString( "%1 --init%2 %3" ) ;
+				auto e = QString( "%1 --init %2 %3" ) ;
 				return e.arg( exe,configPath,cipherFolder ) ;
 			}else{
-				auto mode = [ & ](){
-
-					if( opt.ro ){
-
-						return "-ro" ;
-					}else{
-						return "" ;
-					}
-				}() ;
-
 				auto e = QString( "%1 %2 %3 %4 %5" ) ;
 
 				return e.arg( exe,mode,configPath,cipherFolder,mountPoint ) ;
@@ -156,16 +156,6 @@ static QString _args( const QString& exe,const cryfsTask::options& opt,
 				auto e = QString( "%1 create %2 %3" ) ;
 				return e.arg( exe,configPath,cipherFolder ) ;
 			}else{
-				auto mode = [ & ](){
-
-					if( opt.ro ){
-
-						return "-o ro" ;
-					}else{
-						return "-o rw" ;
-					}
-				}() ;
-
 				auto e = QString( "%1 mount -b %2 %3 -o fsname=securefs@%4 -o subtype=securefs %5 %6" ) ;
 
 				return e.arg( exe,configPath,mode,cipherFolder,cipherFolder,mountPoint ) ;
@@ -188,7 +178,7 @@ static QString _args( const QString& exe,const cryfsTask::options& opt,
 
 static cs _cmd( bool create,const QString& app,const cryfsTask::options& opt,
 		const QString& password,const QString& configFilePath )
-{        
+{
 	auto exe = utility::executableFullPath( app ) ;
 
 	if( exe.isEmpty() ){
@@ -245,7 +235,7 @@ static cs _cmd( bool create,const QString& app,const cryfsTask::options& opt,
 
 					}else if( app == "encfs" ){
 
-						return cs::encfs ;						
+						return cs::encfs ;
 
 					}else if( app == "securefs" ){
 
