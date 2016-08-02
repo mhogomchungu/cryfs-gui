@@ -33,6 +33,8 @@
 #include "utility.h"
 #include "lxqt_wallet.h"
 
+#include "plugin.h"
+
 static QString _kwallet()
 {
 	return QObject::tr( "Kde Wallet" ) ;
@@ -193,6 +195,7 @@ keyDialog::keyDialog( QWidget * parent,
 
 	m_ui->cbKeyType->addItem( tr( "Key" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "KeyFile" ) ) ;
+	m_ui->cbKeyType->addItem( tr( "HMAC+KeyFile" ) ) ;
 	m_ui->cbKeyType->addItem( tr( "Key+KeyFile" ) ) ;
 
 	m_ui->cbKeyType->addItem( _internalWallet() ) ;
@@ -407,7 +410,13 @@ void keyDialog::KeyFile()
 
 void keyDialog::pbkeyOption()
 {
-	this->KeyFile() ;
+	auto msg = tr( "Select A File To Be Used As A Keyfile." ) ;
+	auto e = QFileDialog::getOpenFileName( this,msg,utility::homePath() ) ;
+
+	if( !e.isEmpty() ){
+
+		m_ui->lineEditKey->setText( e ) ;
+	}
 }
 
 void keyDialog::closeEvent( QCloseEvent * e )
@@ -688,6 +697,13 @@ void keyDialog::openVolume()
 			return this->enableAll() ;
 		}
 
+	}else if( keyType == keyDialog::hmacKeyFile ){
+
+		Task::await( [ this ](){
+
+			m_key = plugins::hmac_key( m_ui->lineEditKey->text(),QString() ) ;
+		} ) ;
+
 	}else if( keyType == keyDialog::keyfile ){
 
 		QFile f( m_ui->lineEditKey->text() ) ;
@@ -703,7 +719,7 @@ void keyDialog::openVolume()
 			msg.ShowUIOK( tr( "WARNING" ),tr( "KeyFile Contents Will Be Trancated On The First Encountered NewLine Character." ) ) ;
 		}
 
-	}else if( keyType == keyDialog::plugin ){
+	}else if( keyType == keyDialog::Plugin ){
 
 		/*
 		 * m_key is already set
@@ -733,6 +749,10 @@ void keyDialog::cbActicated( QString e )
 	}else if( e == tr( "Key+KeyFile" ) ){
 
 		this->keyAndKeyFile() ;
+
+	}else if( e == tr( "HMAC+KeyFile" ) ){
+
+		this->HMACKeyFile() ;
 	}else{
 		this->plugIn() ;
 
@@ -751,6 +771,18 @@ void keyDialog::cbActicated( QString e )
 	}
 }
 
+void keyDialog::HMACKeyFile()
+{
+	m_keyType = keyDialog::hmacKeyFile ;
+
+	m_ui->pbkeyOption->setIcon( QIcon( ":/keyfile.png" ) ) ;
+	m_ui->pbkeyOption->setEnabled( true ) ;
+	m_ui->lineEditKey->setEchoMode( QLineEdit::Normal ) ;
+	m_ui->label->setText( tr( "KeyFile" ) ) ;
+	m_ui->lineEditKey->setEnabled( true ) ;
+	m_ui->lineEditKey->clear() ;
+}
+
 void keyDialog::keyAndKeyFile()
 {
 	m_keyType = keyDialog::keyKeyFile ;
@@ -765,7 +797,7 @@ void keyDialog::keyAndKeyFile()
 
 void keyDialog::plugIn()
 {
-	m_keyType = keyDialog::plugin ;
+	m_keyType = keyDialog::Plugin ;
 
 	m_ui->pbkeyOption->setIcon( QIcon( ":/module.png" ) ) ;
 	m_ui->pbkeyOption->setEnabled( false ) ;

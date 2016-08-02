@@ -129,6 +129,7 @@ private slots:
 	void plugIn( void ) ;
 	void key( void ) ;
 	void keyFile( void ) ;
+	void HMACKeyFile( void ) ;
 	void pbOpen( void ) ;
 	void pbCancel( void ) ;
 	void KeyFile( void ) ;
@@ -166,7 +167,7 @@ private :
 
 	keystrength m_keyStrength ;
 
-	typedef enum{ Key = 0,keyfile = 1,keyKeyFile = 2,plugin = 3 } keyType ;
+	typedef enum{ Key = 0,keyfile = 1,hmacKeyFile = 2,keyKeyFile = 3,Plugin = 4 } keyType ;
 
 	keyType m_keyType ;
 
