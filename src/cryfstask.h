@@ -48,6 +48,10 @@ namespace cryfsTask
 		{
 			return m_type ;
 		}
+		QString executableFullPath() const
+		{
+			return utility::executableFullPath( m_type ) ;
+		}
 		bool operator==( const char * type ) const
 		{
 			return m_type == type ;

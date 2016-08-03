@@ -185,7 +185,7 @@ static cs _cmd( bool create,const cryfsTask::options& opt,
 {
 	const auto& app = opt.type ;
 
-	auto exe = utility::executableFullPath( app.name() ) ;
+	auto exe = app.executableFullPath() ;
 
 	if( exe.isEmpty() ){
 
