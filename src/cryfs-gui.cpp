@@ -607,7 +607,8 @@ void cryfsGUI::unlockVolume( const QString& volume,const QString& mountPath,
 
 				auto o = []( const QString& e ){ Q_UNUSED( e ) ; } ;
 
-				auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,cPath,"",mode,o } ).await() ;
+				auto e = cryfsTask::encryptedFolderMount( { volume,m,w.key,mOpt,
+									    cPath,"",mode,o } ).await() ;
 
 				if( e == cryfsTask::status::success ){
 

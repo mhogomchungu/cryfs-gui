@@ -30,14 +30,45 @@
 
 namespace cryfsTask
 {
+	class volumeType
+	{
+	public:
+		volumeType( const QString& type ) : m_type( type )
+		{
+		}
+		volumeType( const char * type ) : m_type( type )
+		{
+		}
+		volumeType& operator=( const char * e )
+		{
+			m_type = e ;
+			return *this ;
+		}
+		const QString& name() const
+		{
+			return m_type ;
+		}
+		bool operator==( const char * type ) const
+		{
+			return m_type == type ;
+		}
+		template< typename ... T >
+		bool isOneOf( const T& ... t ) const
+		{
+			return utility::equalsAtleastOne( m_type,t ... ) ;
+		}
+	private:
+		QString m_type ;
+	};
+
 	struct options
 	{
 		QString cipherFolder ;
 		QString plainFolder ;
 		QString key ;
 		QString mOpt ;
-                QString configFilePath ;
-		QString exe ;
+		QString configFilePath ;
+		cryfsTask::volumeType type ;
 		bool ro ;
 		std::function< void( const QString& ) > openFolder ;
 	};
