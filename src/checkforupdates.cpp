@@ -34,6 +34,37 @@ static QString _tr( const QString& n,const QString& a,const QStringList& l )
 	return e.arg( n,a,l.at( 0 ),l.at( 1 ) ) ;
 }
 
+static QString _versions()
+{
+	auto _get_version = []( const QString& exe,const QString& args ){
+
+		auto e = utility::executableFullPath( exe ) ;
+
+		if( !e.isEmpty() ){
+
+			auto a = utility::Task::run( e + args ).await().splitOutput( ' ' ) ;
+
+			if( a.size() > 1 ){
+
+				auto r = a.at( 1 ) ;
+
+				r.remove( ';' ) ;
+				r.remove( 'v' ) ;
+
+				return r ;
+			}
+		}
+
+		return QString( "\"\"" ) ;
+	} ;
+
+	auto a = _tr( "\n\n\n","gocryptfs",{ _get_version( "gocryptfs"," --version" ),"\"\"" } ) ;
+
+	auto b = _tr( "\n\n\n","securefs",{ _get_version( "securefs"," version" ),"\"\"" } ) ;
+
+	return a + b ;
+}
+
 static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStringList& e = QStringList() )
 {
 	DialogMsg msg( w ) ;
@@ -69,6 +100,8 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 					l += _tr( "\n\n\n","cryfs",e ) ;
 				}
 
+				l += _versions() ;
+
 				msg.ShowUIInfo( QObject::tr( "Update Available" ),l + "\n" ) ;
 			}
 		}else{
@@ -80,6 +113,8 @@ static void _show( QObject * obj,bool autocheck,QWidget * w,QString l,const QStr
 
 					l += _tr( "\n\n\n","cryfs",e ) ;
 				}
+
+				l += _versions() ;
 
 				msg.ShowUIInfo( QObject::tr( "Version Info" ),l + "\n" ) ;
 			}else{
