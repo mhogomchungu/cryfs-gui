@@ -327,6 +327,16 @@ void keyDialog::pbMountPointPath()
 	auto msg = tr( "Select A Folder To Create A Mount Point In." ) ;
 	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
+	while( true ){
+
+		if( e.endsWith( '/' ) ){
+
+			e.truncate( e.length() - 1 ) ;
+		}else{
+			break ;
+		}
+	}
+
 	if( !e.isEmpty() ){
 
 		e = e + "/" + m_ui->lineEditMountPoint->text().split( '/' ).last() ;
@@ -339,6 +349,16 @@ void keyDialog::pbFolderPath()
 {
 	auto msg = tr( "Select A Folder To Create A Mount Point In." ) ;
 	auto e = QFileDialog::getExistingDirectory( this,msg,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
+
+	while( true ){
+
+		if( e.endsWith( '/' ) ){
+
+			e.truncate( e.length() - 1 ) ;
+		}else{
+			break ;
+		}
+	}
 
 	if( !e.isEmpty() ){
 

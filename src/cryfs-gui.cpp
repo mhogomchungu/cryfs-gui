@@ -986,6 +986,16 @@ void cryfsGUI::unlockCryptFs()
 	auto e = tr( "Select An Encrypted Volume Directory" ) ;
 	auto path = QFileDialog::getExistingDirectory( this,e,utility::homePath(),QFileDialog::ShowDirsOnly ) ;
 
+	while( true ){
+
+		if( path.endsWith( '/' ) ){
+
+			path.truncate( path.length() - 1 ) ;
+		}else{
+			break ;
+		}
+	}
+
 	if( path.isEmpty() ){
 
 		this->enableAll() ;
