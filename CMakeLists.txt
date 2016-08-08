@@ -61,7 +61,7 @@ if( NOT DEFINED WITH_CREATE_ENCFS )
 	set( WITH_CREATE_ENCFS "false" )
 endif()
 
-set( PGR_VERSION "1.3.3" )
+set( PGR_VERSION "1.3.4" )
 
 file( WRITE ${PROJECT_BINARY_DIR}/version.h "
 #ifndef THIS_VERSION

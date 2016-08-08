@@ -53,6 +53,7 @@ public slots:
 	void raiseWindow( void ) ;
 	void raiseWindow( QString ) ;
 private slots:
+	void setDefaultMountPointPrefix( void ) ;
 	void showTrayGUI( void ) ;
 	void properties( void ) ;
 	void autoCheckUpdates( bool ) ;

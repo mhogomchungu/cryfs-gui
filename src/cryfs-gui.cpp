@@ -235,6 +235,9 @@ void cryfsGUI::setUpAppMenu()
 	m->addAction( _addAction( true,checkForUpdates::autoCheck(),tr( "Autocheck For Updates" ),
 				  "Autocheck For Updates",SLOT( autoCheckUpdates( bool ) ) ) ) ;
 
+	m->addAction( _addAction( false,false,tr( "Set Mount Point Prefix" ),
+				  "Set Mount Point Prefix",SLOT( setDefaultMountPointPrefix() ) ) ) ;
+
 	m->addAction( _addAction( false,false,tr( "Unmount All" ),"Unmount All",SLOT( unMountAll() ) ) ) ;
 
 	m_change_password_action = [ &_addMenu,&_addAction ](){
@@ -303,6 +306,26 @@ void cryfsGUI::setUpAppMenu()
 
 	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
 		 this,SLOT( slotTrayClicked( QSystemTrayIcon::ActivationReason ) ) ) ;
+}
+
+void cryfsGUI::setDefaultMountPointPrefix()
+{
+	auto e = QFileDialog::getExistingDirectory( this,QString(),QDir::homePath(),QFileDialog::ShowDirsOnly ) ;
+
+	if( !e.isEmpty() ){
+
+		while( true ){
+
+			if( e.endsWith( '/' ) ){
+
+				e.truncate( e.length() - 1 ) ;
+			}else{
+				break ;
+			}
+		}
+
+		utility::setDefaultMountPointPrefix( e ) ;
+	}
 }
 
 void cryfsGUI::showTrayGUI()

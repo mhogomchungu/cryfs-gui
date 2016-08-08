@@ -17,7 +17,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 Name:           cryfs-gui
-Version:        1.3.3
+Version:        1.3.4
 Release:        0
 Summary:        Qt GUI front end to cryfs and encfs
 License:        GPL-2.0+

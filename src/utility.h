@@ -133,6 +133,8 @@ namespace utility
 	QString homePath() ;
 	QString mountPath( const QString& path ) ;
 
+	void setDefaultMountPointPrefix( const QString& path ) ;
+
 	QString createVolumeExecutable( void ) ;
 
 	QString mountPathPostFix( const QString& path ) ;

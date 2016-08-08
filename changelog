@@ -53,3 +53,12 @@ version 1.3.3
 
 -- Add support for creating and unlocking securefs volumes.
    Homepage for this project is at: https://github.com/netheril96/securefs.
+
+version 1.3.4
+
+-- Add a menu entry to set default mount point path prefix.
+-- Add a convenient "HMAC+KeyFile" option to use a keyfile with an empty passphrase
+   as a volume password. "Key+KeyFile" option is to be used if volume passphrase is to be a combination
+   of a password and a keyfile. Both of these two options are better than using a "KeyFile" option
+   because keyfiles will most likely be trancated on the first new line character encountered and al the
+   contents of the keyfile may not be used leading to weak passphrase.

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  *  Copyright ( c ) 2011-2015
  *  name : Francis Banyikwa
@@ -226,7 +226,7 @@ void favorites::add()
 
 QString favorites::getExistingDirectory( const QString& r )
 {
-	auto e = QFileDialog::getExistingDirectory( this,r,QDir::homePath(),0 ) ;
+	auto e = QFileDialog::getExistingDirectory( this,r,QDir::homePath(),QFileDialog::ShowDirsOnly ) ;
 
 	while( true ){
 

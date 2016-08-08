@@ -1,3 +1,11 @@
+cryfs-gui (1.3.4-1) UNRELEASED; urgency=low
+  [Mhogo Mchungu]
+  * New Features
+     -- Add a GUI way to set default mount point prefix.
+     -- Add an "HMAC+KeyFile" option to use a passphrase made up of a key file and an empty password.
+
+ -- Mhogo Mchungu <mhogomchungu@gmail.com>  Mon, 8 Aug 2016 16:38:48 +0000
+
 cryfs-gui (1.3.3-1) UNRELEASED; urgency=low
   [Mhogo Mchungu]
   * New Features

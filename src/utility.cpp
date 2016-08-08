@@ -895,6 +895,17 @@ QString utility::mountPath( const QString& path )
 	return _mountPath + "/" + path ;
 }
 
+void utility::setDefaultMountPointPrefix( const QString& path )
+{
+	QFile f( utility::homeConfigPath( "mountPrefix" ) );
+
+	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+
+	f.write( path.toLatin1() ) ;
+
+	_mountPath.clear() ;
+}
+
 QString utility::mountPathPostFix( const QString& path )
 {
 	return utility::mountPathPostFix( utility::mountPath( path ),path ) ;
