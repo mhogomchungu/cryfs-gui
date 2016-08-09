@@ -257,69 +257,6 @@ namespace utility
 
 namespace utility
 {
-	class fileHandle
-	{
-	public:
-		fileHandle()
-		{
-		}
-		fileHandle( int r ) : m_fd( r )
-		{
-		}
-		fileHandle( int r,std::function< void( int ) > cmd ) :
-			m_fd( r ),m_releaseResource( std::move( cmd ) )
-		{
-		}
-		bool open( const char * filePath,bool ro = true )
-		{
-			if( ro ){
-
-				m_fd = ::open( filePath,O_RDONLY ) ;
-			}else{
-				m_fd = ::open( filePath,O_WRONLY|O_CREAT,S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) ;
-			}
-
-			m_path = filePath ;
-
-			return m_fd != -1 ;
-		}
-		bool open( const QString& filePath,bool ro = true )
-		{
-			return this->open( filePath.toLatin1().constData(),ro ) ;
-		}
-		int handle() const
-		{
-			return m_fd ;
-		}
-		const char * path()
-		{
-			return m_path.constData() ;
-		}
-		bool opened() const
-		{
-			return m_fd != -1 ;
-		}
-		~fileHandle()
-		{
-			m_releaseResource( m_fd ) ;
-		}
-	private:
-		int m_fd = -1 ;
-
-		QByteArray m_path ;
-
-		std::function< void( int ) > m_releaseResource = []( int fd ){
-
-			if( fd != -1 ){
-
-				::close( fd ) ;
-			}
-		} ;
-	} ;
-}
-
-namespace utility
-{
 	class Task
 	{
 	public :

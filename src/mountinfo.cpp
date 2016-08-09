@@ -32,15 +32,15 @@
 class monitorMountinfo
 {
 public:
-	monitorMountinfo()
+	monitorMountinfo() : m_handle( "/proc/self/mountinfo" )
 	{
-		m_handle.open( "/proc/self/mountinfo" ) ;
+		m_handle.open( QIODevice::ReadOnly ) ;
 		m_monitor.fd     = m_handle.handle() ;
 		m_monitor.events = POLLPRI ;
 	}
 	operator bool()
 	{
-		return m_handle.opened() ;
+		return m_monitor.fd != -1 ;
 	}
 	bool gotEvent()
 	{
@@ -48,7 +48,7 @@ public:
 		return true ;
 	}
 private:
-	utility::fileHandle m_handle ;
+	QFile m_handle ;
 	struct pollfd m_monitor ;
 };
 
@@ -56,14 +56,12 @@ QStringList mountinfo::mountedVolumes()
 {
 	QFile f( "/proc/self/mountinfo" ) ;
 
-	QString e ;
-
 	if( f.open( QIODevice::ReadOnly ) ){
 
-		e = f.readAll() ;
+		return utility::split( f.readAll() ) ;
+	}else{
+		return QStringList() ;
 	}
-
-	return utility::split( e ) ;
 }
 
 mountinfo::mountinfo( QObject * parent,bool e,std::function< void() >&& f ) :
@@ -120,15 +118,15 @@ void mountinfo::run()
 	if( monitor ){
 
 		m_running = true ;
+
+		while( monitor.gotEvent() ){
+
+			if( m_announceEvents ){
+
+				emit gotEvent() ;
+			}
+		}
 	}else{
 		return this->failedToStart() ;
-	}
-
-	while( monitor.gotEvent() ){
-
-		if( m_announceEvents ){
-
-			emit gotEvent() ;
-		}
 	}
 }

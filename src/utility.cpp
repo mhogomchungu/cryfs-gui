@@ -813,9 +813,8 @@ QString utility::homePath()
 
 bool utility::pathIsReadable( const QString& path )
 {
-	utility::fileHandle h ;
-
-	return h.open( path ) ;
+	QDir d( path ) ;
+	return d.isReadable() ;
 }
 
 bool utility::pathExists( const QString& path )
