@@ -107,29 +107,11 @@ void plugin::pbSetKey()
 	Task::run< QByteArray >( [ this,passphrase,keyFile ](){
 
 		switch( m_pluginType ){
-		case plugins::plugin::gpg:
-
-			return plugins::gpg( m_exe,keyFile,passphrase ) ;
-
-		case plugins::plugin::hmac_key_1:
-
-			return plugins::hmac_key_1( m_exe,keyFile,passphrase ) ;
 
 		case plugins::plugin::hmac_key:
 
 			return plugins::hmac_key( keyFile,passphrase ) ;
 
-		case plugins::plugin::keyKeyFile:
-
-			return plugins::keyKeyFile( m_exe,keyFile,passphrase ) ;
-
-		case plugins::plugin::luks:
-
-			return plugins::luks( m_exe,keyFile,passphrase ) ;
-
-		case plugins::plugin::steghide:
-
-			return plugins::steghide( m_exe,keyFile,passphrase ) ;
 		default:
 			return QByteArray() ;
 		}

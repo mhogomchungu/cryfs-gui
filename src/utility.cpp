@@ -599,37 +599,6 @@ int utility::pluginKey( QWidget * w,QString * key,const QString& p )
 		pluginType   = plugins::plugin::hmac_key ;
 		pluginString = QObject::tr( "hmac plugin.\n\nThis plugin generates a key using below formular:\n\nkey = hmac(sha256,passphrase,keyfile contents)" ) ;
 
-	}else if( p == "keykeyfile" ){
-
-		pluginType   = plugins::plugin::keyKeyFile ;
-		pluginString = QObject::tr( "keykeyfile plugin.\n\nThis plugin generates a key using below formular:\n\nkey = passphrase + keyfile contents" ) ;
-
-	}else if( p == "gpg" ){
-
-		pluginType   = plugins::plugin::gpg ;
-		pluginString = QObject::tr( "gpg plugin.\n\nThis plugin retrives a key locked in a gpg file with a symmetric key" ) ;
-
-		if( utility::pathExists( "/usr/bin/gpg" ) ){
-
-			exe.append( "/usr/bin/gpg" ) ;
-
-		}else if( utility::pathExists( "/usr/local/bin/gpg" ) ){
-
-			exe.append( "/usr/local/bin/gpg" ) ;
-
-		}else if( utility::pathExists( "/usr/sbin/gpg" ) ){
-
-			exe.append( "/usr/sbin/gpg" ) ;
-
-		}else{
-
-			DialogMsg msg( w ) ;
-
-			msg.ShowUIOK( QObject::tr( "ERROR" ),QObject::tr( "Could not find \"gpg\" executable in \"/usr/local/bin\",\"/usr/bin\" and \"/usr/sbin\"" ) ) ;
-
-			return 1 ;
-		}
-
 	}else{
 		return 1 ;
 	}

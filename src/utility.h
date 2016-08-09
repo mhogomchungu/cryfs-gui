@@ -320,46 +320,6 @@ namespace utility
 
 namespace utility
 {
-	class monitor_mountinfo
-	{
-	public:
-		static QStringList mountinfo()
-		{
-			QFile f( "/proc/self/mountinfo" ) ;
-
-			QString e ;
-
-			if( f.open( QIODevice::ReadOnly ) ){
-
-				e = f.readAll() ;
-			}
-
-			return utility::split( e ) ;
-		}
-
-		monitor_mountinfo()
-		{
-			m_handle.open( "/proc/self/mountinfo" ) ;
-			m_monitor.fd     = m_handle.handle() ;
-			m_monitor.events = POLLPRI ;
-		}
-		operator bool()
-		{
-			return m_handle.opened() ;
-		}
-		bool gotEvent() const
-		{
-			poll( &m_monitor,1,-1 ) ;
-			return true ;
-		}
-	private:
-		utility::fileHandle m_handle ;
-		mutable struct pollfd m_monitor ;
-	};
-}
-
-namespace utility
-{
 	class Task
 	{
 	public :
@@ -405,13 +365,13 @@ namespace utility
 		{
 		}
 		Task( const QString& exe,int waitTime = -1,const QProcessEnvironment& env = QProcessEnvironment(),
-		      const QByteArray& password = QByteArray(),const std::function< void() >& f = [](){} )
+		      const QByteArray& password = QByteArray(),std::function< void() > f = [](){} )
 		{
-			this->execute( exe,waitTime,env,password,f ) ;
+			this->execute( exe,waitTime,env,password,std::move( f ) ) ;
 		}
-		Task( const QString& exe,const QProcessEnvironment& env,const std::function< void() >& f )
+		Task( const QString& exe,const QProcessEnvironment& env,std::function< void() > f )
 		{
-			this->execute( exe,-1,env,QByteArray(),f ) ;
+			this->execute( exe,-1,env,QByteArray(),std::move( f ) ) ;
 		}
 		QStringList splitOutput( char token ) const
 		{
@@ -455,11 +415,11 @@ namespace utility
 		}
 	private:
 		void execute( const QString& exe,int waitTime,const QProcessEnvironment& env,
-			      const QByteArray& password,const std::function< void() >& f )
+			      const QByteArray& password,std::function< void() >&& f )
 		{
 			class Process : public QProcess{
 			public:
-				Process( const std::function< void() >& f ) : m_function( f )
+				Process( std::function< void() >&& f ) : m_function( std::move( f ) )
 				{
 				}
 			protected:
@@ -469,7 +429,7 @@ namespace utility
 				}
 			private:
 				std::function< void() > m_function ;
-			} p( f ) ;
+			} p( std::move( f ) ) ;
 
 			p.setProcessEnvironment( env ) ;
 

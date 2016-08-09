@@ -36,7 +36,7 @@
 class QCloseEvent ;
 class QAction ;
 class QTableWidgetItem ;
-class monitor_mountinfo ;
+class mountinfo ;
 
 namespace Ui {
 class cryfsGUI ;
@@ -142,7 +142,7 @@ private:
 
 	QSystemTrayIcon m_trayIcon ;
 
-	monitor_mountinfo& m_mountInfo ;
+	mountinfo& m_mountInfo ;
 };
 
 #endif // MAINWINDOW_H

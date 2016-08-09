@@ -140,7 +140,7 @@ set( UI_FILES 	src/cryfs-gui.ui
 set( MOC_FILES 	src/cryfs-gui.h
 		src/keydialog.h
 		src/oneinstance.h
-		src/monitor_mountinfo.h
+		src/mountinfo.h
 		src/dialogmsg.h
 		src/plugin.h
 		src/favorites.h
@@ -158,7 +158,7 @@ set( SRC 	src/main.cpp
 		src/keydialog.cpp
 		src/cryfstask.cpp
 		src/oneinstance.cpp
-		src/monitor_mountinfo.cpp
+		src/mountinfo.cpp
 		src/utility.cpp
 		src/dialogmsg.cpp
 		src/favorites.cpp

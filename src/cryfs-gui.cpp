@@ -50,7 +50,7 @@
 #include "dialogmsg.h"
 #include "tablewidget.h"
 #include "oneinstance.h"
-#include "monitor_mountinfo.h"
+#include "mountinfo.h"
 #include "utility.h"
 #include "cryfstask.h"
 #include "checkforupdates.h"
@@ -60,7 +60,7 @@
 
 cryfsGUI::cryfsGUI( QWidget * parent ) :
 	QWidget( parent ),
-	m_mountInfo( monitor_mountinfo::instance( this,true,[](){ QCoreApplication::quit() ; } ) )
+	m_mountInfo( mountinfo::instance( this,true,[](){ QCoreApplication::quit() ; } ) )
 {
 }
 

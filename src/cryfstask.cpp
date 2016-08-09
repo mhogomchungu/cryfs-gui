@@ -18,6 +18,7 @@
  */
 
 #include "cryfstask.h"
+#include "mountinfo.h"
 
 #include <QDir>
 #include <QString>
@@ -469,7 +470,7 @@ Task::future< QVector< volumeInfo > >& cryfsTask::updateVolumeList()
 
 		QVector< volumeInfo > e ;
 
-		for( const auto& it : utility::monitor_mountinfo::mountinfo() ){
+		for( const auto& it : mountinfo::mountedVolumes() ){
 
 			if( utility::containsAtleastOne( it," fuse.cryfs ",
 							 " fuse.encfs ",

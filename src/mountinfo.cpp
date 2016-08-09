@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "monitor_mountinfo.h"
+#include "mountinfo.h"
 
 #include <QString>
 #include <QStringList>
@@ -29,7 +29,44 @@
 
 #include <QCoreApplication>
 
-monitor_mountinfo::monitor_mountinfo( QObject * parent,bool e,std::function< void() >&& f ) :
+class monitorMountinfo
+{
+public:
+	monitorMountinfo()
+	{
+		m_handle.open( "/proc/self/mountinfo" ) ;
+		m_monitor.fd     = m_handle.handle() ;
+		m_monitor.events = POLLPRI ;
+	}
+	operator bool()
+	{
+		return m_handle.opened() ;
+	}
+	bool gotEvent()
+	{
+		poll( &m_monitor,1,-1 ) ;
+		return true ;
+	}
+private:
+	utility::fileHandle m_handle ;
+	struct pollfd m_monitor ;
+};
+
+QStringList mountinfo::mountedVolumes()
+{
+	QFile f( "/proc/self/mountinfo" ) ;
+
+	QString e ;
+
+	if( f.open( QIODevice::ReadOnly ) ){
+
+		e = f.readAll() ;
+	}
+
+	return utility::split( e ) ;
+}
+
+mountinfo::mountinfo( QObject * parent,bool e,std::function< void() >&& f ) :
 	QThread( parent ),m_stop( std::move( f ) ),m_announceEvents( e )
 {
 	m_babu = parent ;
@@ -37,11 +74,11 @@ monitor_mountinfo::monitor_mountinfo( QObject * parent,bool e,std::function< voi
 	m_main = this ;
 }
 
-monitor_mountinfo::~monitor_mountinfo()
+mountinfo::~mountinfo()
 {
 }
 
-std::function< void() > monitor_mountinfo::stop()
+std::function< void() > mountinfo::stop()
 {
 	return [ this ](){
 
@@ -54,31 +91,31 @@ std::function< void() > monitor_mountinfo::stop()
 	} ;
 }
 
-void monitor_mountinfo::threadStopped()
+void mountinfo::threadStopped()
 {
 	m_running = false ;
 	m_stop() ;
 }
 
-void monitor_mountinfo::failedToStart()
+void mountinfo::failedToStart()
 {
 	qDebug() << "failed to monitor /proc/self/mountinfo" ;
 	m_running = false ;
 }
 
-void monitor_mountinfo::announceEvents( bool s )
+void mountinfo::announceEvents( bool s )
 {
 	m_announceEvents = s ;
 }
 
-void monitor_mountinfo::run()
+void mountinfo::run()
 {
 	m_mtoto = this ;
 
 	connect( m_mtoto,SIGNAL( finished() ),m_main,SLOT( threadStopped() ) ) ;
 	connect( m_mtoto,SIGNAL( finished() ),m_mtoto,SLOT( deleteLater() ) ) ;
 
-	utility::monitor_mountinfo monitor ;
+	monitorMountinfo monitor ;
 
 	if( monitor ){
 
