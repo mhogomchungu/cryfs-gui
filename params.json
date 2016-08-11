@@ -1,6 +1,6 @@
 {
   "name": "cryfs-gui",
   "tagline": "A Qt/C++ front end to encfs.",
-  "body": "# The project is moved to: https://mhogomchungu.github.io/sirikali\r\n\r\n### Reason?\r\n\r\nI initially named the project \"cryfs-gui\" because it initially acted as a front end to only \"cryfs\" tool but this is no longer the case since it now acts as a front end to \"cryfs\",\"gocryptfs\",\"securefs\" and \"encfs\" and i felt the project needed a neutral name and i settled with \"SiriKali\".",
+  "body": "# This project is moved to: https://mhogomchungu.github.io/sirikali\r\n\r\n### Reason?\r\n\r\nI initially named the project \"cryfs-gui\" because it initially acted as a front end to only \"cryfs\" tool but this is no longer the case since it now acts as a front end to \"cryfs\",\"gocryptfs\",\"securefs\" and \"encfs\" and i felt the project needed a neutral name and i settled with \"SiriKali\".",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
