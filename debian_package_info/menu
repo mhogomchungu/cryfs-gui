@@ -1,2 +1,0 @@
-?package(cryfs-gui):needs="X11" section="Applications/System/Security"\
-  title="cryfs-gui" command="/usr/bin/cryfs_gui"
